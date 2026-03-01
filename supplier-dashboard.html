@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>iBlue B2B • Supplier Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1F2937;
+        }
+
+        /* Header */
+        .header {
+            background: #0B4F6C;
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .menu-btn {
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-circle {
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0B4F6C;
+            font-weight: 800;
+            font-size: 20px;
+            font-style: italic;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .header-icon {
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background: #EF4444;
+            color: white;
+            font-size: 10px;
+            padding: 2px 5px;
+            border-radius: 10px;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: -280px;
+            top: 0;
+            bottom: 0;
+            width: 280px;
+            background: white;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+            transition: left 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            background: #0B4F6C;
+            color: white;
+            padding: 20px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-close {
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar-user {
+            flex: 1;
+        }
+
+        .sidebar-user h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-user p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .sidebar-menu {
+            padding: 16px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: #4B5563;
+            text-decoration: none;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #F3F4F6;
+        }
+
+        .menu-item.active {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .menu-item i {
+            width: 20px;
+            font-size: 18px;
+        }
+
+        .menu-divider {
+            height: 1px;
+            background: #E5E7EB;
+            margin: 16px 0;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 16px;
+            margin-left: 0;
+            transition: margin-left 0.3s;
+        }
+
+        .main-content.shifted {
+            margin-left: 280px;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            color: white;
+            padding: 24px 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .welcome-text h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .welcome-text p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .verification-badge {
+            background: #F59E0B;
+            color: #1F2937;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .verification-badge.verified {
+            background: #10B981;
+            color: white;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-icon.orders {
+            background: #e1f0fa;
+            color: #0B4F6C;
+        }
+
+        .stat-icon.revenue {
+            background: #e6f7e6;
+            color: #10B981;
+        }
+
+        .stat-icon.products {
+            background: #fff3e0;
+            color: #F59E0B;
+        }
+
+        .stat-icon.rating {
+            background: #fee2e2;
+            color: #EF4444;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            color: #10B981;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .action-btn {
+            background: #F3F4F6;
+            border: none;
+            padding: 16px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #4B5563;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .action-btn i {
+            font-size: 24px;
+            color: #0B4F6C;
+        }
+
+        .action-btn:hover i {
+            color: white;
+        }
+
+        /* Recent Orders */
+        .recent-orders {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .view-all {
+            color: #0B4F6C;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid #E5E7EB;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: #0B4F6C;
+        }
+
+        .order-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-processing {
+            background: #E0F2FE;
+            color: #0369A1;
+        }
+
+        .status-shipped {
+            background: #E0F2FE;
+            color: #0369A1;
+        }
+
+        .status-delivered {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-cancelled {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .order-amount {
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .order-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            background: #F3F4F6;
+            color: #4B5563;
+        }
+
+        .order-btn:hover {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        /* Low Stock Alert */
+        .stock-alert {
+            background: #FEF2F2;
+            border-left: 4px solid #EF4444;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .stock-alert-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stock-alert i {
+            color: #EF4444;
+            font-size: 24px;
+        }
+
+        .stock-alert h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .stock-alert p {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .stock-btn {
+            background: #EF4444;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #E5E7EB;
+        }
+
+        .product-image {
+            height: 160px;
+            background: #F3F4F6;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-stock {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .stock-low {
+            background: #EF4444;
+            color: white;
+        }
+
+        .stock-ok {
+            background: #10B981;
+            color: white;
+        }
+
+        .product-info {
+            padding: 12px;
+        }
+
+        .product-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .product-price {
+            color: #0B4F6C;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-orders {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .product-edit {
+            color: #0B4F6C;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .main-content {
+                padding: 24px;
+            }
+            
+            .main-content.shifted {
+                margin-left: 280px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .order-info {
+                width: 100%;
+            }
+            
+            .order-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="menu-btn" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="logo">
+            <div class="logo-circle">i</div>
+            <span>iBlue B2B • Supplier</span>
+        </div>
+        <div class="header-actions">
+            <div class="header-icon" id="notificationsIcon">
+                <i class="far fa-bell"></i>
+                <span class="badge" id="notificationBadge" style="display: none;">0</span>
+            </div>
+            <div class="header-icon" id="messagesIcon">
+                <i class="far fa-comment-dots"></i>
+                <span class="badge" id="messageBadge" style="display: none;">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-close" id="closeSidebar">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="sidebar-user" id="sidebarUser">
+                <h3>Loading...</h3>
+                <p>Supplier</p>
+            </div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="supplier-dashboard.html" class="menu-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="supplier-products.html" class="menu-item">
+                <i class="fas fa-box"></i>
+                <span>Products</span>
+            </a>
+            <a href="supplier-orders.html" class="menu-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Orders</span>
+            </a>
+            <a href="supplier-negotiations.html" class="menu-item">
+                <i class="fas fa-handshake"></i>
+                <span>Negotiations</span>
+            </a>
+            <a href="inventory-management.html" class="menu-item">
+                <i class="fas fa-warehouse"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="bulk-pricing-setup.html" class="menu-item">
+                <i class="fas fa-tags"></i>
+                <span>Bulk Pricing</span>
+            </a>
+            
+            <div class="menu-divider"></div>
+            
+            <a href="supplier-reviews.html" class="menu-item">
+                <i class="fas fa-star"></i>
+                <span>Reviews</span>
+            </a>
+            <a href="supplier-payments.html" class="menu-item">
+                <i class="fas fa-wallet"></i>
+                <span>Payments</span>
+            </a>
+            <a href="supplier-subscription.html" class="menu-item">
+                <i class="fas fa-crown"></i>
+                <span>Subscription</span>
+            </a>
+            <a href="supplier-settings.html" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+            <a href="supplier-verification.html" class="menu-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>Verification</span>
+            </a>
+            
+            <div class="menu-divider"></div>
+            
+            <a href="#" class="menu-item" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner" id="welcomeBanner">
+            <div class="welcome-text">
+                <h2 id="welcomeMessage">Welcome back!</h2>
+                <p id="businessInfo">Loading your dashboard...</p>
+            </div>
+            <div id="verificationStatus" class="verification-badge">
+                <i class="fas fa-clock"></i>
+                <span>Verification Pending</span>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon orders">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div>
+                        <div class="stat-label">Total Orders</div>
+                        <div class="stat-value" id="totalOrders">0</div>
+                    </div>
+                </div>
+                <div class="stat-change" id="ordersChange">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>Loading...</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon revenue">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div>
+                        <div class="stat-label">Revenue (UGX)</div>
+                        <div class="stat-value" id="totalRevenue">0</div>
+                    </div>
+                </div>
+                <div class="stat-change" id="revenueChange">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>Loading...</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon products">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div>
+                        <div class="stat-label">Active Products</div>
+                        <div class="stat-value" id="activeProducts">0</div>
+                    </div>
+                </div>
+                <div class="stat-change" id="productsChange">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>Loading...</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon rating">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div>
+                        <div class="stat-label">Rating</div>
+                        <div class="stat-value" id="averageRating">0.0</div>
+                    </div>
+                </div>
+                <div class="stat-change" id="ratingChange">
+                    <i class="fas fa-star"></i>
+                    <span>from reviews</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h3 class="section-title">
+                <i class="fas fa-bolt" style="color: #0B4F6C;"></i>
+                Quick Actions
+            </h3>
+            <div class="actions-grid">
+                <a href="post-ad.html?type=b2b" class="action-btn">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>New Product</span>
+                </a>
+                <a href="supplier-orders.html?status=pending" class="action-btn">
+                    <i class="fas fa-clock"></i>
+                    <span>Pending Orders</span>
+                </a>
+                <a href="bulk-pricing-setup.html" class="action-btn">
+                    <i class="fas fa-tags"></i>
+                    <span>Bulk Pricing</span>
+                </a>
+                <a href="inventory-management.html" class="action-btn">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Update Stock</span>
+                </a>
+                <a href="supplier-negotiations.html" class="action-btn">
+                    <i class="fas fa-handshake"></i>
+                    <span>Negotiations</span>
+                </a>
+                <a href="supplier-products.html" class="action-btn">
+                    <i class="fas fa-edit"></i>
+                    <span>Manage Products</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Low Stock Alert (hidden by default) -->
+        <div class="stock-alert" id="stockAlert" style="display: none;">
+            <div class="stock-alert-content">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <h4>Low Stock Alert</h4>
+                    <p id="stockAlertMessage">Some products are running low on stock</p>
+                </div>
+            </div>
+            <a href="inventory-management.html" class="stock-btn">Restock Now</a>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="recent-orders">
+            <div class="orders-header">
+                <h3 class="section-title">
+                    <i class="fas fa-clock"></i>
+                    Recent Orders
+                </h3>
+                <a href="supplier-orders.html" class="view-all">View All →</a>
+            </div>
+            <div id="recentOrdersList">
+                <!-- Orders populated by JavaScript -->
+                <div style="text-align: center; padding: 40px; color: #6B7280;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 12px;"></i>
+                    <p>Loading orders...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Products -->
+        <div class="recent-orders">
+            <div class="orders-header">
+                <h3 class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    Top Selling Products
+                </h3>
+                <a href="supplier-products.html" class="view-all">Manage →</a>
+            </div>
+            <div class="products-grid" id="topProducts">
+                <!-- Products populated by JavaScript -->
+                <div style="text-align: center; padding: 40px; color: #6B7280; grid-column: 1/-1;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 12px;"></i>
+                    <p>Loading products...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ============================================
+        // SUPABASE CONFIGURATION
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // STATE
+        // ============================================
+        let currentUser = null;
+        let supplierProfile = null;
+        let notificationCount = 0;
+        let messageCount = 0;
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            setupEventListeners();
+            loadDashboardData();
+        });
+
+        // ============================================
+        // CHECK AUTHENTICATION
+        // ============================================
+        async function checkAuth() {
+            try {
+                const { data: { user }, error } = await sb.auth.getUser();
+                
+                if (error || !user) {
+                    showToast('Please login to access supplier dashboard');
+                    setTimeout(() => {
+                        window.location.href = 'login.html?redirect=supplier-dashboard.html';
+                    }, 2000);
+                    return;
+                }
+                
+                currentUser = user;
+                
+                // Check if user is a supplier
+                const { data: profile, error: profileError } = await sb
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (profileError) throw profileError;
+                
+                if (!profile?.is_supplier) {
+                    showToast('Access denied. Supplier account required.');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                    return;
+                }
+                
+                // Get supplier details
+                const { data: supplier, error: supplierError } = await sb
+                    .from('suppliers')
+                    .select('*')
+                    .eq('profile_id', user.id)
+                    .single();
+                
+                if (supplierError && supplierError.code !== 'PGRST116') {
+                    console.error('Error fetching supplier:', supplierError);
+                }
+                
+                supplierProfile = supplier;
+                
+                // Update UI with user info
+                updateUserInfo(profile, supplier);
+                
+            } catch (error) {
+                console.error('Auth check error:', error);
+                showToast('Error checking authentication');
+            }
+        }
+
+        // ============================================
+        // UPDATE USER INFO
+        // ============================================
+        function updateUserInfo(profile, supplier) {
+            // Sidebar user info
+            const sidebarUser = document.getElementById('sidebarUser');
+            sidebarUser.innerHTML = `
+                <h3>${profile.business_name || profile.full_name || 'Supplier'}</h3>
+                <p>${supplier?.verification_status === 'verified' ? '✓ Verified Supplier' : 'Pending Verification'}</p>
+            `;
+            
+            // Welcome banner
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            welcomeMessage.textContent = `Welcome back, ${profile.full_name?.split(' ')[0] || 'Supplier'}!`;
+            
+            const businessInfo = document.getElementById('businessInfo');
+            businessInfo.textContent = profile.business_name || 'Your business dashboard';
+            
+            // Verification status
+            const verificationBadge = document.getElementById('verificationStatus');
+            if (supplier?.verification_status === 'verified') {
+                verificationBadge.className = 'verification-badge verified';
+                verificationBadge.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <span>Verified Supplier</span>
+                `;
+            } else {
+                verificationBadge.className = 'verification-badge';
+                verificationBadge.innerHTML = `
+                    <i class="fas fa-clock"></i>
+                    <span>Verification Pending</span>
+                `;
+            }
+        }
+
+        // ============================================
+        // LOAD DASHBOARD DATA
+        // ============================================
+        async function loadDashboardData() {
+            try {
+                // Load stats
+                await loadStats();
+                
+                // Load recent orders
+                await loadRecentOrders();
+                
+                // Load top products
+                await loadTopProducts();
+                
+                // Check for low stock
+                await checkLowStock();
+                
+                // Load notifications count
+                await loadNotificationCounts();
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showToast('Error loading dashboard data');
+            }
+        }
+
+        // ============================================
+        // LOAD STATS
+        // ============================================
+        async function loadStats() {
+            try {
+                // Get supplier ID
+                let supplierId = supplierProfile?.id;
+                
+                if (!supplierId && currentUser) {
+                    const { data } = await sb
+                        .from('suppliers')
+                        .select('id')
+                        .eq('profile_id', currentUser.id)
+                        .single();
+                    
+                    supplierId = data?.id;
+                }
+                
+                if (!supplierId) return;
+                
+                // Get order stats
+                const { data: orders, error: ordersError } = await sb
+                    .from('orders')
+                    .select('total_amount, status, created_at')
+                    .eq('supplier_id', supplierId);
+                
+                if (!ordersError && orders) {
+                    // Total orders
+                    document.getElementById('totalOrders').textContent = orders.length;
+                    
+                    // Calculate revenue (only paid/completed orders)
+                    const revenue = orders
+                        .filter(o => ['delivered', 'shipped', 'confirmed'].includes(o.status))
+                        .reduce((sum, o) => sum + (parseFloat(o.total_amount) || 0), 0);
+                    
+                    document.getElementById('totalRevenue').textContent = revenue.toLocaleString();
+                    
+                    // Calculate change (compare last 30 days vs previous 30)
+                    const now = new Date();
+                    const thirtyDaysAgo = new Date(now.setDate(now.getDate() - 30));
+                    const sixtyDaysAgo = new Date(now.setDate(now.getDate() - 30));
+                    
+                    const recentOrders = orders.filter(o => new Date(o.created_at) > thirtyDaysAgo).length;
+                    const previousOrders = orders.filter(o => {
+                        const date = new Date(o.created_at);
+                        return date > sixtyDaysAgo && date <= thirtyDaysAgo;
+                    }).length;
+                    
+                    const ordersChange = previousOrders ? ((recentOrders - previousOrders) / previousOrders * 100).toFixed(0) : 0;
+                    document.getElementById('ordersChange').innerHTML = `
+                        <i class="fas fa-${ordersChange >= 0 ? 'arrow-up' : 'arrow-down'}"></i>
+                        <span>${Math.abs(ordersChange)}% vs last month</span>
+                    `;
+                    
+                    // Revenue change
+                    const recentRevenue = orders
+                        .filter(o => new Date(o.created_at) > thirtyDaysAgo && ['delivered', 'shipped'].includes(o.status))
+                        .reduce((sum, o) => sum + (parseFloat(o.total_amount) || 0), 0);
+                    
+                    const previousRevenue = orders
+                        .filter(o => {
+                            const date = new Date(o.created_at);
+                            return date > sixtyDaysAgo && date <= thirtyDaysAgo && ['delivered', 'shipped'].includes(o.status);
+                        })
+                        .reduce((sum, o) => sum + (parseFloat(o.total_amount) || 0), 0);
+                    
+                    const revenueChange = previousRevenue ? ((recentRevenue - previousRevenue) / previousRevenue * 100).toFixed(0) : 0;
+                    document.getElementById('revenueChange').innerHTML = `
+                        <i class="fas fa-${revenueChange >= 0 ? 'arrow-up' : 'arrow-down'}"></i>
+                        <span>${Math.abs(revenueChange)}% vs last month</span>
+                    `;
+                }
+                
+                // Get product stats
+                const { data: products, error: productsError } = await sb
+                    .from('ads')
+                    .select('id, status')
+                    .eq('seller_id', currentUser.id);
+                
+                if (!productsError && products) {
+                    const activeProducts = products.filter(p => p.status === 'active').length;
+                    document.getElementById('activeProducts').textContent = activeProducts;
+                    
+                    // Products change
+                    // You could implement similar change calculation here
+                }
+                
+                // Get rating
+                const { data: reviews, error: reviewsError } = await sb
+                    .from('reviews')
+                    .select('rating')
+                    .eq('reviewee_id', currentUser.id)
+                    .eq('review_type', 'supplier');
+                
+                if (!reviewsError && reviews && reviews.length > 0) {
+                    const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+                    document.getElementById('averageRating').textContent = avgRating.toFixed(1);
+                    document.getElementById('ratingChange').innerHTML = `
+                        <i class="fas fa-star"></i>
+                        <span>from ${reviews.length} reviews</span>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD RECENT ORDERS
+        // ============================================
+        async function loadRecentOrders() {
+            const container = document.getElementById('recentOrdersList');
+            
+            try {
+                let supplierId = supplierProfile?.id;
+                
+                if (!supplierId && currentUser) {
+                    const { data } = await sb
+                        .from('suppliers')
+                        .select('id')
+                        .eq('profile_id', currentUser.id)
+                        .single();
+                    
+                    supplierId = data?.id;
+                }
+                
+                if (!supplierId) {
+                    container.innerHTML = '<p style="text-align: center; padding: 20px;">No orders found</p>';
+                    return;
+                }
+                
+                const { data: orders, error } = await sb
+                    .from('orders')
+                    .select(`
+                        id,
+                        order_number,
+                        total_amount,
+                        status,
+                        created_at,
+                        buyer_id,
+                        profiles!orders_buyer_id_fkey (
+                            full_name,
+                            business_name
+                        )
+                    `)
+                    .eq('supplier_id', supplierId)
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                
+                if (error) throw error;
+                
+                if (!orders || orders.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; padding: 20px; color: #6B7280;">No recent orders</p>';
+                    return;
+                }
+                
+                container.innerHTML = orders.map(order => {
+                    const statusClass = getStatusClass(order.status);
+                    const buyerName = order.profiles?.business_name || order.profiles?.full_name || 'Buyer';
+                    
+                    return `
+                        <div class="order-item">
+                            <div class="order-info">
+                                <span class="order-id">#${order.order_number?.substring(0, 8) || order.id}</span>
+                                <span class="order-status ${statusClass}">${formatStatus(order.status)}</span>
+                                <span class="order-amount">UGX ${parseInt(order.total_amount).toLocaleString()}</span>
+                                <span style="font-size: 13px; color: #6B7280;">${buyerName}</span>
+                            </div>
+                            <div class="order-actions">
+                                <a href="supplier-order-detail.html?id=${order.id}" class="order-btn">View</a>
+                                ${order.status === 'pending' ? 
+                                    `<a href="supplier-order-detail.html?id=${order.id}&action=process" class="order-btn" style="background: #0B4F6C; color: white;">Process</a>` : 
+                                    ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                container.innerHTML = '<p style="text-align: center; padding: 20px; color: #EF4444;">Error loading orders</p>';
+            }
+        }
+
+        // ============================================
+        // LOAD TOP PRODUCTS
+        // ============================================
+        async function loadTopProducts() {
+            const container = document.getElementById('topProducts');
+            
+            try {
+                const { data: products, error } = await sb
+                    .from('ads')
+                    .select(`
+                        id,
+                        title,
+                        price,
+                        wholesale_price,
+                        image_urls,
+                        stock_quantity,
+                        low_stock_threshold,
+                        view_count
+                    `)
+                    .eq('seller_id', currentUser.id)
+                    .eq('status', 'active')
+                    .order('view_count', { ascending: false })
+                    .limit(4);
+                
+                if (error) throw error;
+                
+                if (!products || products.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #6B7280; grid-column: 1/-1;">
+                            <i class="fas fa-box-open" style="font-size: 32px; margin-bottom: 12px;"></i>
+                            <p>No products yet</p>
+                            <a href="post-ad.html?type=b2b" class="order-btn" style="margin-top: 12px; display: inline-block;">Add Your First Product</a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = products.map(product => {
+                    const imageUrl = product.image_urls?.[0] || 'https://via.placeholder.com/200?text=No+Image';
+                    const price = product.wholesale_price || product.price || 0;
+                    const stockStatus = product.stock_quantity <= (product.low_stock_threshold || 10) ? 'low' : 'ok';
+                    
+                    return `
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="${imageUrl}" alt="${product.title}" loading="lazy">
+                                <div class="product-stock stock-${stockStatus}">
+                                    ${stockStatus === 'low' ? 'Low Stock' : 'In Stock'}
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-title">${product.title.substring(0, 30)}${product.title.length > 30 ? '...' : ''}</div>
+                                <div class="product-price">UGX ${parseInt(price).toLocaleString()}</div>
+                                <div class="product-footer">
+                                    <span class="product-orders">${product.view_count || 0} views</span>
+                                    <a href="edit-ad.html?id=${product.id}" class="product-edit">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Error loading products:', error);
+                container.innerHTML = '<p style="text-align: center; padding: 20px; color: #EF4444;">Error loading products</p>';
+            }
+        }
+
+        // ============================================
+        // CHECK LOW STOCK
+        // ============================================
+        async function checkLowStock() {
+            try {
+                const { data: products, error } = await sb
+                    .from('ads')
+                    .select('id, title, stock_quantity, low_stock_threshold')
+                    .eq('seller_id', currentUser.id)
+                    .eq('status', 'active');
+                
+                if (error) throw error;
+                
+                const lowStockProducts = products.filter(p => 
+                    p.stock_quantity <= (p.low_stock_threshold || 10)
+                );
+                
+                if (lowStockProducts.length > 0) {
+                    const alert = document.getElementById('stockAlert');
+                    const message = document.getElementById('stockAlertMessage');
+                    
+                    if (lowStockProducts.length === 1) {
+                        message.textContent = `"${lowStockProducts[0].title}" is running low on stock`;
+                    } else {
+                        message.textContent = `${lowStockProducts.length} products are running low on stock`;
+                    }
+                    
+                    alert.style.display = 'flex';
+                }
+                
+            } catch (error) {
+                console.error('Error checking stock:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD NOTIFICATION COUNTS
+        // ============================================
+        async function loadNotificationCounts() {
+            try {
+                // Count unread messages
+                const { count: msgCount, error: msgError } = await sb
+                    .from('messages')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('receiver_id', currentUser.id)
+                    .eq('is_read', false);
+                
+                if (!msgError && msgCount > 0) {
+                    document.getElementById('messageBadge').style.display = 'block';
+                    document.getElementById('messageBadge').textContent = msgCount;
+                }
+                
+                // Count unread notifications
+                const { count: notifCount, error: notifError } = await sb
+                    .from('notifications')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('user_id', currentUser.id)
+                    .eq('is_read', false);
+                
+                if (!notifError && notifCount > 0) {
+                    document.getElementById('notificationBadge').style.display = 'block';
+                    document.getElementById('notificationBadge').textContent = notifCount;
+                }
+                
+            } catch (error) {
+                console.error('Error loading counts:', error);
+            }
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        function getStatusClass(status) {
+            const classes = {
+                'pending': 'status-pending',
+                'pending_payment': 'status-pending',
+                'payment_verifying': 'status-pending',
+                'confirmed': 'status-processing',
+                'processing': 'status-processing',
+                'shipped': 'status-shipped',
+                'delivered': 'status-delivered',
+                'cancelled': 'status-cancelled',
+                'disputed': 'status-cancelled'
+            };
+            return classes[status] || 'status-pending';
+        }
+
+        function formatStatus(status) {
+            return status.split('_').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        function setupEventListeners() {
+            // Sidebar toggle
+            document.getElementById('menuToggle').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.add('open');
+            });
+            
+            document.getElementById('closeSidebar').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.remove('open');
+            });
+            
+            // Notifications
+            document.getElementById('notificationsIcon').addEventListener('click', () => {
+                window.location.href = 'notifications.html';
+            });
+            
+            // Messages
+            document.getElementById('messagesIcon').addEventListener('click', () => {
+                window.location.href = 'supplier-chat.html';
+            });
+            
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+                e.preventDefault();
+                await sb.auth.signOut();
+                window.location.href = 'login.html';
+            });
+            
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                const sidebar = document.getElementById('sidebar');
+                const menuBtn = document.getElementById('menuToggle');
+                
+                if (sidebar.classList.contains('open') && 
+                    !sidebar.contains(e.target) && 
+                    !menuBtn.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Manage Quotations - Supplier Dashboard | iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/supplier-quotation.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="supplier-dashboard.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+                <span class="supplier-badge">SUPPLIER</span>
+            </a>
+            <div class="header-actions">
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">5</span>
+                </a>
+                <div class="header-icon" id="menuToggle">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-item">
+                <span class="stat-value" id="pendingQuotes">0</span>
+                <span class="stat-label">Pending</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="quotesSent">0</span>
+                <span class="stat-label">Sent</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="acceptedQuotes">0</span>
+                <span class="stat-label">Accepted</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="conversionRate">0%</span>
+                <span class="stat-label">Conversion</span>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="new">New Inquiries <span class="tab-badge" id="newCount">0</span></button>
+            <button class="tab-btn" data-tab="draft">Drafts <span class="tab-badge" id="draftCount">0</span></button>
+            <button class="tab-btn" data-tab="sent">Sent Quotes <span class="tab-badge" id="sentCount">0</span></button>
+            <button class="tab-btn" data-tab="accepted">Accepted <span class="tab-badge" id="acceptedCount">0</span></button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading inquiries...</p>
+        </div>
+
+        <!-- New Inquiries Tab -->
+        <div class="tab-content active" id="tab-new">
+            <div class="inquiries-list" id="newInquiriesList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Drafts Tab -->
+        <div class="tab-content" id="tab-draft">
+            <div class="inquiries-list" id="draftInquiriesList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Sent Quotes Tab -->
+        <div class="tab-content" id="tab-sent">
+            <div class="inquiries-list" id="sentQuotesList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Accepted Quotes Tab -->
+        <div class="tab-content" id="tab-accepted">
+            <div class="inquiries-list" id="acceptedQuotesList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-inbox"></i>
+            <h3>No inquiries found</h3>
+            <p>When buyers send inquiries, they'll appear here</p>
+        </div>
+    </main>
+
+    <!-- Quote Creation Modal -->
+    <div class="modal" id="quoteModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Create Quotation</h3>
+                <button class="modal-close" onclick="closeQuoteModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body" id="quoteModalBody">
+                <!-- Loading -->
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Quote Modal -->
+    <div class="modal" id="viewQuoteModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Quotation Details</h3>
+                <button class="modal-close" onclick="closeViewQuoteModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body" id="viewQuoteModalBody">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Quote Sent Successfully!</h3>
+            <p id="successMessage">Your quotation has been sent to the buyer.</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="supplier-dashboard.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="supplier-products.html" class="nav-item">
+            <i class="fas fa-box"></i>
+            <span>Products</span>
+        </a>
+        <a href="supplier-quotation.html" class="nav-item active">
+            <i class="fas fa-file-invoice"></i>
+            <span>Quotes</span>
+        </a>
+        <a href="supplier-orders.html" class="nav-item">
+            <i class="fas fa-truck"></i>
+            <span>Orders</span>
+        </a>
+        <a href="supplier-profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supplier-quotation.js"></script>
+</body>
+</html>

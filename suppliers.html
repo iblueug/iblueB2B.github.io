@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>iBlue B2B • Verified Suppliers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1F2937;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: #0B4F6C;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .filter-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Search Bar */
+        .search-container {
+            padding: 12px 16px;
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 16px;
+            padding-left: 44px;
+            border-radius: 30px;
+            border: 1.5px solid #E5E7EB;
+            font-size: 14px;
+            background: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #0B4F6C;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+            font-size: 16px;
+        }
+
+        /* Filter Sidebar */
+        .filter-sidebar {
+            position: fixed;
+            right: -320px;
+            top: 0;
+            bottom: 0;
+            width: 320px;
+            background: white;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+            transition: right 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .filter-sidebar.open {
+            right: 0;
+        }
+
+        .filter-header {
+            background: #0B4F6C;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .filter-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .filter-close {
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .filter-section {
+            padding: 16px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .filter-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0B4F6C;
+        }
+
+        .filter-option label {
+            font-size: 14px;
+            color: #4B5563;
+            cursor: pointer;
+        }
+
+        .filter-option .count {
+            margin-left: auto;
+            color: #9CA3AF;
+            font-size: 12px;
+        }
+
+        .filter-actions {
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .apply-btn {
+            flex: 1;
+            background: #0B4F6C;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .clear-btn {
+            flex: 1;
+            background: white;
+            color: #4B5563;
+            border: 1px solid #E5E7EB;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Location Bar */
+        .location-bar {
+            background: white;
+            padding: 8px 16px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .location-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .location-chip {
+            background: #F3F4F6;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #4B5563;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .location-chip.active {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .location-chip i {
+            font-size: 12px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 16px;
+        }
+
+        /* Results Header */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .results-count {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .results-count strong {
+            color: #0B4F6C;
+            font-size: 16px;
+        }
+
+        .sort-select {
+            padding: 8px 16px;
+            border: 1px solid #E5E7EB;
+            border-radius: 20px;
+            font-size: 13px;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Active Filters */
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .filter-tag {
+            background: #F3F4F6;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-tag i {
+            cursor: pointer;
+            color: #9CA3AF;
+        }
+
+        .filter-tag i:hover {
+            color: #EF4444;
+        }
+
+        /* Suppliers Grid */
+        .suppliers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .supplier-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #E5E7EB;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .supplier-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .supplier-header {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            padding: 24px 16px 16px;
+            position: relative;
+            text-align: center;
+        }
+
+        .supplier-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 600;
+            color: #0B4F6C;
+            border: 3px solid white;
+            overflow: hidden;
+        }
+
+        .supplier-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .supplier-verified {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #10B981;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            border: 2px solid white;
+        }
+
+        .supplier-featured {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: #F59E0B;
+            color: #1F2937;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .supplier-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .supplier-location {
+            font-size: 12px;
+            color: rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .supplier-body {
+            padding: 16px;
+        }
+
+        .supplier-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        .supplier-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #4B5563;
+        }
+
+        .meta-item i {
+            width: 16px;
+            color: #0B4F6C;
+        }
+
+        .supplier-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .badge {
+            background: #F3F4F6;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #4B5563;
+        }
+
+        .badge.verified {
+            background: #10B981;
+            color: white;
+        }
+
+        .badge.featured {
+            background: #F59E0B;
+            color: #1F2937;
+        }
+
+        .badge.premium {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .supplier-footer {
+            padding: 16px;
+            border-top: 1px solid #F3F4F6;
+            display: flex;
+            gap: 8px;
+        }
+
+        .contact-btn {
+            flex: 1;
+            background: #0B4F6C;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .view-btn {
+            flex: 1;
+            background: white;
+            color: #0B4F6C;
+            border: 1px solid #0B4F6C;
+            padding: 10px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        /* Featured Suppliers Section */
+        .featured-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: #F59E0B;
+        }
+
+        .featured-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            margin: 0 -20px;
+            padding: 4px 20px;
+        }
+
+        .featured-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .featured-wrapper {
+            display: flex;
+            gap: 16px;
+        }
+
+        .featured-card {
+            flex: 0 0 240px;
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .featured-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .featured-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #0B4F6C;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        .featured-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .featured-info p {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        .featured-products {
+            display: flex;
+            gap: 4px;
+            margin: 12px 0;
+        }
+
+        .product-thumb {
+            width: 60px;
+            height: 60px;
+            background: #E5E7EB;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .product-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Categories Grid */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 8px;
+            text-align: center;
+            border: 1px solid #E5E7EB;
+            cursor: pointer;
+        }
+
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            background: #F3F4F6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            color: #0B4F6C;
+            font-size: 24px;
+        }
+
+        .category-name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .category-count {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 24px 0;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #E5E7EB;
+            background: white;
+            color: #4B5563;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .page-btn.active {
+            background: #0B4F6C;
+            color: white;
+            border-color: #0B4F6C;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Loading Skeleton */
+        .skeleton-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .skeleton-header {
+            height: 140px;
+            background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        .skeleton-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: -40px auto 12px;
+            background: #E5E7EB;
+            border: 3px solid white;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            padding: 8px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #9CA3AF;
+            font-size: 11px;
+            gap: 4px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: #0B4F6C;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .main-content {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            .suppliers-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="header-title">Suppliers</div>
+        <div class="filter-toggle" id="filterToggle">
+            <i class="fas fa-sliders-h"></i>
+        </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search suppliers by name or product...">
+        </div>
+    </div>
+
+    <!-- Location Bar -->
+    <div class="location-bar" id="locationBar">
+        <span class="location-chip active" id="currentLocationChip">
+            <i class="fas fa-map-marker-alt"></i>
+            <span id="currentLocation">Kampala</span>
+        </span>
+        <span class="location-chip" onclick="changeLocation()">
+            <i class="fas fa-edit"></i> Change
+        </span>
+        <span class="location-chip" onclick="filterByLocation('nationwide')">
+            <i class="fas fa-globe"></i> Nationwide
+        </span>
+    </div>
+
+    <!-- Filter Sidebar -->
+    <div class="filter-sidebar" id="filterSidebar">
+        <div class="filter-header">
+            <div class="filter-title">Filter Suppliers</div>
+            <div class="filter-close" id="filterClose">&times;</div>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-section-title">
+                <i class="fas fa-check-circle" style="color: #10B981;"></i>
+                Supplier Status
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="verifiedOnly">
+                <label for="verifiedOnly">Verified Suppliers</label>
+                <span class="count" id="verifiedCount">0</span>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="featuredOnly">
+                <label for="featuredOnly">Featured Suppliers</label>
+                <span class="count" id="featuredCount">0</span>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-section-title">
+                <i class="fas fa-store"></i>
+                Business Type
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="typeManufacturer">
+                <label for="typeManufacturer">Manufacturer</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="typeWholesaler">
+                <label for="typeWholesaler">Wholesaler</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="typeDistributor">
+                <label for="typeDistributor">Distributor</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="typeExporter">
+                <label for="typeExporter">Exporter</label>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-section-title">
+                <i class="fas fa-star"></i>
+                Minimum Rating
+            </div>
+            <div class="filter-option">
+                <input type="radio" name="rating" id="rating4" value="4">
+                <label for="rating4">4★ & above</label>
+            </div>
+            <div class="filter-option">
+                <input type="radio" name="rating" id="rating3" value="3">
+                <label for="rating3">3★ & above</label>
+            </div>
+            <div class="filter-option">
+                <input type="radio" name="rating" id="rating2" value="2">
+                <label for="rating2">2★ & above</label>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-section-title">
+                <i class="fas fa-dollar-sign"></i>
+                Min Order Value
+            </div>
+            <select class="price-input" id="minOrderFilter" style="width: 100%; padding: 10px; border: 1px solid #E5E7EB; border-radius: 8px;">
+                <option value="">Any amount</option>
+                <option value="100000">UGX 100,000+</option>
+                <option value="500000">UGX 500,000+</option>
+                <option value="1000000">UGX 1,000,000+</option>
+                <option value="5000000">UGX 5,000,000+</option>
+                <option value="10000000">UGX 10,000,000+</option>
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button class="apply-btn" id="applyFilters">Apply Filters</button>
+            <button class="clear-btn" id="clearFilters">Clear All</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Categories Quick Filter -->
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Featured Suppliers Section -->
+        <div class="featured-section" id="featuredSection">
+            <h3 class="section-title">
+                <i class="fas fa-crown"></i>
+                Featured Suppliers
+            </h3>
+            <div class="featured-scroll">
+                <div class="featured-wrapper" id="featuredWrapper">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Header -->
+        <div class="results-header">
+            <div class="results-count">
+                <strong id="resultsCount">0</strong> suppliers found
+            </div>
+            <select class="sort-select" id="sortSelect">
+                <option value="relevance">Sort by: Relevance</option>
+                <option value="rating">Highest Rated</option>
+                <option value="products">Most Products</option>
+                <option value="orders">Most Orders</option>
+                <option value="newest">Newest First</option>
+            </select>
+        </div>
+
+        <!-- Active Filters -->
+        <div class="active-filters" id="activeFilters"></div>
+
+        <!-- Suppliers Grid -->
+        <div class="suppliers-grid" id="suppliersGrid">
+            <!-- Loading Skeletons -->
+            <div class="skeleton-card">
+                <div class="skeleton-header"></div>
+                <div style="padding: 16px; text-align: center;">
+                    <div class="skeleton-avatar"></div>
+                    <div style="height: 16px; width: 60%; margin: 8px auto; background: #E5E7EB;"></div>
+                    <div style="height: 12px; width: 40%; margin: 8px auto; background: #E5E7EB;"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-header"></div>
+                <div style="padding: 16px; text-align: center;">
+                    <div class="skeleton-avatar"></div>
+                    <div style="height: 16px; width: 60%; margin: 8px auto; background: #E5E7EB;"></div>
+                    <div style="height: 12px; width: 40%; margin: 8px auto; background: #E5E7EB;"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-header"></div>
+                <div style="padding: 16px; text-align: center;">
+                    <div class="skeleton-avatar"></div>
+                    <div style="height: 16px; width: 60%; margin: 8px auto; background: #E5E7EB;"></div>
+                    <div style="height: 12px; width: 40%; margin: 8px auto; background: #E5E7EB;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination">
+            <button class="page-btn" id="prevPage" disabled>&lt;</button>
+            <button class="page-btn active" id="page1">1</button>
+            <button class="page-btn" id="page2">2</button>
+            <button class="page-btn" id="page3">3</button>
+            <button class="page-btn" id="nextPage">&gt;</button>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="B2B-search.html" class="nav-item">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <i class="fas fa-th-large"></i>
+            <span>Categories</span>
+        </a>
+        <a href="suppliers.html" class="nav-item active">
+            <i class="fas fa-store"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ============================================
+        // SUPABASE CONFIGURATION
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // STATE
+        // ============================================
+        let currentUser = null;
+        let currentPage = 1;
+        let itemsPerPage = 12;
+        let totalResults = 0;
+        let currentFilters = {
+            verifiedOnly: false,
+            featuredOnly: false,
+            businessTypes: [],
+            minRating: null,
+            minOrderValue: null
+        };
+
+        // Get location from localStorage
+        let selectedRegion = localStorage.getItem('selectedRegion') || 'Central';
+        let selectedDistrict = localStorage.getItem('selectedDistrict') || 'Kampala';
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            setupEventListeners();
+            await loadCategories();
+            await loadFeaturedSuppliers();
+            await loadFilterCounts();
+            await loadSuppliers();
+            
+            // Update location display
+            document.getElementById('currentLocation').textContent = selectedDistrict;
+        });
+
+        // ============================================
+        // CHECK AUTH
+        // ============================================
+        async function checkAuth() {
+            try {
+                const { data: { user } } = await sb.auth.getUser();
+                currentUser = user;
+            } catch (error) {
+                console.error('Auth check error:', error);
+            }
+        }
+
+        // ============================================
+        // SETUP EVENT LISTENERS
+        // ============================================
+        function setupEventListeners() {
+            // Search input
+            let searchTimeout;
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    currentPage = 1;
+                    loadSuppliers(e.target.value);
+                }, 500);
+            });
+
+            // Filter toggle
+            document.getElementById('filterToggle').addEventListener('click', () => {
+                document.getElementById('filterSidebar').classList.add('open');
+            });
+
+            document.getElementById('filterClose').addEventListener('click', () => {
+                document.getElementById('filterSidebar').classList.remove('open');
+            });
+
+            // Apply filters
+            document.getElementById('applyFilters').addEventListener('click', () => {
+                collectFilters();
+                document.getElementById('filterSidebar').classList.remove('open');
+                currentPage = 1;
+                loadSuppliers();
+            });
+
+            // Clear filters
+            document.getElementById('clearFilters').addEventListener('click', () => {
+                clearFilters();
+                document.getElementById('filterSidebar').classList.remove('open');
+            });
+
+            // Sort
+            document.getElementById('sortSelect').addEventListener('change', () => {
+                loadSuppliers();
+            });
+
+            // Pagination
+            document.getElementById('prevPage').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    loadSuppliers();
+                }
+            });
+
+            document.getElementById('nextPage').addEventListener('click', () => {
+                const totalPages = Math.ceil(totalResults / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    loadSuppliers();
+                }
+            });
+
+            // Click outside to close filter
+            document.addEventListener('click', (e) => {
+                const sidebar = document.getElementById('filterSidebar');
+                const toggle = document.getElementById('filterToggle');
+                
+                if (sidebar.classList.contains('open') && 
+                    !sidebar.contains(e.target) && 
+                    !toggle.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        }
+
+        // ============================================
+        // LOAD CATEGORIES
+        // ============================================
+        async function loadCategories() {
+            try {
+                const { data: categories, error } = await sb
+                    .from('categories')
+                    .select('id, name, icon, conducive_icon')
+                    .eq('is_active', true)
+                    .order('display_order', { ascending: true })
+                    .limit(8);
+
+                if (error) throw error;
+
+                const grid = document.getElementById('categoriesGrid');
+                
+                if (categories && categories.length > 0) {
+                    grid.innerHTML = categories.map(cat => `
+                        <div class="category-card" onclick="filterByCategory('${cat.name}')">
+                            <div class="category-icon">
+                                <i class="fas ${cat.icon || cat.conducive_icon || 'fa-tag'}"></i>
+                            </div>
+                            <div class="category-name">${cat.name}</div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD FEATURED SUPPLIERS
+        // ============================================
+        async function loadFeaturedSuppliers() {
+            try {
+                const { data: suppliers, error } = await sb
+                    .from('suppliers')
+                    .select(`
+                        *,
+                        profiles!suppliers_profile_id_fkey (
+                            full_name,
+                            avatar_url,
+                            is_verified
+                        )
+                    `)
+                    .eq('is_featured', true)
+                    .eq('verification_status', 'verified')
+                    .limit(10);
+
+                if (error) throw error;
+
+                const wrapper = document.getElementById('featuredWrapper');
+                
+                if (!suppliers || suppliers.length === 0) {
+                    document.getElementById('featuredSection').style.display = 'none';
+                    return;
+                }
+
+                wrapper.innerHTML = suppliers.map(supplier => {
+                    const initials = (supplier.business_name || 'Supplier')
+                        .split(' ')
+                        .map(n => n[0])
+                        .join('')
+                        .toUpperCase()
+                        .substring(0, 2);
+
+                    return `
+                        <div class="featured-card">
+                            <div class="featured-header">
+                                <div class="featured-avatar">
+                                    ${supplier.profiles?.avatar_url ? 
+                                        `<img src="${supplier.profiles.avatar_url}" style="width:100%;height:100%;object-fit:cover;">` : 
+                                        initials}
+                                </div>
+                                <div class="featured-info">
+                                    <h4>${supplier.business_name}</h4>
+                                    <p>${supplier.warehouse_district || 'Uganda'}</p>
+                                </div>
+                            </div>
+                            <div class="featured-products" id="featuredProducts-${supplier.id}">
+                                <div style="width:100%; text-align:center; color:#6B7280;">Loading...</div>
+                            </div>
+                            <a href="wholesaler-detail.html?id=${supplier.id}" style="text-decoration: none;">
+                                <button class="view-btn" style="width:100%;">View Profile</button>
+                            </a>
+                        </div>
+                    `;
+                }).join('');
+
+                // Load products for each featured supplier
+                suppliers.forEach(async (supplier) => {
+                    const { data: products } = await sb
+                        .from('ads')
+                        .select('image_urls')
+                        .eq('supplier_id', supplier.id)
+                        .eq('status', 'active')
+                        .limit(3);
+
+                    const productsContainer = document.getElementById(`featuredProducts-${supplier.id}`);
+                    
+                    if (products && products.length > 0) {
+                        productsContainer.innerHTML = products.map(p => `
+                            <div class="product-thumb">
+                                <img src="${p.image_urls?.[0] || 'https://via.placeholder.com/60'}" alt="Product">
+                            </div>
+                        `).join('');
+                    } else {
+                        productsContainer.innerHTML = '<div style="color:#6B7280; font-size:12px;">No products</div>';
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error loading featured suppliers:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD FILTER COUNTS
+        // ============================================
+        async function loadFilterCounts() {
+            try {
+                const { count: verifiedCount } = await sb
+                    .from('suppliers')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('verification_status', 'verified');
+
+                document.getElementById('verifiedCount').textContent = verifiedCount || 0;
+
+                const { count: featuredCount } = await sb
+                    .from('suppliers')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('is_featured', true)
+                    .eq('verification_status', 'verified');
+
+                document.getElementById('featuredCount').textContent = featuredCount || 0;
+
+            } catch (error) {
+                console.error('Error loading filter counts:', error);
+            }
+        }
+
+        // ============================================
+        // COLLECT FILTERS
+        // ============================================
+        function collectFilters() {
+            const businessTypes = [];
+            if (document.getElementById('typeManufacturer').checked) businessTypes.push('Manufacturer');
+            if (document.getElementById('typeWholesaler').checked) businessTypes.push('Wholesaler');
+            if (document.getElementById('typeDistributor').checked) businessTypes.push('Distributor');
+            if (document.getElementById('typeExporter').checked) businessTypes.push('Exporter');
+
+            currentFilters = {
+                verifiedOnly: document.getElementById('verifiedOnly').checked,
+                featuredOnly: document.getElementById('featuredOnly').checked,
+                businessTypes: businessTypes,
+                minRating: document.querySelector('input[name="rating"]:checked')?.value || null,
+                minOrderValue: document.getElementById('minOrderFilter').value || null
+            };
+
+            renderActiveFilters();
+        }
+
+        // ============================================
+        // RENDER ACTIVE FILTERS
+        // ============================================
+        function renderActiveFilters() {
+            const container = document.getElementById('activeFilters');
+            let filtersHtml = '';
+
+            if (currentFilters.verifiedOnly) {
+                filtersHtml += `<span class="filter-tag">Verified Only <i class="fas fa-times" onclick="removeFilter('verifiedOnly')"></i></span>`;
+            }
+            if (currentFilters.featuredOnly) {
+                filtersHtml += `<span class="filter-tag">Featured <i class="fas fa-times" onclick="removeFilter('featuredOnly')"></i></span>`;
+            }
+            if (currentFilters.businessTypes.length > 0) {
+                filtersHtml += `<span class="filter-tag">${currentFilters.businessTypes.join(', ')} <i class="fas fa-times" onclick="removeFilter('businessTypes')"></i></span>`;
+            }
+            if (currentFilters.minRating) {
+                filtersHtml += `<span class="filter-tag">${currentFilters.minRating}★ & above <i class="fas fa-times" onclick="removeFilter('minRating')"></i></span>`;
+            }
+            if (currentFilters.minOrderValue) {
+                filtersHtml += `<span class="filter-tag">Min Order: UGX ${parseInt(currentFilters.minOrderValue).toLocaleString()}+ <i class="fas fa-times" onclick="removeFilter('minOrderValue')"></i></span>`;
+            }
+
+            container.innerHTML = filtersHtml;
+        }
+
+        // ============================================
+        // CLEAR FILTERS
+        // ============================================
+        function clearFilters() {
+            // Reset checkboxes
+            document.getElementById('verifiedOnly').checked = false;
+            document.getElementById('featuredOnly').checked = false;
+            document.getElementById('typeManufacturer').checked = false;
+            document.getElementById('typeWholesaler').checked = false;
+            document.getElementById('typeDistributor').checked = false;
+            document.getElementById('typeExporter').checked = false;
+            
+            // Reset radio buttons
+            document.querySelectorAll('input[name="rating"]').forEach(r => r.checked = false);
+            
+            // Reset select
+            document.getElementById('minOrderFilter').value = '';
+            
+            // Reset filters object
+            currentFilters = {
+                verifiedOnly: false,
+                featuredOnly: false,
+                businessTypes: [],
+                minRating: null,
+                minOrderValue: null
+            };
+            
+            renderActiveFilters();
+            currentPage = 1;
+            loadSuppliers();
+        }
+
+        // ============================================
+        // REMOVE FILTER
+        // ============================================
+        window.removeFilter = function(filter) {
+            switch(filter) {
+                case 'verifiedOnly':
+                    document.getElementById('verifiedOnly').checked = false;
+                    currentFilters.verifiedOnly = false;
+                    break;
+                case 'featuredOnly':
+                    document.getElementById('featuredOnly').checked = false;
+                    currentFilters.featuredOnly = false;
+                    break;
+                case 'businessTypes':
+                    document.getElementById('typeManufacturer').checked = false;
+                    document.getElementById('typeWholesaler').checked = false;
+                    document.getElementById('typeDistributor').checked = false;
+                    document.getElementById('typeExporter').checked = false;
+                    currentFilters.businessTypes = [];
+                    break;
+                case 'minRating':
+                    document.querySelectorAll('input[name="rating"]').forEach(r => r.checked = false);
+                    currentFilters.minRating = null;
+                    break;
+                case 'minOrderValue':
+                    document.getElementById('minOrderFilter').value = '';
+                    currentFilters.minOrderValue = null;
+                    break;
+            }
+            
+            renderActiveFilters();
+            currentPage = 1;
+            loadSuppliers();
+        };
+
+        // ============================================
+        // LOAD SUPPLIERS
+        // ============================================
+        async function loadSuppliers(searchQuery = '') {
+            try {
+                // Show loading skeletons
+                showLoading();
+
+                // Build query
+                let query = sb
+                    .from('suppliers')
+                    .select(`
+                        *,
+                        profiles!suppliers_profile_id_fkey (
+                            id,
+                            full_name,
+                            avatar_url,
+                            is_verified,
+                            district
+                        )
+                    `, { count: 'exact' })
+                    .eq('verification_status', 'verified');
+
+                // Search query
+                if (searchQuery) {
+                    query = query.or(`business_name.ilike.%${searchQuery}%,profiles.full_name.ilike.%${searchQuery}%`);
+                }
+
+                // Apply filters
+                if (currentFilters.verifiedOnly) {
+                    query = query.eq('profiles.is_verified', true);
+                }
+
+                if (currentFilters.featuredOnly) {
+                    query = query.eq('is_featured', true);
+                }
+
+                if (currentFilters.businessTypes.length > 0) {
+                    query = query.in('business_type', currentFilters.businessTypes);
+                }
+
+                if (currentFilters.minOrderValue) {
+                    query = query.gte('min_order_value', parseFloat(currentFilters.minOrderValue));
+                }
+
+                // Location filter
+                if (selectedDistrict) {
+                    query = query.eq('warehouse_district', selectedDistrict);
+                }
+
+                // Apply sorting
+                const sort = document.getElementById('sortSelect').value;
+                switch(sort) {
+                    case 'rating':
+                        // You'd need a rating field in suppliers table
+                        query = query.order('completion_rate', { ascending: false });
+                        break;
+                    case 'products':
+                        query = query.order('total_orders', { ascending: false });
+                        break;
+                    case 'orders':
+                        query = query.order('total_orders', { ascending: false });
+                        break;
+                    case 'newest':
+                        query = query.order('created_at', { ascending: false });
+                        break;
+                    default:
+                        query = query.order('is_featured', { ascending: false })
+                                   .order('created_at', { ascending: false });
+                }
+
+                // Pagination
+                const from = (currentPage - 1) * itemsPerPage;
+                const to = from + itemsPerPage - 1;
+                
+                const { data, count, error } = await query
+                    .range(from, to);
+
+                if (error) throw error;
+
+                totalResults = count || 0;
+                document.getElementById('resultsCount').textContent = totalResults;
+
+                // Render suppliers
+                renderSuppliers(data || []);
+
+                // Update pagination
+                updatePagination();
+
+            } catch (error) {
+                console.error('Error loading suppliers:', error);
+                showToast('Error loading suppliers');
+            }
+        }
+
+        // ============================================
+        // SHOW LOADING
+        // ============================================
+        function showLoading() {
+            let skeletons = '';
+            for (let i = 0; i < 6; i++) {
+                skeletons += `
+                    <div class="skeleton-card">
+                        <div class="skeleton-header"></div>
+                        <div style="padding: 16px; text-align: center;">
+                            <div class="skeleton-avatar"></div>
+                            <div style="height: 16px; width: 60%; margin: 8px auto; background: #E5E7EB;"></div>
+                            <div style="height: 12px; width: 40%; margin: 8px auto; background: #E5E7EB;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            document.getElementById('suppliersGrid').innerHTML = skeletons;
+        }
+
+        // ============================================
+        // RENDER SUPPLIERS
+        // ============================================
+        function renderSuppliers(suppliers) {
+            if (suppliers.length === 0) {
+                document.getElementById('suppliersGrid').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                        <i class="fas fa-store" style="font-size: 48px; color: #9CA3AF; margin-bottom: 16px;"></i>
+                        <h3>No Suppliers Found</h3>
+                        <p style="color: #6B7280;">Try adjusting your search or filters</p>
+                        <button onclick="clearFilters()" style="margin-top: 16px; padding: 12px 24px; background: #0B4F6C; color: white; border: none; border-radius: 30px; font-weight: 600;">Clear Filters</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const gridHtml = suppliers.map(supplier => {
+                const profile = supplier.profiles || {};
+                const initials = (supplier.business_name || 'Supplier')
+                    .split(' ')
+                    .map(n => n[0])
+                    .join('')
+                    .toUpperCase()
+                    .substring(0, 2);
+
+                return `
+                    <div class="supplier-card">
+                        <div class="supplier-header">
+                            ${supplier.is_featured ? '<div class="supplier-featured"><i class="fas fa-crown"></i> Featured</div>' : ''}
+                            ${profile.is_verified ? '<div class="supplier-verified"><i class="fas fa-check"></i></div>' : ''}
+                            <div class="supplier-avatar">
+                                ${profile.avatar_url ? 
+                                    `<img src="${profile.avatar_url}" alt="${supplier.business_name}">` : 
+                                    initials}
+                            </div>
+                            <div class="supplier-name">${supplier.business_name}</div>
+                            <div class="supplier-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${supplier.warehouse_district || 'Uganda'}
+                            </div>
+                        </div>
+                        <div class="supplier-body">
+                            <div class="supplier-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value">${supplier.total_orders || 0}</div>
+                                    <div class="stat-label">Orders</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">${supplier.completion_rate || 100}%</div>
+                                    <div class="stat-label">Completion</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">${supplier.response_time_hours || '-'}</div>
+                                    <div class="stat-label">Response</div>
+                                </div>
+                            </div>
+                            <div class="supplier-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-tag"></i>
+                                    <span>${supplier.business_type || 'Supplier'}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Member since ${new Date(supplier.created_at).getFullYear()}</span>
+                                </div>
+                                ${supplier.min_order_value ? `
+                                    <div class="meta-item">
+                                        <i class="fas fa-coins"></i>
+                                        <span>Min Order: UGX ${parseInt(supplier.min_order_value).toLocaleString()}</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div class="supplier-badges">
+                                ${supplier.verification_status === 'verified' ? 
+                                    '<span class="badge verified"><i class="fas fa-check-circle"></i> Verified</span>' : ''}
+                                ${supplier.business_type ? 
+                                    `<span class="badge">${supplier.business_type}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="supplier-footer">
+                            <a href="wholesaler-detail.html?id=${supplier.id}" class="view-btn">View Profile</a>
+                            <a href="supplier-chat.html?supplier=${supplier.id}" class="contact-btn">Contact</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('suppliersGrid').innerHTML = gridHtml;
+        }
+
+        // ============================================
+        // UPDATE PAGINATION
+        // ============================================
+        function updatePagination() {
+            const totalPages = Math.ceil(totalResults / itemsPerPage);
+            
+            // Update page buttons
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById(`page${i}`);
+                if (btn) {
+                    const pageNum = currentPage + (i - 2);
+                    if (pageNum >= 1 && pageNum <= totalPages) {
+                        btn.style.display = 'block';
+                        btn.textContent = pageNum;
+                        btn.classList.toggle('active', pageNum === currentPage);
+                    } else {
+                        btn.style.display = 'none';
+                    }
+                }
+            }
+
+            // Update prev/next buttons
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+        }
+
+        // ============================================
+        // FILTER BY CATEGORY
+        // ============================================
+        window.filterByCategory = function(category) {
+            // Store category filter and redirect to search
+            window.location.href = `B2B-search.html?category=${encodeURIComponent(category)}`;
+        };
+
+        // ============================================
+        // CHANGE LOCATION
+        // ============================================
+        window.changeLocation = function() {
+            window.location.href = 'location-selector.html?redirect=suppliers.html';
+        };
+
+        // ============================================
+        // FILTER BY LOCATION
+        // ============================================
+        window.filterByLocation = function(location) {
+            if (location === 'nationwide') {
+                selectedDistrict = null;
+                localStorage.removeItem('selectedDistrict');
+            } else {
+                selectedDistrict = location;
+            }
+            document.getElementById('currentLocation').textContent = selectedDistrict || 'Nationwide';
+            currentPage = 1;
+            loadSuppliers();
+        };
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
