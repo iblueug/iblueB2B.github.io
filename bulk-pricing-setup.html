@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>iBlue B2B • Bulk Pricing Setup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1F2937;
+            padding-bottom: 100px;
+        }
+
+        /* Header */
+        .header {
+            background: #0B4F6C;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .save-btn {
+            background: white;
+            color: #0B4F6C;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* Product Selector */
+        .product-selector {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .selector-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .selector-title i {
+            color: #0B4F6C;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .product-option {
+            background: #F9FAFB;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .product-option:hover {
+            border-color: #0B4F6C;
+        }
+
+        .product-option.selected {
+            border-color: #0B4F6C;
+            background: rgba(11, 79, 108, 0.05);
+        }
+
+        .product-option-image {
+            width: 100%;
+            height: 100px;
+            border-radius: 8px;
+            background: #F3F4F6;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+
+        .product-option-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-option-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .product-option-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        /* Current Pricing Card */
+        .current-pricing {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .pricing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .pricing-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .base-price {
+            background: #F3F4F6;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+        }
+
+        .base-price strong {
+            color: #0B4F6C;
+            margin-left: 8px;
+        }
+
+        /* Bulk Pricing Table */
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+
+        .pricing-table th {
+            text-align: left;
+            padding: 12px;
+            background: #F9FAFB;
+            color: #4B5563;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .pricing-table td {
+            padding: 12px;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .pricing-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tier-input {
+            width: 100%;
+            padding: 10px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .tier-input:focus {
+            border-color: #0B4F6C;
+            outline: none;
+        }
+
+        .tier-input.error {
+            border-color: #EF4444;
+        }
+
+        .remove-tier {
+            color: #EF4444;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .add-tier-btn {
+            background: #F9FAFB;
+            border: 1.5px dashed #9CA3AF;
+            border-radius: 12px;
+            padding: 16px;
+            width: 100%;
+            color: #4B5563;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .add-tier-btn:hover {
+            border-color: #0B4F6C;
+            color: #0B4F6C;
+        }
+
+        /* Price Preview */
+        .price-preview {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .preview-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            height: 200px;
+            margin: 20px 0;
+        }
+
+        .preview-bar {
+            flex: 1;
+            background: #0B4F6C;
+            border-radius: 8px 8px 0 0;
+            min-height: 40px;
+            transition: height 0.3s;
+            position: relative;
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            white-space: nowrap;
+            color: #6B7280;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            font-weight: 600;
+            color: #0B4F6C;
+            white-space: nowrap;
+        }
+
+        .savings-note {
+            color: #10B981;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        /* Bulk Discount Calculator */
+        .calculator {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .calc-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            align-items: flex-end;
+        }
+
+        .calc-field {
+            flex: 1;
+        }
+
+        .calc-label {
+            font-size: 12px;
+            color: #6B7280;
+            margin-bottom: 4px;
+        }
+
+        .calc-input {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .calc-result {
+            background: #F3F4F6;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .result-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        .result-savings {
+            color: #10B981;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Validation Warnings */
+        .validation-warning {
+            background: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .validation-warning i {
+            color: #F59E0B;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            padding: 12px 16px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 1.5px solid #0B4F6C;
+            color: #0B4F6C;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Success Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #10B981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 40px;
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 8px;
+        }
+
+        .modal-text {
+            color: #6B7280;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+
+        .modal-btn-primary {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .modal-btn-secondary {
+            background: white;
+            border: 1.5px solid #E5E7EB;
+            color: #4B5563;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .action-buttons {
+                max-width: 800px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 30px 30px 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="header-title">Bulk Pricing Setup</div>
+        <button class="save-btn" id="saveBtn">
+            <i class="fas fa-check"></i>
+            Save
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Product Selector -->
+        <div class="product-selector">
+            <div class="selector-title">
+                <i class="fas fa-box"></i>
+                Select Product
+            </div>
+            <div class="product-grid" id="productGrid">
+                <!-- Products populated by JS -->
+                <div style="text-align: center; padding: 20px; color: #6B7280; grid-column: 1/-1;">
+                    <i class="fas fa-spinner fa-spin"></i> Loading products...
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Pricing (shown when product selected) -->
+        <div id="pricingSection" style="display: none;">
+            <div class="current-pricing">
+                <div class="pricing-header">
+                    <div class="pricing-title">Current Pricing</div>
+                    <div class="base-price" id="basePriceDisplay">
+                        Base Price: <strong>UGX 0</strong>
+                    </div>
+                </div>
+
+                <!-- Bulk Pricing Table -->
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th>Min Quantity</th>
+                            <th>Max Quantity</th>
+                            <th>Price Per Unit (UGX)</th>
+                            <th>Discount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="pricingTiers">
+                        <!-- Tiers populated by JS -->
+                    </tbody>
+                </table>
+
+                <button class="add-tier-btn" id="addTierBtn">
+                    <i class="fas fa-plus"></i>
+                    Add Pricing Tier
+                </button>
+
+                <!-- Validation Warnings -->
+                <div id="validationWarnings"></div>
+            </div>
+
+            <!-- Price Preview Chart -->
+            <div class="price-preview">
+                <div class="preview-title">
+                    <i class="fas fa-chart-line"></i>
+                    Price Preview
+                </div>
+                <div class="preview-chart" id="priceChart">
+                    <!-- Chart bars populated by JS -->
+                </div>
+                <div class="savings-note" id="savingsNote">
+                    <i class="fas fa-gem"></i>
+                    Buyers save more with larger quantities
+                </div>
+            </div>
+
+            <!-- Bulk Discount Calculator -->
+            <div class="calculator">
+                <div class="preview-title">
+                    <i class="fas fa-calculator"></i>
+                    Bulk Discount Calculator
+                </div>
+                <div class="calc-row">
+                    <div class="calc-field">
+                        <div class="calc-label">Quantity</div>
+                        <input type="number" class="calc-input" id="calcQuantity" value="100" min="1">
+                    </div>
+                    <div class="calc-field">
+                        <div class="calc-label">Regular Price</div>
+                        <input type="number" class="calc-input" id="calcRegularPrice" readonly>
+                    </div>
+                </div>
+                <div class="calc-result">
+                    <div class="result-price" id="calcFinalPrice">UGX 0</div>
+                    <div class="result-savings" id="calcSavings">You save UGX 0 (0%)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Product Selected State -->
+        <div id="noProductSection" class="product-selector" style="text-align: center; padding: 40px;">
+            <i class="fas fa-cubes" style="font-size: 48px; color: #9CA3AF; margin-bottom: 16px;"></i>
+            <h3 style="margin-bottom: 8px;">Select a Product</h3>
+            <p style="color: #6B7280;">Choose a product from above to set up bulk pricing tiers</p>
+        </div>
+    </main>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="btn btn-secondary" id="previewBtn">
+            <i class="fas fa-eye"></i>
+            Preview
+        </button>
+        <button class="btn btn-primary" id="savePricingBtn" disabled>
+            <i class="fas fa-save"></i>
+            Save Pricing
+        </button>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 class="modal-title">Pricing Saved!</h2>
+            <p class="modal-text">Your bulk pricing tiers have been updated successfully.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal()">
+                    Add More
+                </button>
+                <button class="modal-btn modal-btn-primary" onclick="window.location.href='supplier-products.html'">
+                    View Products
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ============================================
+        // SUPABASE CONFIGURATION
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // STATE
+        ============================================
+        let currentUser = null;
+        let products = [];
+        let selectedProduct = null;
+        let pricingTiers = [];
+        let deletedTiers = [];
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            await loadProducts();
+            setupEventListeners();
+        });
+
+        // ============================================
+        // CHECK AUTH
+        // ============================================
+        async function checkAuth() {
+            try {
+                const { data: { user }, error } = await sb.auth.getUser();
+                
+                if (error || !user) {
+                    showToast('Please login to manage bulk pricing');
+                    setTimeout(() => {
+                        window.location.href = 'login.html?redirect=bulk-pricing-setup.html';
+                    }, 2000);
+                    return;
+                }
+                
+                currentUser = user;
+                
+            } catch (error) {
+                console.error('Auth check error:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD PRODUCTS
+        // ============================================
+        async function loadProducts() {
+            try {
+                const { data, error } = await sb
+                    .from('ads')
+                    .select(`
+                        *,
+                        bulk_pricing (*)
+                    `)
+                    .eq('seller_id', currentUser.id)
+                    .in('status', ['active', 'draft'])
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                products = data || [];
+                renderProductGrid();
+
+            } catch (error) {
+                console.error('Error loading products:', error);
+                showToast('Error loading products');
+            }
+        }
+
+        // ============================================
+        // RENDER PRODUCT GRID
+        // ============================================
+        function renderProductGrid() {
+            const container = document.getElementById('productGrid');
+
+            if (products.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #6B7280; grid-column: 1/-1;">
+                        <i class="fas fa-box-open" style="font-size: 32px; margin-bottom: 12px;"></i>
+                        <p>No products found</p>
+                        <a href="post-ad.html?type=b2b" style="color: #0B4F6C; font-weight: 600; display: inline-block; margin-top: 12px;">
+                            Add Your First Product
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = products.map(product => {
+                const imageUrl = product.image_urls?.[0] || 'https://via.placeholder.com/200x100?text=No+Image';
+                const price = product.wholesale_price || product.price || 0;
+                
+                return `
+                    <div class="product-option" onclick="selectProduct(${product.id})" data-id="${product.id}">
+                        <div class="product-option-image">
+                            <img src="${imageUrl}" alt="${product.title}">
+                        </div>
+                        <div class="product-option-title">${product.title.substring(0, 30)}${product.title.length > 30 ? '...' : ''}</div>
+                        <div class="product-option-price">UGX ${parseInt(price).toLocaleString()}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================
+        // SELECT PRODUCT
+        // ============================================
+        window.selectProduct = async function(productId) {
+            // Update UI
+            document.querySelectorAll('.product-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.dataset.id == productId) {
+                    opt.classList.add('selected');
+                }
+            });
+
+            selectedProduct = products.find(p => p.id === productId);
+            
+            // Load existing pricing tiers
+            pricingTiers = selectedProduct.bulk_pricing || [];
+            
+            // Show pricing section
+            document.getElementById('pricingSection').style.display = 'block';
+            document.getElementById('noProductSection').style.display = 'none';
+            
+            // Update base price display
+            const basePrice = selectedProduct.wholesale_price || selectedProduct.price || 0;
+            document.getElementById('basePriceDisplay').innerHTML = `
+                Base Price: <strong>UGX ${parseInt(basePrice).toLocaleString()}</strong>
+            `;
+            
+            document.getElementById('calcRegularPrice').value = basePrice;
+            
+            // Render pricing tiers
+            renderPricingTiers();
+            
+            // Enable save button
+            document.getElementById('savePricingBtn').disabled = false;
+            
+            // Update calculator
+            updateCalculator();
+        };
+
+        // ============================================
+        // RENDER PRICING TIERS
+        // ============================================
+        function renderPricingTiers() {
+            const container = document.getElementById('pricingTiers');
+            
+            if (pricingTiers.length === 0) {
+                // Add default tier if none exists
+                pricingTiers.push({
+                    id: null,
+                    min_quantity: 10,
+                    max_quantity: null,
+                    price_per_unit: selectedProduct?.wholesale_price || selectedProduct?.price || 0,
+                    discount_percentage: 0,
+                    is_active: true
+                });
+            }
+
+            container.innerHTML = pricingTiers.map((tier, index) => {
+                const basePrice = selectedProduct?.wholesale_price || selectedProduct?.price || 0;
+                const discount = basePrice > 0 ? ((basePrice - tier.price_per_unit) / basePrice * 100).toFixed(0) : 0;
+                
+                return `
+                    <tr data-index="${index}">
+                        <td>
+                            <input type="number" class="tier-input" value="${tier.min_quantity}" min="1" 
+                                   onchange="updateTier(${index}, 'min', this.value)" 
+                                   oninput="validateTiers()">
+                        </td>
+                        <td>
+                            <input type="number" class="tier-input" value="${tier.max_quantity || ''}" min="1" 
+                                   placeholder="∞" onchange="updateTier(${index}, 'max', this.value)"
+                                   oninput="validateTiers()">
+                        </td>
+                        <td>
+                            <input type="number" class="tier-input" value="${tier.price_per_unit}" min="0" step="100"
+                                   onchange="updateTier(${index}, 'price', this.value)"
+                                   oninput="validateTiers()">
+                        </td>
+                        <td>
+                            <span style="font-weight: 600; color: ${discount > 0 ? '#10B981' : '#6B7280'};">
+                                ${discount > 0 ? `${discount}% off` : '-'}
+                            </span>
+                        </td>
+                        <td class="remove-tier" onclick="removeTier(${index})">
+                            <i class="fas fa-times"></i>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            updatePriceChart();
+            validateTiers();
+        }
+
+        // ============================================
+        // UPDATE TIER
+        // ============================================
+        window.updateTier = function(index, field, value) {
+            if (field === 'max' && value === '') {
+                pricingTiers[index].max_quantity = null;
+            } else {
+                pricingTiers[index][field === 'min' ? 'min_quantity' : 
+                                 field === 'max' ? 'max_quantity' : 'price_per_unit'] = parseFloat(value) || 0;
+            }
+            
+            validateTiers();
+            updatePriceChart();
+            updateCalculator();
+        };
+
+        // ============================================
+        // ADD TIER
+        // ============================================
+        document.getElementById('addTierBtn').addEventListener('click', () => {
+            const lastTier = pricingTiers[pricingTiers.length - 1];
+            const lastMin = lastTier?.min_quantity || 0;
+            
+            pricingTiers.push({
+                id: null,
+                min_quantity: lastMin + 100,
+                max_quantity: null,
+                price_per_unit: lastTier?.price_per_unit || selectedProduct?.wholesale_price || selectedProduct?.price || 0,
+                discount_percentage: 0,
+                is_active: true
+            });
+            
+            renderPricingTiers();
+        });
+
+        // ============================================
+        // REMOVE TIER
+        // ============================================
+        window.removeTier = function(index) {
+            if (pricingTiers[index].id) {
+                deletedTiers.push(pricingTiers[index].id);
+            }
+            
+            pricingTiers.splice(index, 1);
+            
+            if (pricingTiers.length === 0) {
+                // Add default if all removed
+                pricingTiers.push({
+                    id: null,
+                    min_quantity: 10,
+                    max_quantity: null,
+                    price_per_unit: selectedProduct?.wholesale_price || selectedProduct?.price || 0,
+                    discount_percentage: 0,
+                    is_active: true
+                });
+            }
+            
+            renderPricingTiers();
+        };
+
+        // ============================================
+        // VALIDATE TIERS
+        // ============================================
+        function validateTiers() {
+            const warnings = [];
+            const basePrice = selectedProduct?.wholesale_price || selectedProduct?.price || 0;
+            
+            // Sort by min quantity
+            pricingTiers.sort((a, b) => a.min_quantity - b.min_quantity);
+            
+            // Check for overlapping ranges
+            for (let i = 0; i < pricingTiers.length - 1; i++) {
+                const current = pricingTiers[i];
+                const next = pricingTiers[i + 1];
+                
+                if (current.max_quantity && current.max_quantity >= next.min_quantity) {
+                    warnings.push(`Tier ${i + 1} and ${i + 2} have overlapping quantity ranges`);
+                }
+            }
+            
+            // Check for decreasing prices
+            for (let i = 0; i < pricingTiers.length - 1; i++) {
+                if (pricingTiers[i].price_per_unit <= pricingTiers[i + 1].price_per_unit) {
+                    warnings.push(`Prices should decrease with larger quantities (Tier ${i + 1} should be cheaper than Tier ${i + 2})`);
+                }
+            }
+            
+            // Check price below base
+            pricingTiers.forEach((tier, index) => {
+                if (tier.price_per_unit > basePrice) {
+                    warnings.push(`Tier ${index + 1} price is higher than base price`);
+                }
+            });
+            
+            // Display warnings
+            const warningsContainer = document.getElementById('validationWarnings');
+            if (warnings.length > 0) {
+                warningsContainer.innerHTML = warnings.map(w => `
+                    <div class="validation-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        ${w}
+                    </div>
+                `).join('');
+            } else {
+                warningsContainer.innerHTML = '';
+            }
+            
+            return warnings.length === 0;
+        }
+
+        // ============================================
+        // UPDATE PRICE CHART
+        // ============================================
+        function updatePriceChart() {
+            const chart = document.getElementById('priceChart');
+            const basePrice = selectedProduct?.wholesale_price || selectedProduct?.price || 0;
+            
+            // Sort tiers
+            const sortedTiers = [...pricingTiers].sort((a, b) => a.min_quantity - b.min_quantity);
+            
+            // Calculate max height for scaling
+            const maxPrice = Math.max(basePrice, ...sortedTiers.map(t => t.price_per_unit));
+            
+            chart.innerHTML = sortedTiers.map((tier, index) => {
+                const height = (tier.price_per_unit / maxPrice) * 180; // 180px max height
+                const savings = ((basePrice - tier.price_per_unit) / basePrice * 100).toFixed(0);
+                
+                return `
+                    <div class="preview-bar" style="height: ${height}px;">
+                        <div class="bar-value">UGX ${parseInt(tier.price_per_unit).toLocaleString()}</div>
+                        <div class="bar-label">${tier.min_quantity}+</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================
+        // UPDATE CALCULATOR
+        // ============================================
+        function updateCalculator() {
+            const quantity = parseInt(document.getElementById('calcQuantity').value) || 0;
+            const basePrice = selectedProduct?.wholesale_price || selectedProduct?.price || 0;
+            
+            // Find applicable tier
+            const applicableTier = [...pricingTiers]
+                .sort((a, b) => a.min_quantity - b.min_quantity)
+                .find(tier => quantity >= tier.min_quantity && 
+                    (!tier.max_quantity || quantity <= tier.max_quantity));
+            
+            const finalPrice = applicableTier ? applicableTier.price_per_unit : basePrice;
+            const total = finalPrice * quantity;
+            const regularTotal = basePrice * quantity;
+            const savings = regularTotal - total;
+            const savingsPercent = ((savings / regularTotal) * 100).toFixed(0);
+            
+            document.getElementById('calcFinalPrice').textContent = `UGX ${total.toLocaleString()}`;
+            
+            if (savings > 0) {
+                document.getElementById('calcSavings').innerHTML = `
+                    You save UGX ${savings.toLocaleString()} (${savingsPercent}%)
+                `;
+                document.getElementById('calcSavings').style.color = '#10B981';
+            } else {
+                document.getElementById('calcSavings').textContent = 'No discount applied';
+                document.getElementById('calcSavings').style.color = '#6B7280';
+            }
+        }
+
+        // ============================================
+        // SAVE PRICING
+        // ============================================
+        async function savePricing() {
+            if (!validateTiers()) {
+                showToast('Please fix validation errors before saving');
+                return;
+            }
+
+            const saveBtn = document.getElementById('savePricingBtn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            try {
+                // Delete removed tiers
+                for (const tierId of deletedTiers) {
+                    await sb
+                        .from('bulk_pricing')
+                        .delete()
+                        .eq('id', tierId);
+                }
+
+                // Save/update tiers
+                for (const tier of pricingTiers) {
+                    const tierData = {
+                        ad_id: selectedProduct.id,
+                        min_quantity: tier.min_quantity,
+                        max_quantity: tier.max_quantity || null,
+                        price_per_unit: tier.price_per_unit,
+                        discount_percentage: ((selectedProduct.wholesale_price - tier.price_per_unit) / selectedProduct.wholesale_price * 100) || 0,
+                        is_active: true
+                    };
+
+                    if (tier.id) {
+                        // Update existing
+                        await sb
+                            .from('bulk_pricing')
+                            .update(tierData)
+                            .eq('id', tier.id);
+                    } else {
+                        // Insert new
+                        await sb
+                            .from('bulk_pricing')
+                            .insert(tierData);
+                    }
+                }
+
+                // Show success
+                document.getElementById('successModal').classList.add('show');
+                
+            } catch (error) {
+                console.error('Error saving pricing:', error);
+                showToast('Error saving pricing tiers');
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Pricing';
+            }
+        }
+
+        // ============================================
+        // SETUP EVENT LISTENERS
+        // ============================================
+        function setupEventListeners() {
+            // Save button
+            document.getElementById('saveBtn').addEventListener('click', savePricing);
+            document.getElementById('savePricingBtn').addEventListener('click', savePricing);
+
+            // Preview button
+            document.getElementById('previewBtn').addEventListener('click', () => {
+                updatePriceChart();
+                updateCalculator();
+            });
+
+            // Calculator quantity input
+            document.getElementById('calcQuantity').addEventListener('input', updateCalculator);
+
+            // Save button in modal
+            document.getElementById('savePricingBtn').addEventListener('click', savePricing);
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        window.closeModal = function() {
+            document.getElementById('successModal').classList.remove('show');
+            window.location.href = 'supplier-products.html';
+        };
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('successModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+</body>
+</html>

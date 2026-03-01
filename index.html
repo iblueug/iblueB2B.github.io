@@ -1,0 +1,2384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>iBlue B2B - Uganda's Business Marketplace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/9.2.0/swiper-bundle.min.css">
+    <style>
+        /* B2B-focused styling with professional blue theme */
+        :root {
+            --primary: #0B4F6C;
+            --primary-dark: #083b4f;
+            --primary-light: #1a6b8a;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --dark: #1F2937;
+            --gray-800: #1F2937;
+            --gray-700: #374151;
+            --gray-600: #4B5563;
+            --gray-500: #6B7280;
+            --gray-400: #9CA3AF;
+            --gray-300: #D1D5DB;
+            --gray-200: #E5E7EB;
+            --gray-100: #F3F4F6;
+            --white: #FFFFFF;
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--gray-100);
+            color: var(--dark);
+            line-height: 1.4;
+            padding-bottom: 70px;
+        }
+
+        /* Header with B2B branding */
+        .header {
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            z-index: 1000;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform: translateY(0);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .header.scrolled {
+            box-shadow: var(--shadow);
+        }
+
+        .header.hidden {
+            transform: translateY(-100%);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-circle {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 24px;
+            font-style: italic;
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        .b2b-badge {
+            background: var(--accent);
+            color: var(--dark);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 4px;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon {
+            color: var(--gray-600);
+            font-size: 20px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .header-icon:hover {
+            color: var(--primary);
+        }
+
+        .badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 5px;
+            border-radius: 10px;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        /* Business Location Bar */
+        .location-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+            background: var(--white);
+            border-top: 1px solid var(--gray-200);
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        .location-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .location-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 20px;
+            background: var(--gray-100);
+        }
+
+        .business-hub-badge {
+            background: var(--secondary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Location Modal (kept same as before) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--gray-500);
+        }
+
+        .region-list {
+            list-style: none;
+        }
+
+        .region-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gray-100);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .region-item:hover {
+            background: var(--gray-100);
+        }
+
+        .region-item i {
+            color: var(--primary);
+            width: 20px;
+        }
+
+        .region-name {
+            flex: 1;
+        }
+
+        .region-check {
+            color: var(--primary);
+        }
+
+        .current-location {
+            padding: 12px 16px;
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .current-location i {
+            color: var(--primary);
+        }
+
+        /* B2B Stats Bar */
+        .b2b-stats {
+            background: var(--primary);
+            color: white;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-around;
+            font-size: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .stat-label {
+            opacity: 0.9;
+        }
+
+        /* Banner */
+        .swiper {
+            height: 160px;
+            margin: 12px 16px;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .swiper-slide {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        /* B2B Quick Actions */
+        .b2b-quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 16px;
+            background: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .quick-action-item {
+            text-align: center;
+            text-decoration: none;
+            color: var(--gray-700);
+        }
+
+        .quick-action-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            color: var(--primary);
+            font-size: 20px;
+            transition: all 0.2s;
+        }
+
+        .quick-action-item:hover .quick-action-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .quick-action-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* Section Headers */
+        .section {
+            padding: 16px;
+            background: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .section-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Horizontal Scroll */
+        .horizontal-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            margin: 0 -16px;
+            padding: 4px 16px;
+            scroll-behavior: smooth;
+        }
+
+        .horizontal-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scroll-wrapper {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* B2B Product Cards */
+        .product-card-horizontal {
+            flex: 0 0 180px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s;
+        }
+
+        .product-card-horizontal:active {
+            transform: scale(0.98);
+        }
+
+        .product-image {
+            width: 180px;
+            height: 180px;
+            background: var(--gray-100);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .product-card-horizontal:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .product-badge.bulk {
+            background: var(--secondary);
+        }
+
+        .product-badge.wholesale {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        .product-info {
+            padding: 10px;
+        }
+
+        .product-title {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--danger);
+            margin-bottom: 2px;
+        }
+
+        .product-price small {
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--gray-500);
+        }
+
+        .product-moq {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 600;
+            margin: 4px 0;
+        }
+
+        .product-meta {
+            font-size: 11px;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            background: #EFF6FF;
+            color: var(--primary);
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 4px;
+        }
+
+        .verified-badge i {
+            font-size: 10px;
+        }
+
+        /* Supplier Cards */
+        .supplier-card-horizontal {
+            flex: 0 0 200px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s;
+            padding: 16px 12px;
+        }
+
+        .supplier-card-horizontal:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+
+        .supplier-avatar-container {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 12px;
+            position: relative;
+        }
+
+        .supplier-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 28px;
+            overflow: hidden;
+        }
+
+        .supplier-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .supplier-verified {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--secondary);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            border: 2px solid white;
+        }
+
+        .supplier-name {
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .supplier-location {
+            font-size: 12px;
+            color: var(--gray-500);
+            text-align: center;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .supplier-stats {
+            font-size: 12px;
+            color: var(--gray-600);
+            text-align: center;
+            margin: 8px 0;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .supplier-badge {
+            background: var(--primary);
+            color: white;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-align: center;
+            display: inline-block;
+            width: 100%;
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 16px;
+            background: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .category-item {
+            text-align: center;
+            text-decoration: none;
+            color: var(--gray-700);
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            color: var(--primary);
+            font-size: 24px;
+            transition: all 0.2s;
+        }
+
+        .category-item:hover .category-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .category-name {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Bulk Deals Banner */
+        .bulk-deals-banner {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 20px;
+            margin: 8px 16px;
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bulk-deals-banner h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .bulk-deals-banner p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .bulk-deals-banner button {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Grid Products (for category sections) */
+        .product-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:active {
+            transform: scale(0.98);
+        }
+
+        .product-card .product-image {
+            width: 100%;
+            height: 140px;
+        }
+
+        .product-card .product-info {
+            padding: 12px;
+        }
+
+        .product-card .product-title {
+            font-size: 14px;
+            white-space: normal;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            height: 36px;
+            margin-bottom: 6px;
+        }
+
+        .product-card .product-price {
+            font-size: 16px;
+        }
+
+        .product-card .product-moq {
+            font-size: 11px;
+            margin: 4px 0;
+        }
+
+        /* B2B Features Section */
+        .b2b-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 16px;
+            background: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .feature-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .feature-text h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .feature-text p {
+            font-size: 11px;
+            color: var(--gray-500);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            padding: 8px 0 12px;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray-400);
+            font-size: 11px;
+            gap: 4px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Responsive */
+        @media (min-width: 640px) {
+            .category-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+            
+            .b2b-features {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+                <span class="b2b-badge">BUSINESS</span>
+            </a>
+            
+            <div class="header-actions">
+                <div class="header-icon" id="headerSearchIcon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge" style="display: none;">3</span>
+                </a>
+                <a href="messages.html" class="header-icon">
+                    <i class="far fa-comment-dots"></i>
+                    <span class="badge" id="messageBadge" style="display: none;">2</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Business Location Bar -->
+        <div class="location-bar">
+            <div class="location-info">
+                <i class="fas fa-map-marker-alt" style="color: var(--primary);"></i>
+                <button class="location-btn" id="locationBtn">
+                    <span id="currentLocation">Loading location...</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+            <div class="business-hub-badge">
+                <i class="fas fa-briefcase"></i> B2B HUB
+            </div>
+        </div>
+    </header>
+
+    <!-- B2B Stats Bar -->
+    <div class="b2b-stats">
+        <div class="stat-item">
+            <div class="stat-value" id="activeSuppliers">0</div>
+            <div class="stat-label">Suppliers</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="bulkDeals">0</div>
+            <div class="stat-label">Bulk Deals</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="activeBuyers">0</div>
+            <div class="stat-label">Buyers</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="avgResponse">2h</div>
+            <div class="stat-label">Avg Response</div>
+        </div>
+    </div>
+
+    <!-- Location Modal -->
+    <div class="modal" id="locationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Select Business Location</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            
+            <div class="current-location" id="useCurrentLocation">
+                <i class="fas fa-location-dot"></i>
+                <span>Use my current location</span>
+            </div>
+            
+            <h4 style="margin: 10px 0; color: var(--gray-600);">Business Regions</h4>
+            <ul class="region-list" id="regionList">
+                <!-- Populated dynamically -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Banner -->
+        <div class="swiper" id="bannerSwiper">
+            <div class="swiper-wrapper" id="bannerWrapper">
+                <div class="swiper-slide">📦 B2B Wholesale Prices • Minimum Orders Apply</div>
+                <div class="swiper-slide">🚚 Bulk Delivery Across Uganda • Negotiate Prices</div>
+                <div class="swiper-slide">✅ Verified Suppliers • Business Registration Required</div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- B2B Quick Actions -->
+        <div class="b2b-quick-actions">
+            <a href="post-ad.html?type=b2b" class="quick-action-item">
+                <div class="quick-action-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <span class="quick-action-label">Sell B2B</span>
+            </a>
+            <a href="bulk-orders.html" class="quick-action-item">
+                <div class="quick-action-icon">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <span class="quick-action-label">Bulk Orders</span>
+            </a>
+            <a href="supplier-requests.html" class="quick-action-item">
+                <div class="quick-action-icon">
+                    <i class="fas fa-file-invoice"></i>
+                </div>
+                <span class="quick-action-label">Quotes</span>
+            </a>
+            <a href="negotiations.html" class="quick-action-item">
+                <div class="quick-action-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <span class="quick-action-label">Negotiate</span>
+            </a>
+        </div>
+
+<!-- Hot Suppliers Section -->
+<section class="section hot-suppliers-section" id="hotSuppliersSection" style="display: none;">
+    <div class="section-header">
+        <h2 class="section-title">
+            <i class="fas fa-fire" style="color: #EF4444;"></i>
+            <span>Hot Suppliers 🔥</span>
+        </h2>
+        <a href="suppliers.html?filter=featured" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="hot-suppliers-carousel">
+        <div class="carousel-container">
+            <button class="carousel-arrow prev" onclick="scrollSuppliers('prev')">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <div class="suppliers-carousel-wrapper" id="suppliersCarouselWrapper">
+                <div class="suppliers-carousel-track" id="suppliersCarouselTrack">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+            
+            <button class="carousel-arrow next" onclick="scrollSuppliers('next')">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Add this CSS -->
+<style>
+    .hot-suppliers-section {
+        background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+        border-top: 1px solid #fee2e2;
+        border-bottom: 1px solid #fee2e2;
+    }
+
+    .hot-suppliers-carousel {
+        position: relative;
+        margin: 20px 0;
+    }
+
+    .carousel-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .suppliers-carousel-wrapper {
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        flex: 1;
+    }
+
+    .suppliers-carousel-track {
+        display: flex;
+        gap: 16px;
+        transition: transform 0.3s ease;
+    }
+
+    .hot-supplier-card {
+        flex: 0 0 220px;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        border: 1px solid #f0f0f0;
+        transition: all 0.3s ease;
+        position: relative;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .hot-supplier-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(239, 68, 68, 0.15);
+        border-color: #EF4444;
+    }
+
+    .hot-supplier-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: #EF4444;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        z-index: 2;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .hot-supplier-image {
+        height: 120px;
+        background: linear-gradient(135deg, #EF4444, #F59E0B);
+        position: relative;
+    }
+
+    .hot-supplier-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 4px solid white;
+        position: absolute;
+        bottom: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .hot-supplier-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .hot-supplier-info {
+        padding: 48px 16px 16px;
+        text-align: center;
+    }
+
+    .hot-supplier-name {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 4px;
+        color: #1F2937;
+    }
+
+    .hot-supplier-location {
+        font-size: 12px;
+        color: #6B7280;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+
+    .hot-supplier-stats {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        font-size: 12px;
+        color: #4B5563;
+        margin: 12px 0;
+    }
+
+    .hot-supplier-stats span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .hot-supplier-badge-small {
+        background: #EF4444;
+        color: white;
+        font-size: 10px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        display: inline-block;
+        font-weight: 600;
+    }
+
+    .carousel-arrow {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: white;
+        border: 1px solid #e5e7eb;
+        color: #4B5563;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 10;
+    }
+
+    .carousel-arrow:hover {
+        background: #EF4444;
+        color: white;
+        border-color: #EF4444;
+    }
+
+    .carousel-arrow:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+        .hot-supplier-card {
+            flex: 0 0 180px;
+        }
+        
+        .carousel-arrow {
+            width: 32px;
+            height: 32px;
+        }
+    }
+</style>
+
+
+        <!-- Business Categories -->
+        <div class="category-grid" id="categoryGrid">
+            <!-- Populated dynamically -->
+        </div>
+
+        <!-- B2B Features -->
+        <div class="b2b-features">
+            <a href="bulk-pricing.html" class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <div class="feature-text">
+                    <h4>Bulk Pricing</h4>
+                    <p>Volume discounts</p>
+                </div>
+            </a>
+            <a href="supplier-verification.html" class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="feature-text">
+                    <h4>Verified</h4>
+                    <p>Business verified</p>
+                </div>
+            </a>
+            <a href="trade-assurance.html" class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="feature-text">
+                    <h4>Trade Assurance</h4>
+                    <p>Secure payments</p>
+                </div>
+            </a>
+            <a href="delivery-logistics.html" class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="feature-text">
+                    <h4>B2B Logistics</h4>
+                    <p>Bulk delivery</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Verified Suppliers Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-check-circle" style="color: var(--secondary);"></i>
+                    Verified B2B Suppliers
+                </h2>
+                <a href="suppliers.html" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="horizontal-scroll" id="suppliersScroll">
+                <div class="scroll-wrapper" id="suppliersWrapper">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Bulk Deals Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-gem"></i>
+                    Bulk & Wholesale Deals
+                </h2>
+                <a href="bulk-deals.html" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="horizontal-scroll" id="bulkDealsScroll">
+                <div class="scroll-wrapper" id="bulkDealsWrapper">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Bulk Deals Banner -->
+        <div class="bulk-deals-banner">
+            <div>
+                <h3>Bulk Orders Welcome</h3>
+                <p>MOQ as low as 10 units • Negotiate wholesale prices</p>
+            </div>
+            <button onclick="window.location.href='bulk-inquiry.html'">Request Quote</button>
+        </div>
+
+        <!-- Category Sections (from homepage_spotlights) -->
+        <div id="spotlightSections"></div>
+    </main>
+
+    <!-- Bottom Navigation (B2B focused) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active" id="homeNav">
+            <i class="fas fa-home"></i>
+            <span>B2B Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="negotiations.html" class="nav-item">
+            <i class="fas fa-handshake"></i>
+            <span>Deals</span>
+        </a>
+        <a href="orders.html" class="nav-item">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Orders</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Business</span>
+        </a>
+    </nav>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/9.2.0/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ============================================
+        // SUPABASE CONFIGURATION
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // STATE MANAGEMENT
+        // ============================================
+        let currentUser = null;
+        let lastScrollTop = 0;
+        const scrollThreshold = 100;
+        
+        let productsCache = {
+            suppliers: null,
+            bulkDeals: null,
+            categories: {},
+            lastUpdated: null
+        };
+        
+        // Load location from localStorage
+        let selectedRegion = localStorage.getItem('selectedRegion') || 'Central';
+        let selectedDistrict = localStorage.getItem('selectedDistrict') || 'Kampala';
+
+        // ============================================
+        // LOCATION FUNCTIONS
+        // ============================================
+        function updateLocationDisplay() {
+            const locationSpan = document.getElementById('currentLocation');
+            if (locationSpan) {
+                locationSpan.textContent = `${selectedDistrict}, ${selectedRegion}`;
+            }
+        }
+
+        function saveLocation(region, district) {
+            selectedRegion = region;
+            selectedDistrict = district;
+            localStorage.setItem('selectedRegion', region);
+            localStorage.setItem('selectedDistrict', district);
+            updateLocationDisplay();
+            
+            // Clear cache
+            productsCache = {
+                suppliers: null,
+                bulkDeals: null,
+                categories: {},
+                lastUpdated: null
+            };
+            sessionStorage.removeItem('homepageCache');
+            
+            // Reload all data
+            forceReloadAllData();
+        }
+
+        // ============================================
+        // LOAD B2B STATS
+        // ============================================
+        async function loadB2BStats() {
+            try {
+                // Count verified suppliers
+                const { count: supplierCount, error: supplierError } = await sb
+                    .from('suppliers')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('verification_status', 'verified');
+                
+                if (!supplierError) {
+                    document.getElementById('activeSuppliers').textContent = supplierCount || 0;
+                }
+
+                // Count bulk deals (ads with bulk pricing or wholesale flag)
+                const { count: bulkCount, error: bulkError } = await sb
+                    .from('ads')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('status', 'active')
+                    .not('wholesale_price', 'is', null);
+                
+                if (!bulkError) {
+                    document.getElementById('bulkDeals').textContent = bulkCount || 0;
+                }
+
+                // Count active buyers (profiles with is_buyer = true)
+                const { count: buyerCount, error: buyerError } = await sb
+                    .from('profiles')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('is_buyer', true);
+                
+                if (!buyerError) {
+                    document.getElementById('activeBuyers').textContent = buyerCount || 0;
+                }
+
+            } catch (error) {
+                console.error('Error loading B2B stats:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD CATEGORIES
+        // ============================================
+        async function loadCategories() {
+            const container = document.getElementById('categoryGrid');
+            if (!container) return;
+            
+            try {
+                const { data: categories, error } = await sb
+                    .from('categories')
+                    .select('id, name, slug, icon, color_hex')
+                    .eq('is_active', true)
+                    .order('display_order', { ascending: true })
+                    .limit(8);
+                
+                if (error) throw error;
+                
+                if (categories && categories.length > 0) {
+                    container.innerHTML = categories.map(cat => `
+                        <a href="category.html?category=${encodeURIComponent(cat.name)}&id=${cat.id}&region=${encodeURIComponent(selectedRegion)}&district=${encodeURIComponent(selectedDistrict)}" class="category-item">
+                            <div class="category-icon" style="color: ${cat.color_hex || '#0B4F6C'}">
+                                <i class="fas ${cat.icon || 'fa-tag'}"></i>
+                            </div>
+                            <span class="category-name">${escapeHtml(cat.name)}</span>
+                        </a>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD VERIFIED SUPPLIERS
+        // ============================================
+        async function loadVerifiedSuppliers(useCache = true) {
+            const wrapper = document.getElementById('suppliersWrapper');
+            if (!wrapper) return;
+            
+            if (useCache && productsCache.suppliers) {
+                wrapper.innerHTML = productsCache.suppliers;
+                return;
+            }
+            
+            wrapper.innerHTML = getPlaceholderSuppliers();
+            
+            try {
+                const { data: suppliers, error } = await sb
+                    .from('suppliers')
+                    .select(`
+                        id,
+                        business_name,
+                        business_phone,
+                        warehouse_district,
+                        verification_status,
+                        is_featured,
+                        profile_id,
+                        profiles!suppliers_profile_id_fkey (
+                            full_name,
+                            avatar_url,
+                            is_verified
+                        )
+                    `)
+                    .eq('verification_status', 'verified')
+                    .order('is_featured', { ascending: false })
+                    .limit(10);
+                
+                if (error) throw error;
+                
+                if (!suppliers || suppliers.length === 0) {
+                    wrapper.innerHTML = '<p style="padding: 20px;">No verified suppliers found</p>';
+                    return;
+                }
+
+                // Get product counts for each supplier
+                const suppliersWithCounts = await Promise.all(
+                    suppliers.map(async (supplier) => {
+                        const { count } = await sb
+                            .from('ads')
+                            .select('*', { count: 'exact', head: true })
+                            .eq('supplier_id', supplier.id)
+                            .eq('status', 'active');
+                        
+                        return { ...supplier, productCount: count || 0 };
+                    })
+                );
+
+                const suppliersHtml = suppliersWithCounts.map(supplier => {
+                    const initials = supplier.business_name
+                        ?.split(' ')
+                        .map(n => n[0])
+                        .join('')
+                        .toUpperCase()
+                        .substring(0, 2) || 'BS';
+
+                    return `
+                        <a href="supplier-profile.html?id=${supplier.id}&region=${encodeURIComponent(selectedRegion)}&district=${encodeURIComponent(selectedDistrict)}" class="supplier-card-horizontal">
+                            <div class="supplier-avatar-container">
+                                <div class="supplier-avatar">
+                                    ${supplier.profiles?.avatar_url ? 
+                                        `<img src="${supplier.profiles.avatar_url}" alt="${supplier.business_name}">` : 
+                                        `<span>${initials}</span>`
+                                    }
+                                </div>
+                                <span class="supplier-verified"><i class="fas fa-check"></i></span>
+                            </div>
+                            <div class="supplier-name">${escapeHtml(supplier.business_name)}</div>
+                            <div class="supplier-location">
+                                <i class="fas fa-map-marker-alt"></i> ${escapeHtml(supplier.warehouse_district || 'Uganda')}
+                            </div>
+                            <div class="supplier-stats">
+                                <span><i class="fas fa-box"></i> ${supplier.productCount} products</span>
+                            </div>
+                            <div class="supplier-badge">
+                                Verified Supplier
+                            </div>
+                        </a>
+                    `;
+                }).join('');
+                
+                wrapper.innerHTML = suppliersHtml;
+                productsCache.suppliers = suppliersHtml;
+                saveToCache();
+
+            } catch (error) {
+                console.error('Error loading suppliers:', error);
+                wrapper.innerHTML = '<p style="padding: 20px;">Error loading suppliers</p>';
+            }
+        }
+
+        // ============================================
+        // LOAD BULK DEALS
+        // ============================================
+        async function loadBulkDeals(useCache = true) {
+            const wrapper = document.getElementById('bulkDealsWrapper');
+            if (!wrapper) return;
+            
+            if (useCache && productsCache.bulkDeals) {
+                wrapper.innerHTML = productsCache.bulkDeals;
+                return;
+            }
+            
+            wrapper.innerHTML = getPlaceholderProducts();
+            
+            try {
+                const { data: ads, error } = await sb
+                    .from('ads')
+                    .select(`
+                        id,
+                        title,
+                        wholesale_price,
+                        price,
+                        currency,
+                        image_urls,
+                        moq,
+                        is_bulk_only,
+                        region,
+                        district,
+                        supplier_id,
+                        profiles!ads_seller_id_fkey (is_verified)
+                    `)
+                    .eq('status', 'active')
+                    .not('wholesale_price', 'is', null)
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+                
+                if (error) throw error;
+                
+                if (!ads || ads.length === 0) {
+                    wrapper.innerHTML = '<p style="padding: 20px;">No bulk deals found</p>';
+                    return;
+                }
+
+                const dealsHtml = ads.map(ad => {
+                    const imageUrl = ad.image_urls?.[0] || 'https://via.placeholder.com/200?text=No+Image';
+                    const price = ad.wholesale_price ? 
+                        `UGX ${parseInt(ad.wholesale_price).toLocaleString()}` : 
+                        (ad.price ? `UGX ${parseInt(ad.price).toLocaleString()}` : 'Call for price');
+                    
+                    return `
+                        <a href="B2B-ad-detail.html?id=${ad.id}&region=${encodeURIComponent(selectedRegion)}&district=${encodeURIComponent(selectedDistrict)}" class="product-card-horizontal" onclick="trackClick(${ad.id})">
+                            <div class="product-image">
+                                <img src="${imageUrl}" alt="${escapeHtml(ad.title)}" loading="lazy"
+                                     onload="this.style.opacity=1" style="opacity:0; transition:opacity 0.3s"
+                                     onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
+                                <span class="product-badge wholesale">BULK</span>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-title">${escapeHtml(ad.title.substring(0, 25))}${ad.title.length > 25 ? '...' : ''}</div>
+                                <div class="product-price">${price}</div>
+                                ${ad.moq ? `<div class="product-moq">MOQ: ${ad.moq} units</div>` : ''}
+                                <div class="product-meta">
+                                    <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(ad.district || ad.region || 'Uganda')}</span>
+                                </div>
+                                ${ad.profiles?.is_verified ? `
+                                    <div class="verified-badge">
+                                        <i class="fas fa-check-circle"></i> Verified
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </a>
+                    `;
+                }).join('');
+                
+                wrapper.innerHTML = dealsHtml;
+                productsCache.bulkDeals = dealsHtml;
+                saveToCache();
+
+            } catch (error) {
+                console.error('Error loading bulk deals:', error);
+                wrapper.innerHTML = '<p style="padding: 20px;">Error loading deals</p>';
+            }
+        }
+
+        // ============================================
+        // LOAD SPOTLIGHT SECTIONS (from homepage_spotlights)
+        // ============================================
+        async function loadSpotlightSections(useCache = true) {
+            const container = document.getElementById('spotlightSections');
+            if (!container) return;
+            
+            // Check cache
+            if (useCache && productsCache.categories && Object.keys(productsCache.categories).length > 0) {
+                const cachedHtml = Object.values(productsCache.categories).join('');
+                if (cachedHtml) {
+                    container.innerHTML = cachedHtml;
+                    return;
+                }
+            }
+            
+            container.innerHTML = getSkeletonSections(3);
+            
+            try {
+                // Get active spotlight sections
+                const { data: spotlights, error } = await sb
+                    .from('homepage_spotlights')
+                    .select(`
+                        id,
+                        spotlight_type,
+                        display_title,
+                        ad_id,
+                        ads:ad_id (
+                            id,
+                            title,
+                            price,
+                            wholesale_price,
+                            currency,
+                            image_urls,
+                            moq,
+                            is_bulk_only,
+                            region,
+                            district,
+                            profiles!ads_seller_id_fkey (is_verified)
+                        )
+                    `)
+                    .eq('is_active', true)
+                    .gt('ends_at', new Date().toISOString())
+                    .order('display_order', { ascending: true });
+                
+                if (error) throw error;
+                
+                if (!spotlights || spotlights.length === 0) {
+                    // Fallback to category-based sections
+                    await loadCategorySections(container);
+                    return;
+                }
+
+                // Group by spotlight type
+                const sections = {};
+                spotlights.forEach(spot => {
+                    if (!sections[spot.spotlight_type]) {
+                        sections[spot.spotlight_type] = {
+                            title: spot.display_title || formatSpotlightTitle(spot.spotlight_type),
+                            ads: []
+                        };
+                    }
+                    if (spot.ads) {
+                        sections[spot.spotlight_type].ads.push(spot.ads);
+                    }
+                });
+
+                // Render sections
+                let html = '';
+                Object.entries(sections).forEach(([type, section]) => {
+                    if (section.ads.length > 0) {
+                        html += `
+                            <section class="section">
+                                <div class="section-header">
+                                    <h2 class="section-title">
+                                        <i class="fas ${getSpotlightIcon(type)}"></i>
+                                        ${escapeHtml(section.title)}
+                                    </h2>
+                                    <a href="${getSpotlightPage(type)}.html?region=${encodeURIComponent(selectedRegion)}&district=${encodeURIComponent(selectedDistrict)}" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+                                </div>
+                                <div class="horizontal-scroll">
+                                    <div class="scroll-wrapper">
+                                        ${section.ads.map(ad => createProductCard(ad)).join('')}
+                                    </div>
+                                </div>
+                            </section>
+                        `;
+                    }
+                });
+
+                if (html) {
+                    container.innerHTML = html;
+                    // Cache it
+                    productsCache.categories = { spotlights: html };
+                    saveToCache();
+                } else {
+                    await loadCategorySections(container);
+                }
+
+            } catch (error) {
+                console.error('Error loading spotlight sections:', error);
+                await loadCategorySections(container);
+            }
+        }
+
+// ============================================
+// HOT SUPPLIERS CAROUSEL
+// ============================================
+let currentSupplierScrollPosition = 0;
+
+async function loadHotSuppliers() {
+    const section = document.getElementById('hotSuppliersSection');
+    const track = document.getElementById('suppliersCarouselTrack');
+    
+    if (!track) return;
+
+    try {
+        // Call the database function to get active supplier spotlights
+        const { data: suppliers, error } = await sb
+            .rpc('get_active_supplier_spotlights', { limit_count: 20 });
+
+        if (error) throw error;
+
+        if (!suppliers || suppliers.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+
+        // Show the section
+        section.style.display = 'block';
+
+        // Build the carousel HTML
+        const suppliersHtml = suppliers.map(supplier => {
+            const avatarUrl = supplier.avatar_url || 'https://via.placeholder.com/80?text=Supplier';
+            const badgeColor = supplier.badge_color || '#EF4444';
+            const badgeText = supplier.spotlight_badge || 'HOT';
+            const title = supplier.spotlight_title || supplier.business_name;
+            
+            return `
+                <a href="supplier-profile.html?id=${supplier.supplier_id}" 
+                   class="hot-supplier-card"
+                   onclick="trackSupplierSpotlightClick(${supplier.id})">
+                    <div class="hot-supplier-badge" style="background: ${badgeColor};">
+                        🔥 ${badgeText}
+                    </div>
+                    <div class="hot-supplier-image" style="background: linear-gradient(135deg, ${badgeColor}, ${adjustColor(badgeColor, 40)});">
+                        <div class="hot-supplier-avatar">
+                            <img src="${avatarUrl}" alt="${supplier.business_name}" 
+                                 onerror="this.src='https://via.placeholder.com/80?text=Supplier'">
+                        </div>
+                    </div>
+                    <div class="hot-supplier-info">
+                        <div class="hot-supplier-name">${escapeHtml(title)}</div>
+                        <div class="hot-supplier-location">
+                            <i class="fas fa-map-marker-alt"></i> 
+                            ${escapeHtml(supplier.warehouse_district || 'Uganda')}
+                        </div>
+                        <div class="hot-supplier-stats">
+                            <span><i class="fas fa-box"></i> ${supplier.total_products || 0}</span>
+                            <span><i class="fas fa-star"></i> ${supplier.completion_rate || 100}%</span>
+                        </div>
+                        ${supplier.package_name ? 
+                            `<span class="hot-supplier-badge-small">${supplier.package_name}</span>` : 
+                            ''}
+                    </div>
+                </a>
+            `;
+        }).join('');
+
+        track.innerHTML = suppliersHtml;
+
+        // Track impressions
+        suppliers.forEach(supplier => {
+            trackSupplierSpotlightImpression(supplier.id);
+        });
+
+    } catch (error) {
+        console.error('Error loading hot suppliers:', error);
+        section.style.display = 'none';
+    }
+}
+
+// Helper function to adjust color brightness
+function adjustColor(hex, percent) {
+    // Simplified version - you might want a proper color library
+    return hex;
+}
+
+// Track clicks on supplier spotlights
+async function trackSupplierSpotlightClick(spotlightId) {
+    try {
+        const { data: { user } } = await sb.auth.getUser();
+        
+        // Update click count
+        await sb
+            .from('supplier_spotlights')
+            .update({ click_count: sb.rpc('increment') })
+            .eq('id', spotlightId);
+
+        // Record click details
+        await sb
+            .from('supplier_spotlight_clicks')
+            .insert({
+                spotlight_id: spotlightId,
+                user_id: user?.id || null,
+                user_agent: navigator.userAgent
+            });
+
+    } catch (error) {
+        console.error('Error tracking spotlight click:', error);
+    }
+}
+
+// Track impressions
+async function trackSupplierSpotlightImpression(spotlightId) {
+    try {
+        // Update view count
+        await sb
+            .from('supplier_spotlights')
+            .update({ view_count: sb.rpc('increment') })
+            .eq('id', spotlightId);
+
+        // Record impression
+        await sb
+            .from('supplier_spotlight_impressions')
+            .insert({
+                spotlight_id: spotlightId
+            });
+
+    } catch (error) {
+        console.error('Error tracking impression:', error);
+    }
+}
+
+// Carousel scroll function
+function scrollSuppliers(direction) {
+    const wrapper = document.getElementById('suppliersCarouselWrapper');
+    const card = document.querySelector('.hot-supplier-card');
+    
+    if (!wrapper || !card) return;
+    
+    const cardWidth = card.offsetWidth + 16; // width + gap
+    const scrollAmount = direction === 'next' ? cardWidth * 2 : -cardWidth * 2;
+    
+    wrapper.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+    });
+}
+
+// Add to your DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', async () => {
+    // ... existing code ...
+    
+    // Load hot suppliers
+    await loadHotSuppliers();
+});
+
+
+
+        // Fallback to category-based sections
+        async function loadCategorySections(container) {
+            try {
+                const { data: categories, error } = await sb
+                    .from('categories')
+                    .select('id, name, display_name')
+                    .eq('is_active', true)
+                    .order('display_order', { ascending: true })
+                    .limit(4);
+                
+                if (error) throw error;
+                
+                let html = '';
+                for (const cat of categories) {
+                    const { data: ads } = await sb
+                        .from('ads')
+                        .select(`
+                            id,
+                            title,
+                            price,
+                            wholesale_price,
+                            currency,
+                            image_urls,
+                            moq,
+                            is_bulk_only,
+                            region,
+                            district,
+                            profiles!ads_seller_id_fkey (is_verified)
+                        `)
+                        .eq('status', 'active')
+                        .eq('category_id', cat.id)
+                        .order('created_at', { ascending: false })
+                        .limit(4);
+                    
+                    if (ads && ads.length > 0) {
+                        html += `
+                            <section class="section">
+                                <div class="section-header">
+                                    <h2 class="section-title">
+                                        <i class="fas fa-tag"></i>
+                                        ${escapeHtml(cat.display_name || cat.name)}
+                                    </h2>
+                                    <a href="category.html?category=${encodeURIComponent(cat.name)}&id=${cat.id}&region=${encodeURIComponent(selectedRegion)}&district=${encodeURIComponent(selectedDistrict)}" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+                                </div>
+                                <div class="horizontal-scroll">
+                                    <div class="scroll-wrapper">
+                                        ${ads.map(ad => createProductCard(ad)).join('')}
+                                    </div>
+                                </div>
+                            </section>
+                        `;
+                    }
+                }
+                
+                container.innerHTML = html || '<p class="section" style="text-align: center; padding: 40px;">No products available</p>';
+                
+            } catch (error) {
+                console.error('Error loading category sections:', error);
+                container.innerHTML = '<p class="section" style="text-align: center; padding: 40px;">Error loading products</p>';
+            }
+        }
+
+        // Helper functions
+        function formatSpotlightTitle(type) {
+            const titles = {
+                'featured_deals': '🔥 Featured B2B Deals',
+                'trending_now': '📈 Trending in B2B',
+                'editor_picks': '⭐ Editor\'s Picks',
+                'new_arrivals': '🆕 New Bulk Listings',
+                'budget_finds': '💰 Budget Business Finds',
+                'premium_listings': '👑 Premium Suppliers',
+                'local_favorites': '📍 Local Business Favorites',
+                'verified_sellers': '✅ Verified Suppliers'
+            };
+            return titles[type] || 'B2B Deals';
+        }
+
+        function getSpotlightIcon(type) {
+            const icons = {
+                'featured_deals': 'fa-star',
+                'trending_now': 'fa-fire',
+                'editor_picks': 'fa-pen',
+                'new_arrivals': 'fa-clock',
+                'budget_finds': 'fa-wallet',
+                'premium_listings': 'fa-crown',
+                'local_favorites': 'fa-heart',
+                'verified_sellers': 'fa-check-circle'
+            };
+            return icons[type] || 'fa-tag';
+        }
+
+        function getSpotlightPage(type) {
+            const pages = {
+                'featured_deals': 'featured-deals',
+                'trending_now': 'trending-now',
+                'editor_picks': 'editor-picks',
+                'new_arrivals': 'new-arrivals',
+                'budget_finds': 'budget-finds',
+                'premium_listings': 'premium-listings',
+                'local_favorites': 'local-favorites',
+                'verified_sellers': 'verified-sellers'
+            };
+            return pages[type] || 'category';
+        }
+
+        function createProductCard(product) {
+            const imageUrl = product.image_urls?.[0] || 'https://via.placeholder.com/200?text=No+Image';
+            const price = product.wholesale_price ? 
+                `UGX ${parseInt(product.wholesale_price).toLocaleString()}` : 
+                (product.price ? `UGX ${parseInt(product.price).toLocaleString()}` : 'Call for price');
+            
+            return `
+                <a href="B2B-ad-detail.html?id=${product.id}&region=${encodeURIComponent(selectedRegion)}&district=${encodeURIComponent(selectedDistrict)}" class="product-card-horizontal" onclick="trackClick(${product.id})">
+                    <div class="product-image">
+                        <img src="${imageUrl}" alt="${escapeHtml(product.title)}" loading="lazy"
+                             onload="this.style.opacity=1" style="opacity:0; transition:opacity 0.3s"
+                             onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
+                        ${product.is_bulk_only ? '<span class="product-badge wholesale">BULK</span>' : ''}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">${escapeHtml(product.title.substring(0, 25))}${product.title.length > 25 ? '...' : ''}</div>
+                        <div class="product-price">${price}</div>
+                        ${product.moq ? `<div class="product-moq">MOQ: ${product.moq} units</div>` : ''}
+                        <div class="product-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(product.district || product.region || 'Uganda')}</span>
+                        </div>
+                        ${product.profiles?.is_verified ? `
+                            <div class="verified-badge">
+                                <i class="fas fa-check-circle"></i> Verified
+                            </div>
+                        ` : ''}
+                    </div>
+                </a>
+            `;
+        }
+
+        // ============================================
+        // PLACEHOLDERS
+        // ============================================
+        function getPlaceholderSuppliers() {
+            let html = '';
+            for (let i = 0; i < 6; i++) {
+                html += `
+                    <div class="supplier-card-horizontal">
+                        <div class="supplier-avatar-container">
+                            <div class="supplier-avatar skeleton" style="border-radius: 50%;"></div>
+                        </div>
+                        <div class="skeleton-text" style="width: 80%; margin: 8px auto;"></div>
+                        <div class="skeleton-text" style="width: 60%; margin: 4px auto;"></div>
+                        <div class="skeleton-text" style="width: 70%; margin: 8px auto;"></div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        function getPlaceholderProducts() {
+            let html = '';
+            for (let i = 0; i < 6; i++) {
+                html += `
+                    <div class="product-card-horizontal">
+                        <div class="skeleton-image"></div>
+                        <div class="product-info">
+                            <div class="skeleton-text" style="width: 90%"></div>
+                            <div class="skeleton-text" style="width: 60%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        function getSkeletonSections(count = 3) {
+            let html = '';
+            for (let s = 0; s < count; s++) {
+                html += `
+                    <section class="section">
+                        <div class="section-header">
+                            <div class="skeleton-text" style="width: 200px; height: 24px;"></div>
+                            <div class="skeleton-text" style="width: 60px;"></div>
+                        </div>
+                        <div class="horizontal-scroll">
+                            <div class="scroll-wrapper">
+                                ${getPlaceholderProducts()}
+                            </div>
+                        </div>
+                    </section>
+                `;
+            }
+            return html;
+        }
+
+        // ============================================
+        // CACHE MANAGEMENT
+        // ============================================
+        function saveToCache() {
+            try {
+                productsCache.lastUpdated = Date.now();
+                sessionStorage.setItem('b2bHomepageCache', JSON.stringify(productsCache));
+            } catch (e) {
+                console.error('Error saving cache:', e);
+            }
+        }
+
+        function loadFromCache() {
+            try {
+                const cached = sessionStorage.getItem('b2bHomepageCache');
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (parsed.lastUpdated && (Date.now() - parsed.lastUpdated < 300000)) { // 5 minutes
+                        productsCache = parsed;
+                        return true;
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading cache:', e);
+            }
+            return false;
+        }
+
+        async function forceReloadAllData() {
+            productsCache = {
+                suppliers: null,
+                bulkDeals: null,
+                categories: {},
+                lastUpdated: null
+            };
+            sessionStorage.removeItem('b2bHomepageCache');
+            
+            await loadB2BStats();
+            await loadCategories();
+            await loadVerifiedSuppliers(false);
+            await loadBulkDeals(false);
+            await loadSpotlightSections(false);
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        window.trackClick = async function(adId) {
+            try {
+                const { data: { user } } = await sb.auth.getUser();
+                
+                await sb
+                    .from('ad_engagement')
+                    .insert({
+                        ad_id: adId,
+                        user_id: user?.id || null,
+                        action: 'click',
+                        user_agent: navigator.userAgent
+                    });
+            } catch (error) {
+                console.error('Error tracking click:', error);
+            }
+        };
+
+        // ============================================
+        // LOCATION SELECTOR (same as before)
+        // ============================================
+        const ugandaRegions = [
+            { region: 'Central', districts: ['Kampala', 'Wakiso', 'Mukono', 'Masaka', 'Entebbe'] },
+            { region: 'Western', districts: ['Mbarara', 'Kasese', 'Kabale', 'Fort Portal', 'Bushenyi'] },
+            { region: 'Eastern', districts: ['Jinja', 'Mbale', 'Tororo', 'Soroti', 'Gulu'] },
+            { region: 'Northern', districts: ['Lira', 'Arua', 'Kitgum', 'Nebbi', 'Moroto'] }
+        ];
+
+        function initLocationSelector() {
+            const locationBtn = document.getElementById('locationBtn');
+            const modal = document.getElementById('locationModal');
+            const closeBtn = document.getElementById('closeModal');
+            const currentLocationBtn = document.getElementById('useCurrentLocation');
+            const regionList = document.getElementById('regionList');
+            
+            updateLocationDisplay();
+
+            regionList.innerHTML = '';
+            ugandaRegions.forEach(region => {
+                const li = document.createElement('li');
+                li.className = 'region-item';
+                li.innerHTML = `
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="region-name">${region.region}</span>
+                    <i class="fas fa-chevron-right" style="color: var(--gray-400);"></i>
+                `;
+                li.addEventListener('click', () => showDistricts(region.region, region.districts));
+                regionList.appendChild(li);
+            });
+
+            const openModal = () => modal.classList.add('show');
+            if (locationBtn) locationBtn.addEventListener('click', openModal);
+            if (closeBtn) closeBtn.addEventListener('click', () => modal.classList.remove('show'));
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.remove('show');
+            });
+
+            if (currentLocationBtn) {
+                currentLocationBtn.addEventListener('click', () => {
+                    showToast('Getting your business location...');
+                    setTimeout(() => {
+                        saveLocation('Central', 'Kampala');
+                        modal.classList.remove('show');
+                        showToast('Location updated to Kampala');
+                    }, 1500);
+                });
+            }
+        }
+
+        function showDistricts(region, districts) {
+            const modalContent = document.querySelector('.modal-content');
+            const originalContent = modalContent.innerHTML;
+            
+            modalContent.innerHTML = `
+                <div class="modal-header">
+                    <h3 class="modal-title">Select District in ${region}</h3>
+                    <button class="modal-close" id="backBtn">&larr;</button>
+                </div>
+                <ul class="region-list" id="districtList">
+                    ${districts.map(district => `
+                        <li class="region-item" data-district="${district}" data-region="${region}">
+                            <i class="fas fa-map-pin"></i>
+                            <span class="region-name">${district}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+
+            document.getElementById('backBtn').addEventListener('click', () => {
+                modalContent.innerHTML = originalContent;
+                initLocationSelector();
+            });
+
+            document.querySelectorAll('#districtList .region-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const district = item.dataset.district;
+                    const region = item.dataset.region;
+                    saveLocation(region, district);
+                    document.getElementById('locationModal').classList.remove('show');
+                    showToast(`Business location: ${district}, ${region}`);
+                });
+            });
+        }
+
+        // ============================================
+        // HEADER SCROLL BEHAVIOR
+        // ============================================
+        function setupScrollBehavior() {
+            const header = document.getElementById('mainHeader');
+            
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > 10) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+                
+                if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
+                    header.classList.add('hidden');
+                } else {
+                    header.classList.remove('hidden');
+                }
+                
+                lastScrollTop = scrollTop;
+            });
+        }
+
+        // ============================================
+        // SEARCH
+        // ============================================
+        function setupSearch() {
+            const searchIcon = document.getElementById('headerSearchIcon');
+            if (searchIcon) {
+                searchIcon.addEventListener('click', () => {
+                    window.location.href = 'b2b-search.html?region=' + encodeURIComponent(selectedRegion) + '&district=' + encodeURIComponent(selectedDistrict);
+                });
+            }
+        }
+
+        // ============================================
+        // CHECK AUTH
+        // ============================================
+        async function checkAuth() {
+            try {
+                const { data: { user } } = await sb.auth.getUser();
+                if (user) {
+                    currentUser = user;
+                    
+                    // Check for unread messages/notifications
+                    const { count: msgCount } = await sb
+                        .from('messages')
+                        .select('*', { count: 'exact', head: true })
+                        .eq('receiver_id', user.id)
+                        .eq('is_read', false);
+                    
+                    if (msgCount > 0) {
+                        document.getElementById('messageBadge').style.display = 'block';
+                        document.getElementById('messageBadge').textContent = msgCount;
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking auth:', error);
+            }
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check URL for location params
+            const urlParams = new URLSearchParams(window.location.search);
+            const regionFromUrl = urlParams.get('region');
+            const districtFromUrl = urlParams.get('district');
+            
+            if (regionFromUrl && districtFromUrl) {
+                saveLocation(regionFromUrl, districtFromUrl);
+            }
+            
+            // Try to load from cache
+            const hasCache = loadFromCache();
+            
+            // Initialize components
+            if (document.getElementById('bannerSwiper')) {
+                new Swiper('#bannerSwiper', {
+                    autoplay: { delay: 3000 },
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    loop: true,
+                    speed: 500
+                });
+            }
+
+            setupScrollBehavior();
+            setupSearch();
+            initLocationSelector();
+            
+            // Check auth
+            await checkAuth();
+            
+            // Load B2B stats
+            await loadB2BStats();
+            
+            // Load categories
+            await loadCategories();
+            
+            // Load verified suppliers
+            await loadVerifiedSuppliers(hasCache);
+            
+            // Load bulk deals
+            await loadBulkDeals(hasCache);
+            
+            // Load spotlight sections
+            await loadSpotlightSections(hasCache);
+        });
+    </script>
+</body>
+</html>

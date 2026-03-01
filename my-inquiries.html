@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Inquiries - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/my-inquiries.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            <div class="header-actions">
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+                <a href="messages.html" class="header-icon">
+                    <i class="far fa-comment-dots"></i>
+                    <span class="badge" id="messageBadge">2</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>My Inquiries</h1>
+            <a href="send-inquiry.html" class="new-inquiry-btn">
+                <i class="fas fa-plus"></i> New Inquiry
+            </a>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="summary-icon pending">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="summary-details">
+                    <span class="summary-value" id="pendingCount">0</span>
+                    <span class="summary-label">Pending</span>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon quoted">
+                    <i class="fas fa-file-invoice"></i>
+                </div>
+                <div class="summary-details">
+                    <span class="summary-value" id="quotedCount">0</span>
+                    <span class="summary-label">Quotes Received</span>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon accepted">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="summary-details">
+                    <span class="summary-value" id="acceptedCount">0</span>
+                    <span class="summary-label">Accepted</span>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon total">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="summary-details">
+                    <span class="summary-value" id="totalCount">0</span>
+                    <span class="summary-label">Total</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="pending">Pending</button>
+            <button class="filter-btn" data-filter="quoted">Quotes Received</button>
+            <button class="filter-btn" data-filter="accepted">Accepted</button>
+            <button class="filter-btn" data-filter="expired">Expired</button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search by inquiry title or number...">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading your inquiries...</p>
+        </div>
+
+        <!-- Inquiries List -->
+        <div class="inquiries-list" id="inquiriesList">
+            <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-inbox"></i>
+            <h3>No inquiries found</h3>
+            <p>Start by sending a bulk inquiry to suppliers</p>
+            <a href="send-inquiry.html" class="btn-primary">Send Your First Inquiry</a>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="my-inquiries.html" class="nav-item active">
+            <i class="fas fa-file-invoice"></i>
+            <span>Inquiries</span>
+        </a>
+        <a href="orders.html" class="nav-item">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Orders</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Quote Details Modal -->
+    <div class="modal" id="quoteModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Quotations Received</h3>
+                <button class="modal-close" onclick="closeQuoteModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="quoteModalBody">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Accept Quote Modal -->
+    <div class="modal" id="acceptModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Accept Quotation</h3>
+                <button class="modal-close" onclick="closeAcceptModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="acceptModalBody">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Quote accepted successfully</p>
+            <div class="modal-actions">
+                <a href="orders.html" class="btn-primary">View Orders</a>
+                <button class="btn-secondary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/my-inquiries.js"></script>
+</body>
+</html>

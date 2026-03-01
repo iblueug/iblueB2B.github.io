@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>iBlue B2B • Categories</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1F2937;
+            padding-bottom: 80px;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 100;
+            height: 60px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            text-decoration: none;
+            font-size: 18px;
+            margin-right: 8px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        /* Search Bar */
+        .search-container {
+            padding: 8px 16px;
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 16px;
+            padding-left: 40px;
+            border-radius: 30px;
+            border: 1px solid #e0e0e0;
+            font-size: 14px;
+            background: #f8f8f8;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #0B4F6C;
+            background: white;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 16px;
+        }
+
+        /* Main Container - Two Column Layout */
+        .main-container {
+            display: flex;
+            height: calc(100vh - 140px);
+            overflow: hidden;
+        }
+
+        /* Left Sidebar - Main Categories */
+        .categories-sidebar {
+            width: 35%;
+            max-width: 200px;
+            background: #f8f9fa;
+            overflow-y: auto;
+            border-right: 1px solid #eaeaea;
+            padding: 8px 0;
+        }
+
+        .category-item {
+            padding: 14px 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4b5563;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-item i {
+            width: 20px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .category-item.active {
+            background: white;
+            border-left-color: #0B4F6C;
+            color: #0B4F6C;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .category-item.active i {
+            color: #0B4F6C;
+        }
+
+        /* Right Content - Subcategories */
+        .subcategories-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: white;
+        }
+
+        /* Category Header */
+        .category-header {
+            margin-bottom: 20px;
+        }
+
+        .selected-category-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0B4F6C;
+            margin-bottom: 4px;
+        }
+
+        .category-description {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        /* Subcategories Grid */
+        .subcategories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .subcategory-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px 12px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .subcategory-card:hover {
+            background: white;
+            border-color: #0B4F6C;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .subcategory-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(11, 79, 108, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: #0B4F6C;
+            font-size: 18px;
+        }
+
+        .subcategory-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .subcategory-stats {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat i {
+            font-size: 11px;
+        }
+
+        /* Nested Subcategories */
+        .nested-section {
+            margin-top: 24px;
+        }
+
+        .nested-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eaeaea;
+        }
+
+        .nested-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .nested-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .nested-item:hover {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .nested-item i {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 6px;
+            color: #0B4F6C;
+            font-size: 12px;
+        }
+
+        .nested-item:hover i {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .nested-item span {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .nested-count {
+            font-size: 11px;
+            background: rgba(0,0,0,0.05);
+            padding: 2px 6px;
+            border-radius: 12px;
+        }
+
+        /* Loading States */
+        .loading-skeleton {
+            padding: 16px;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            padding: 8px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 11px;
+            gap: 4px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: #0B4F6C;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (min-width: 768px) {
+            .categories-sidebar {
+                max-width: 240px;
+            }
+            .subcategories-grid,
+            .nested-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="header-title">Categories</h1>
+    </header>
+
+    <div class="search-container">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search categories...">
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="categories-sidebar" id="categoriesSidebar">
+            <div id="mainCategoriesLoading" class="loading-skeleton">
+                <div class="skeleton" style="height: 20px; margin: 10px;"></div>
+                <div class="skeleton" style="height: 20px; margin: 10px;"></div>
+                <div class="skeleton" style="height: 20px; margin: 10px;"></div>
+            </div>
+            <div id="mainCategoriesList" style="display: none;"></div>
+        </div>
+
+        <div class="subcategories-content" id="subcategoriesContent">
+            <div id="subcategoriesLoading" class="loading-skeleton">
+                <div class="skeleton" style="height: 30px; width: 60%; margin-bottom: 20px;"></div>
+                <div class="skeleton" style="height: 100px; margin-bottom: 10px;"></div>
+                <div class="skeleton" style="height: 100px; margin-bottom: 10px;"></div>
+            </div>
+            <div id="subcategoriesList" style="display: none;"></div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="B2B-search.html" class="nav-item"><i class="fas fa-search"></i><span>Search</span></a>
+        <a href="categories.html" class="nav-item active"><i class="fas fa-th-large"></i><span>Categories</span></a>
+        <a href="wholesalers.html" class="nav-item"><i class="fas fa-store"></i><span>Suppliers</span></a>
+        <a href="profile.html" class="nav-item"><i class="far fa-user"></i><span>Profile</span></a>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let allCategories = [];
+        let mainCategories = [];
+        let subcategoriesMap = new Map();
+        let adCountsMap = new Map();
+        let selectedCategoryId = null;
+
+        const iconMap = {
+            'smartphone': 'mobile-alt', 'car': 'car', 'home': 'home', 'tv': 'tv',
+            'shirt': 'tshirt', 'briefcase': 'briefcase', 'sofa': 'couch',
+            'tractor': 'tractor', 'building-storefront': 'store', 'motorcycle': 'motorcycle',
+            'bicycle': 'bicycle', 'house': 'home', 'building': 'building',
+            'tree': 'tree', 'store': 'store', 'tablet': 'tablet', 'phone': 'phone',
+            'headphones': 'headphones', 'truck': 'truck', 'cog': 'cog', 'tag': 'tag',
+            'utensils': 'utensils', 'fan': 'fan', 'tshirt': 'tshirt', 'couch': 'couch',
+            'wind': 'wind', 'fire': 'fire', 'blender': 'blender', 'mug-hot': 'mug-hot',
+            'tooth': 'tooth', 'ice-cream': 'ice-cream', 'lightbulb': 'lightbulb'
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadCategories();
+            setupSearch();
+        });
+
+        async function loadCategories() {
+            try {
+                const { data: categories, error } = await sb
+                    .from('categories')
+                    .select('*')
+                    .eq('is_active', true)
+                    .order('display_order', { ascending: true })
+                    .order('name', { ascending: true });
+
+                if (error) throw error;
+
+                allCategories = categories || [];
+                mainCategories = allCategories.filter(c => !c.parent_id);
+                
+                allCategories.forEach(category => {
+                    if (category.parent_id) {
+                        if (!subcategoriesMap.has(category.parent_id)) {
+                            subcategoriesMap.set(category.parent_id, []);
+                        }
+                        subcategoriesMap.get(category.parent_id).push(category);
+                    }
+                });
+
+                await loadAdCounts();
+                renderMainCategories();
+
+                if (mainCategories.length > 0) {
+                    selectedCategoryId = mainCategories[0].id;
+                    renderSubcategories(selectedCategoryId);
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Failed to load categories');
+                renderFallbackMainCategories();
+            }
+        }
+
+        async function loadAdCounts() {
+            try {
+                const { data: ads, error } = await sb
+                    .from('ads')
+                    .select('category_id, subcategory_id')
+                    .eq('status', 'active');
+
+                if (error) throw error;
+
+                const counts = new Map();
+                ads?.forEach(ad => {
+                    if (ad.category_id) counts.set(ad.category_id, (counts.get(ad.category_id) || 0) + 1);
+                    if (ad.subcategory_id) counts.set(ad.subcategory_id, (counts.get(ad.subcategory_id) || 0) + 1);
+                });
+
+                adCountsMap = counts;
+            } catch (error) {
+                console.error('Error loading ad counts:', error);
+            }
+        }
+
+        function renderMainCategories() {
+            const sidebar = document.getElementById('mainCategoriesList');
+            const loading = document.getElementById('mainCategoriesLoading');
+            
+            let html = '';
+            mainCategories.forEach(cat => {
+                const icon = iconMap[cat.icon] || 'tag';
+                const isActive = cat.id === selectedCategoryId;
+                html += `
+                    <div class="category-item ${isActive ? 'active' : ''}" onclick="selectCategory(${cat.id}, this)">
+                        <i class="fas fa-${icon}"></i>
+                        <span>${escapeHtml(cat.name)}</span>
+                    </div>
+                `;
+            });
+            
+            sidebar.innerHTML = html;
+            loading.style.display = 'none';
+            sidebar.style.display = 'block';
+        }
+
+        window.selectCategory = function(categoryId, element) {
+            if (categoryId === selectedCategoryId) return;
+            
+            selectedCategoryId = categoryId;
+            
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            renderSubcategories(categoryId);
+        };
+
+        function renderSubcategories(categoryId) {
+            const content = document.getElementById('subcategoriesList');
+            const loading = document.getElementById('subcategoriesLoading');
+            
+            loading.style.display = 'block';
+            content.style.display = 'none';
+            
+            const selectedCat = allCategories.find(c => c.id === categoryId);
+            const subcats = subcategoriesMap.get(categoryId) || [];
+            
+            const parentSubcats = [];
+            const leafSubcats = [];
+            
+            subcats.forEach(subcat => {
+                if (subcategoriesMap.has(subcat.id)) {
+                    parentSubcats.push(subcat);
+                } else {
+                    leafSubcats.push(subcat);
+                }
+            });
+            
+            let html = `
+                <div class="category-header">
+                    <h2 class="selected-category-title">${escapeHtml(selectedCat?.name || 'Category')}</h2>
+                </div>
+            `;
+            
+            // Link to B2B-search-results.html instead of B2B-search.html
+            if (leafSubcats.length > 0) {
+                html += `<div class="subcategories-grid">`;
+                leafSubcats.forEach(subcat => {
+                    const icon = iconMap[subcat.icon] || 'tag';
+                    const adCount = adCountsMap.get(subcat.id) || 0;
+                    html += `
+                        <a href="B2B-search-results.html?category=${encodeURIComponent(subcat.name)}&category_id=${subcat.id}" class="subcategory-card">
+                            <div class="subcategory-icon"><i class="fas fa-${icon}"></i></div>
+                            <div class="subcategory-name">${escapeHtml(subcat.name)}</div>
+                            <div class="subcategory-stats"><span class="stat"><i class="fas fa-box"></i> ${adCount} products</span></div>
+                        </a>
+                    `;
+                });
+                html += `</div>`;
+            }
+            
+            for (const parent of parentSubcats) {
+                const children = subcategoriesMap.get(parent.id) || [];
+                const icon = iconMap[parent.icon] || 'tag';
+                
+                html += `
+                    <div class="nested-section">
+                        <div class="nested-title">
+                            <i class="fas fa-${icon}"></i> ${escapeHtml(parent.name)}
+                        </div>
+                        <div class="nested-grid">
+                `;
+                
+                children.forEach(child => {
+                    const childIcon = iconMap[child.icon] || 'tag';
+                    const childCount = adCountsMap.get(child.id) || 0;
+                    html += `
+                        <a href="B2B-search-results.html?category=${encodeURIComponent(child.name)}&category_id=${child.id}" class="nested-item">
+                            <i class="fas fa-${childIcon}"></i>
+                            <span>${escapeHtml(child.name)}</span>
+                            <span class="nested-count">${childCount}</span>
+                        </a>
+                    `;
+                });
+                
+                html += `</div></div>`;
+            }
+            
+            if (subcats.length === 0) {
+                html += `
+                    <div class="empty-state" style="text-align: center; padding: 40px;">
+                        <i class="fas fa-box-open" style="font-size: 48px; color: #ccc;"></i>
+                        <h3>No subcategories</h3>
+                        <a href="B2B-search-results.html?category_id=${categoryId}" style="display: inline-block; margin-top: 16px; padding: 12px 24px; background: #0B4F6C; color: white; text-decoration: none; border-radius: 30px;">
+                            Browse all products
+                        </a>
+                    </div>
+                `;
+            }
+            
+            content.innerHTML = html;
+            loading.style.display = 'none';
+            content.style.display = 'block';
+        }
+
+        function renderFallbackMainCategories() {
+            const sidebar = document.getElementById('mainCategoriesList');
+            const loading = document.getElementById('mainCategoriesLoading');
+            
+            const fallback = [
+                { id: 1, name: 'Construction & Building', icon: 'building' },
+                { id: 2, name: 'Construction & Real Estate', icon: 'home' },
+                { id: 3, name: 'Lights & Lighting', icon: 'lightbulb' }
+            ];
+            
+            let html = '';
+            fallback.forEach((cat, index) => {
+                html += `
+                    <div class="category-item ${index === 0 ? 'active' : ''}" onclick="selectFallbackCategory(${cat.id}, this)">
+                        <i class="fas fa-${cat.icon}"></i>
+                        <span>${cat.name}</span>
+                    </div>
+                `;
+            });
+            
+            sidebar.innerHTML = html;
+            loading.style.display = 'none';
+            sidebar.style.display = 'block';
+            renderFallbackSubcategories(1);
+        }
+
+        window.selectFallbackCategory = function(categoryId, element) {
+            document.querySelectorAll('.category-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            renderFallbackSubcategories(categoryId);
+        };
+
+        function renderFallbackSubcategories(categoryId) {
+            const content = document.getElementById('subcategoriesList');
+            const loading = document.getElementById('subcategoriesLoading');
+            
+            let html = '';
+            
+            if (categoryId === 1) {
+                html = `
+                    <div class="category-header"><h2 class="selected-category-title">Construction & Building</h2></div>
+                    <div class="subcategories-grid">
+                        <a href="B2B-search-results.html?category=Rice%20Cookers&category_id=101" class="subcategory-card">
+                            <div class="subcategory-icon"><i class="fas fa-utensils"></i></div>
+                            <div class="subcategory-name">Rice Cookers</div>
+                            <div class="subcategory-stats"><span class="stat"><i class="fas fa-box"></i> 12 products</span></div>
+                        </a>
+                        <a href="B2B-search-results.html?category=Ceiling%20Fans&category_id=102" class="subcategory-card">
+                            <div class="subcategory-icon"><i class="fas fa-fan"></i></div>
+                            <div class="subcategory-name">Ceiling Fans</div>
+                            <div class="subcategory-stats"><span class="stat"><i class="fas fa-box"></i> 8 products</span></div>
+                        </a>
+                    </div>
+                `;
+            } else if (categoryId === 2) {
+                html = `
+                    <div class="category-header"><h2 class="selected-category-title">Construction & Real Estate</h2></div>
+                    <div class="subcategories-grid">
+                        <a href="B2B-search-results.html?category=Furniture&category_id=201" class="subcategory-card">
+                            <div class="subcategory-icon"><i class="fas fa-couch"></i></div>
+                            <div class="subcategory-name">Furniture</div>
+                            <div class="subcategory-stats"><span class="stat"><i class="fas fa-box"></i> 24 products</span></div>
+                        </a>
+                    </div>
+                `;
+            } else if (categoryId === 3) {
+                html = `
+                    <div class="category-header"><h2 class="selected-category-title">Lights & Lighting</h2></div>
+                    <div class="nested-section">
+                        <div class="nested-title"><i class="fas fa-home"></i> Home Appliances</div>
+                        <div class="nested-grid">
+                            <a href="B2B-search-results.html?category=Electric%20Kettles&category_id=301" class="nested-item">
+                                <i class="fas fa-mug-hot"></i><span>Electric Kettles</span><span class="nested-count">9</span>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            content.innerHTML = html;
+            loading.style.display = 'none';
+            content.style.display = 'block';
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const query = e.target.value.trim();
+                    if (query) {
+                        window.location.href = `B2B-search-results.html?q=${encodeURIComponent(query)}`;
+                    }
+                }
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase().trim();
+                if (term.length < 2) {
+                    document.querySelectorAll('.category-item').forEach(el => el.style.display = 'flex');
+                    return;
+                }
+                
+                document.querySelectorAll('.category-item').forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    item.style.display = text.includes(term) ? 'flex' : 'none';
+                });
+            });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>

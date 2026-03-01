@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>iBlue B2B • My Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1F2937;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: #0B4F6C;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .edit-btn {
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: white;
+            padding: 24px 16px;
+            text-align: center;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 16px;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            font-weight: 600;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .verified-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: #10B981;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            border: 2px solid white;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            display: inline-block;
+            background: #F3F4F6;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            color: #4B5563;
+            margin-bottom: 12px;
+        }
+
+        .profile-role i {
+            color: #0B4F6C;
+            margin-right: 6px;
+        }
+
+        .profile-bio {
+            color: #6B7280;
+            font-size: 14px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: #E5E7EB;
+            margin: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 16px 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0B4F6C;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+            padding: 0 16px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 16px 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6B7280;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: #0B4F6C;
+            border-bottom-color: #0B4F6C;
+        }
+
+        .tab i {
+            margin-right: 6px;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 16px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            color: #0B4F6C;
+        }
+
+        .edit-link {
+            color: #0B4F6C;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Info Rows */
+        .info-row {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            width: 120px;
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .info-value {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1F2937;
+        }
+
+        /* Business Hours */
+        .hours-grid {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 8px;
+            font-size: 14px;
+            margin-top: 12px;
+        }
+
+        .day {
+            color: #6B7280;
+        }
+
+        .time {
+            color: #1F2937;
+            font-weight: 500;
+        }
+
+        /* Documents List */
+        .doc-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #F9FAFB;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .doc-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .doc-icon {
+            width: 40px;
+            height: 40px;
+            background: #E5E7EB;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0B4F6C;
+            font-size: 20px;
+        }
+
+        .doc-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .doc-date {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .doc-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-verified {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-rejected {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #E5E7EB;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .product-image {
+            height: 120px;
+            background: #F3F4F6;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #0B4F6C;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .product-info {
+            padding: 10px;
+        }
+
+        .product-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        /* Reviews */
+        .review-item {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .reviewer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #F3F4F6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0B4F6C;
+            font-weight: 600;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .review-date {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .review-rating {
+            color: #F59E0B;
+            margin-bottom: 8px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: #4B5563;
+            line-height: 1.5;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            padding: 12px 16px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1.5px solid #0B4F6C;
+            color: #0B4F6C;
+        }
+
+        .btn-danger {
+            background: #EF4444;
+            color: white;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Switch Account Button */
+        .switch-account {
+            margin: 16px;
+        }
+
+        .switch-btn {
+            width: 100%;
+            padding: 12px;
+            background: #F3F4F6;
+            border: 1px solid #E5E7EB;
+            border-radius: 30px;
+            color: #4B5563;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+        }
+
+        .skeleton-text {
+            height: 20px;
+            width: 200px;
+            margin: 8px auto;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .main-content {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .action-buttons {
+                max-width: 600px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 30px 30px 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="header-title">My Profile</div>
+        <a href="edit-profile.html" class="edit-btn">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div id="loadingState" style="padding: 40px 20px; text-align: center;">
+            <div class="skeleton-avatar"></div>
+            <div class="skeleton-text" style="width: 150px;"></div>
+            <div class="skeleton-text" style="width: 100px;"></div>
+        </div>
+
+        <!-- Profile Content (hidden initially) -->
+        <div id="profileContent" style="display: none;">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="avatar-container">
+                    <div class="avatar" id="avatar">
+                        <span id="avatarInitials">U</span>
+                    </div>
+                    <div class="verified-badge" id="verifiedBadge" style="display: none;">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+                <h1 class="profile-name" id="profileName">Loading...</h1>
+                <div class="profile-role" id="profileRole">
+                    <i class="fas fa-user"></i> Member
+                </div>
+                <p class="profile-bio" id="profileBio">No bio added yet</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-item">
+                    <div class="stat-value" id="statAds">0</div>
+                    <div class="stat-label">Ads</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statOrders">0</div>
+                    <div class="stat-label">Orders</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statReviews">0</div>
+                    <div class="stat-label">Reviews</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statJoined">-</div>
+                    <div class="stat-label">Joined</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('info')">
+                    <i class="fas fa-info-circle"></i> Info
+                </div>
+                <div class="tab" onclick="switchTab('business')" id="businessTab">
+                    <i class="fas fa-briefcase"></i> Business
+                </div>
+                <div class="tab" onclick="switchTab('products')">
+                    <i class="fas fa-box"></i> Products
+                </div>
+                <div class="tab" onclick="switchTab('reviews')">
+                    <i class="fas fa-star"></i> Reviews
+                </div>
+            </div>
+
+            <!-- Tab: Personal Info -->
+            <div class="tab-content active" id="tabInfo">
+                <div class="info-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-user-circle"></i>
+                            Personal Information
+                        </h3>
+                        <a href="edit-profile.html?section=personal" class="edit-link">Edit</a>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Full Name</span>
+                        <span class="info-value" id="infoFullName">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email</span>
+                        <span class="info-value" id="infoEmail">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Phone</span>
+                        <span class="info-value" id="infoPhone">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Location</span>
+                        <span class="info-value" id="infoLocation">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Member Since</span>
+                        <span class="info-value" id="infoJoined">-</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-shield-alt"></i>
+                            Account Security
+                        </h3>
+                        <a href="security-settings.html" class="edit-link">Manage</a>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Password</span>
+                        <span class="info-value">••••••••</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">2FA</span>
+                        <span class="info-value" id="info2FA">Not enabled</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Last Login</span>
+                        <span class="info-value" id="infoLastLogin">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Business Info (for suppliers) -->
+            <div class="tab-content" id="tabBusiness">
+                <div class="info-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-store"></i>
+                            Business Details
+                        </h3>
+                        <a href="edit-profile.html?section=business" class="edit-link">Edit</a>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Business Name</span>
+                        <span class="info-value" id="businessName">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Business Type</span>
+                        <span class="info-value" id="businessType">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Registration No.</span>
+                        <span class="info-value" id="businessReg">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">TIN Number</span>
+                        <span class="info-value" id="businessTIN">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Year Est.</span>
+                        <span class="info-value" id="businessYear">-</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Warehouse Location
+                        </h3>
+                        <a href="edit-profile.html?section=location" class="edit-link">Edit</a>
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Address</span>
+                        <span class="info-value" id="warehouseAddress">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">District</span>
+                        <span class="info-value" id="warehouseDistrict">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Service Areas</span>
+                        <span class="info-value" id="serviceAreas">-</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-file-invoice"></i>
+                            Verification Documents
+                        </h3>
+                        <a href="supplier-verification.html" class="edit-link">Manage</a>
+                    </div>
+                    
+                    <div id="documentsList">
+                        <!-- Documents populated by JS -->
+                    </div>
+
+                    <div style="margin-top: 16px;" id="verificationStatus">
+                        <!-- Verification status badge -->
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-clock"></i>
+                            Business Hours
+                        </h3>
+                        <a href="edit-profile.html?section=hours" class="edit-link">Edit</a>
+                    </div>
+                    
+                    <div class="hours-grid" id="businessHours">
+                        <!-- Hours populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Products -->
+            <div class="tab-content" id="tabProducts">
+                <div class="info-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-box"></i>
+                            My Products
+                        </h3>
+                        <a href="post-ad.html?type=b2b" class="edit-link">
+                            <i class="fas fa-plus"></i> Add New
+                        </a>
+                    </div>
+                    
+                    <div id="productsList">
+                        <!-- Products populated by JS -->
+                        <div style="text-align: center; padding: 40px; color: #6B7280;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 12px;"></i>
+                            <p>Loading products...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Reviews -->
+            <div class="tab-content" id="tabReviews">
+                <div class="info-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-star"></i>
+                            Reviews & Ratings
+                        </h3>
+                    </div>
+                    
+                    <div id="reviewsList">
+                        <!-- Reviews populated by JS -->
+                        <div style="text-align: center; padding: 40px; color: #6B7280;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 12px;"></i>
+                            <p>Loading reviews...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons" id="actionButtons">
+        <button class="btn btn-outline" id="switchToSeller" style="display: none;">
+            <i class="fas fa-store"></i>
+            Switch to Seller View
+        </button>
+        <button class="btn btn-outline" id="switchToBuyer" style="display: none;">
+            <i class="fas fa-shopping-cart"></i>
+            Switch to Buyer View
+        </button>
+        <button class="btn btn-outline" id="messagesBtn">
+            <i class="far fa-comment-dots"></i>
+            Messages
+        </button>
+        <button class="btn btn-danger" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </button>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ============================================
+        // SUPABASE CONFIGURATION
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // STATE
+        // ============================================
+        let currentUser = null;
+        let userProfile = null;
+        let supplierProfile = null;
+        let isSupplier = false;
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            await loadProfileData();
+            setupEventListeners();
+        });
+
+        // ============================================
+        // CHECK AUTHENTICATION
+        // ============================================
+        async function checkAuth() {
+            try {
+                const { data: { user }, error } = await sb.auth.getUser();
+                
+                if (error || !user) {
+                    showToast('Please login to view profile');
+                    setTimeout(() => {
+                        window.location.href = 'login.html?redirect=profile.html';
+                    }, 2000);
+                    return;
+                }
+                
+                currentUser = user;
+                
+            } catch (error) {
+                console.error('Auth check error:', error);
+                showToast('Authentication error');
+            }
+        }
+
+        // ============================================
+        // LOAD PROFILE DATA
+        // ============================================
+        async function loadProfileData() {
+            try {
+                // Get profile from profiles table
+                const { data: profile, error: profileError } = await sb
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (profileError) throw profileError;
+                
+                userProfile = profile;
+                isSupplier = profile.is_supplier || false;
+
+                // If supplier, get supplier details
+                if (isSupplier) {
+                    const { data: supplier, error: supplierError } = await sb
+                        .from('suppliers')
+                        .select('*')
+                        .eq('profile_id', currentUser.id)
+                        .single();
+
+                    if (!supplierError) {
+                        supplierProfile = supplier;
+                    }
+                }
+
+                // Hide loading, show content
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('profileContent').style.display = 'block';
+
+                // Render profile
+                renderProfile();
+                
+                // Load stats
+                await loadStats();
+                
+                // Load products
+                await loadProducts();
+                
+                // Load reviews
+                await loadReviews();
+                
+                // Show/hide business tab
+                if (isSupplier) {
+                    document.getElementById('businessTab').style.display = 'flex';
+                    renderBusinessInfo();
+                    renderDocuments();
+                } else {
+                    document.getElementById('businessTab').style.display = 'none';
+                }
+
+                // Show/hide switch buttons
+                updateSwitchButtons();
+
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showToast('Error loading profile data');
+            }
+        }
+
+        // ============================================
+        // RENDER PROFILE
+        // ============================================
+        function renderProfile() {
+            // Avatar
+            const initials = (userProfile.full_name || 'User')
+                .split(' ')
+                .map(n => n[0])
+                .join('')
+                .toUpperCase()
+                .substring(0, 2);
+            
+            document.getElementById('avatarInitials').textContent = initials;
+            
+            if (userProfile.avatar_url) {
+                document.getElementById('avatar').innerHTML = `
+                    <img src="${userProfile.avatar_url}" alt="${userProfile.full_name}">
+                `;
+            }
+
+            // Verified badge
+            if (userProfile.is_verified) {
+                document.getElementById('verifiedBadge').style.display = 'flex';
+            }
+
+            // Name
+            document.getElementById('profileName').textContent = 
+                userProfile.business_name || userProfile.full_name || 'User';
+            
+            // Role
+            const roleEl = document.getElementById('profileRole');
+            if (userProfile.is_supplier) {
+                roleEl.innerHTML = '<i class="fas fa-store"></i> Verified Supplier';
+            } else if (userProfile.is_admin) {
+                roleEl.innerHTML = '<i class="fas fa-shield-alt"></i> Administrator';
+            } else {
+                roleEl.innerHTML = '<i class="fas fa-user"></i> Buyer';
+            }
+
+            // Bio
+            document.getElementById('profileBio').textContent = 
+                userProfile.bio || 'No bio added yet';
+
+            // Personal info
+            document.getElementById('infoFullName').textContent = userProfile.full_name || '-';
+            document.getElementById('infoEmail').textContent = userProfile.email || '-';
+            document.getElementById('infoPhone').textContent = userProfile.phone || 'Not provided';
+            
+            const location = userProfile.district 
+                ? `${userProfile.district}${userProfile.location ? `, ${userProfile.location}` : ''}`
+                : (userProfile.location || 'Not provided');
+            document.getElementById('infoLocation').textContent = location;
+            
+            const joined = new Date(userProfile.created_at).toLocaleDateString('en-UG', {
+                year: 'numeric',
+                month: 'long'
+            });
+            document.getElementById('infoJoined').textContent = joined;
+            document.getElementById('statJoined').textContent = 
+                new Date(userProfile.created_at).getFullYear();
+
+            // Last login (from auth user)
+            if (currentUser.last_sign_in_at) {
+                const lastLogin = new Date(currentUser.last_sign_in_at).toLocaleDateString('en-UG', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                document.getElementById('infoLastLogin').textContent = lastLogin;
+            }
+        }
+
+        // ============================================
+        // RENDER BUSINESS INFO
+        // ============================================
+        function renderBusinessInfo() {
+            if (!supplierProfile) return;
+
+            document.getElementById('businessName').textContent = 
+                supplierProfile.business_name || userProfile.business_name || '-';
+            document.getElementById('businessType').textContent = 
+                supplierProfile.business_type || userProfile.business_type || '-';
+            document.getElementById('businessReg').textContent = 
+                supplierProfile.business_registration || 'Not provided';
+            document.getElementById('businessTIN').textContent = 
+                supplierProfile.tax_id || 'Not provided';
+            document.getElementById('businessYear').textContent = 
+                supplierProfile.year_established || 'Not provided';
+
+            // Warehouse
+            document.getElementById('warehouseAddress').textContent = 
+                supplierProfile.warehouse_location || 'Not provided';
+            document.getElementById('warehouseDistrict').textContent = 
+                supplierProfile.warehouse_district || 'Not provided';
+            
+            const serviceAreas = supplierProfile.service_area || [];
+            document.getElementById('serviceAreas').textContent = 
+                serviceAreas.length > 0 ? serviceAreas.join(', ') : 'Nationwide';
+
+            // Business hours (example - you'd store these in supplier table)
+            const hours = supplierProfile.business_hours || {
+                monday: '9:00 - 17:00',
+                tuesday: '9:00 - 17:00',
+                wednesday: '9:00 - 17:00',
+                thursday: '9:00 - 17:00',
+                friday: '9:00 - 17:00',
+                saturday: '10:00 - 14:00',
+                sunday: 'Closed'
+            };
+
+            const hoursHtml = `
+                <div class="day">Monday</div><div class="time">${hours.monday || '9:00 - 17:00'}</div>
+                <div class="day">Tuesday</div><div class="time">${hours.tuesday || '9:00 - 17:00'}</div>
+                <div class="day">Wednesday</div><div class="time">${hours.wednesday || '9:00 - 17:00'}</div>
+                <div class="day">Thursday</div><div class="time">${hours.thursday || '9:00 - 17:00'}</div>
+                <div class="day">Friday</div><div class="time">${hours.friday || '9:00 - 17:00'}</div>
+                <div class="day">Saturday</div><div class="time">${hours.saturday || '10:00 - 14:00'}</div>
+                <div class="day">Sunday</div><div class="time">${hours.sunday || 'Closed'}</div>
+            `;
+            
+            document.getElementById('businessHours').innerHTML = hoursHtml;
+        }
+
+        // ============================================
+        // RENDER DOCUMENTS
+        // ============================================
+        function renderDocuments() {
+            const docsList = document.getElementById('documentsList');
+            const verificationStatus = document.getElementById('verificationStatus');
+            
+            if (!supplierProfile) return;
+
+            // Documents from supplier_profile.verification_docs
+            const docs = supplierProfile.verification_docs || {};
+            const docsArray = [];
+
+            if (docs.certificate) {
+                docsArray.push({
+                    name: 'Business Registration',
+                    icon: 'fa-file-contract',
+                    date: docs.certificate_date || 'Uploaded recently',
+                    status: supplierProfile.verification_status
+                });
+            }
+
+            if (docs.tin) {
+                docsArray.push({
+                    name: 'TIN Certificate',
+                    icon: 'fa-file-invoice',
+                    date: docs.tin_date || 'Uploaded recently',
+                    status: supplierProfile.verification_status
+                });
+            }
+
+            if (docs.license) {
+                docsArray.push({
+                    name: 'Trade License',
+                    icon: 'fa-file-signature',
+                    date: docs.license_date || 'Uploaded recently',
+                    status: supplierProfile.verification_status
+                });
+            }
+
+            if (docsArray.length === 0) {
+                docsList.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: #6B7280;">
+                        <i class="fas fa-file-upload" style="font-size: 24px; margin-bottom: 8px;"></i>
+                        <p>No documents uploaded yet</p>
+                        <a href="supplier-verification.html" style="color: #0B4F6C; font-weight: 600;">Upload Documents</a>
+                    </div>
+                `;
+            } else {
+                docsList.innerHTML = docsArray.map(doc => `
+                    <div class="doc-item">
+                        <div class="doc-info">
+                            <div class="doc-icon">
+                                <i class="fas ${doc.icon}"></i>
+                            </div>
+                            <div>
+                                <div class="doc-name">${doc.name}</div>
+                                <div class="doc-date">${doc.date}</div>
+                            </div>
+                        </div>
+                        <div class="doc-status status-${doc.status}">
+                            ${doc.status === 'verified' ? 'Verified' : 
+                              doc.status === 'pending' ? 'Pending' : 
+                              doc.status === 'rejected' ? 'Rejected' : 'Pending'}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Verification status badge
+            const status = supplierProfile.verification_status || 'pending';
+            const statusConfig = {
+                'verified': { color: '#10B981', text: '✓ Verified Supplier', icon: 'fa-check-circle' },
+                'pending': { color: '#F59E0B', text: '⏳ Verification Pending', icon: 'fa-clock' },
+                'rejected': { color: '#EF4444', text: '✗ Verification Rejected', icon: 'fa-exclamation-circle' }
+            };
+
+            const config = statusConfig[status] || statusConfig.pending;
+            
+            verificationStatus.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #F3F4F6; border-radius: 8px;">
+                    <i class="fas ${config.icon}" style="color: ${config.color}; font-size: 20px;"></i>
+                    <div>
+                        <div style="font-weight: 600; color: #1F2937;">${config.text}</div>
+                        <div style="font-size: 12px; color: #6B7280;">
+                            ${status === 'verified' ? 'Your business is verified' : 
+                              status === 'pending' ? 'Documents under review (24-48 hours)' : 
+                              'Please re-upload documents'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // LOAD STATS
+        // ============================================
+        async function loadStats() {
+            try {
+                // Count user's ads
+                const { count: adsCount, error: adsError } = await sb
+                    .from('ads')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('seller_id', currentUser.id);
+
+                if (!adsError) {
+                    document.getElementById('statAds').textContent = adsCount || 0;
+                }
+
+                // Count orders (as buyer)
+                const { count: ordersCount, error: ordersError } = await sb
+                    .from('orders')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('buyer_id', currentUser.id);
+
+                if (!ordersError) {
+                    document.getElementById('statOrders').textContent = ordersCount || 0;
+                }
+
+                // Count reviews
+                const { count: reviewsCount, error: reviewsError } = await sb
+                    .from('reviews')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('reviewee_id', currentUser.id);
+
+                if (!reviewsError) {
+                    document.getElementById('statReviews').textContent = reviewsCount || 0;
+                }
+
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD PRODUCTS
+        // ============================================
+        async function loadProducts() {
+            const container = document.getElementById('productsList');
+
+            try {
+                const { data: products, error } = await sb
+                    .from('ads')
+                    .select('id, title, price, wholesale_price, image_urls, status')
+                    .eq('seller_id', currentUser.id)
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+
+                if (error) throw error;
+
+                if (!products || products.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #6B7280;">
+                            <i class="fas fa-box-open" style="font-size: 32px; margin-bottom: 12px;"></i>
+                            <p>No products listed yet</p>
+                            <a href="post-ad.html?type=b2b" style="color: #0B4F6C; font-weight: 600; display: inline-block; margin-top: 12px;">
+                                <i class="fas fa-plus"></i> Add Your First Product
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = `
+                    <div class="products-grid">
+                        ${products.map(product => {
+                            const imageUrl = product.image_urls?.[0] || 'https://via.placeholder.com/200?text=No+Image';
+                            const price = product.wholesale_price || product.price || 0;
+                            
+                            return `
+                                <a href="edit-ad.html?id=${product.id}" class="product-card">
+                                    <div class="product-image">
+                                        <img src="${imageUrl}" alt="${product.title}" loading="lazy">
+                                        ${product.status === 'active' ? '' : 
+                                            '<div class="product-badge">' + product.status + '</div>'}
+                                    </div>
+                                    <div class="product-info">
+                                        <div class="product-title">${product.title.substring(0, 20)}${product.title.length > 20 ? '...' : ''}</div>
+                                        <div class="product-price">UGX ${parseInt(price).toLocaleString()}</div>
+                                    </div>
+                                </a>
+                            `;
+                        }).join('')}
+                    </div>
+                    ${products.length >= 10 ? `
+                        <div style="text-align: center; margin-top: 16px;">
+                            <a href="my-ads.html" style="color: #0B4F6C; font-weight: 600;">View All Products →</a>
+                        </div>
+                    ` : ''}
+                `;
+
+            } catch (error) {
+                console.error('Error loading products:', error);
+                container.innerHTML = '<p style="text-align: center; padding: 20px; color: #EF4444;">Error loading products</p>';
+            }
+        }
+
+        // ============================================
+        // LOAD REVIEWS
+        // ============================================
+        async function loadReviews() {
+            const container = document.getElementById('reviewsList');
+
+            try {
+                const { data: reviews, error } = await sb
+                    .from('reviews')
+                    .select(`
+                        id,
+                        rating,
+                        comment,
+                        created_at,
+                        reviewer_id,
+                        profiles!reviews_reviewer_id_fkey (
+                            full_name,
+                            avatar_url
+                        )
+                    `)
+                    .eq('reviewee_id', currentUser.id)
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+
+                if (error) throw error;
+
+                if (!reviews || reviews.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #6B7280;">
+                            <i class="far fa-star" style="font-size: 32px; margin-bottom: 12px;"></i>
+                            <p>No reviews yet</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = reviews.map(review => {
+                    const reviewerName = review.profiles?.full_name || 'Anonymous';
+                    const initials = reviewerName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                    const date = new Date(review.created_at).toLocaleDateString('en-UG', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+
+                    // Generate star rating
+                    let stars = '';
+                    for (let i = 1; i <= 5; i++) {
+                        stars += i <= review.rating ? '★' : '☆';
+                    }
+
+                    return `
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="reviewer">
+                                    <div class="reviewer-avatar">
+                                        ${review.profiles?.avatar_url ? 
+                                            `<img src="${review.profiles.avatar_url}" style="width:100%;height:100%;object-fit:cover;">` : 
+                                            initials}
+                                    </div>
+                                    <div>
+                                        <div class="reviewer-name">${reviewerName}</div>
+                                        <div class="review-date">${date}</div>
+                                    </div>
+                                </div>
+                                <div class="review-rating">${stars}</div>
+                            </div>
+                            <div class="review-text">${review.comment || 'No comment provided.'}</div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+                container.innerHTML = '<p style="text-align: center; padding: 20px; color: #EF4444;">Error loading reviews</p>';
+            }
+        }
+
+        // ============================================
+        // UPDATE SWITCH BUTTONS
+        // ============================================
+        function updateSwitchButtons() {
+            const switchToSeller = document.getElementById('switchToSeller');
+            const switchToBuyer = document.getElementById('switchToBuyer');
+
+            if (isSupplier) {
+                switchToSeller.style.display = 'none';
+                switchToBuyer.style.display = 'flex';
+            } else {
+                switchToSeller.style.display = 'flex';
+                switchToBuyer.style.display = 'none';
+            }
+        }
+
+        // ============================================
+        // TAB SWITCHING
+        // ============================================
+        window.switchTab = function(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(`tab${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`).classList.add('active');
+        };
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        function setupEventListeners() {
+            // Switch to seller view
+            document.getElementById('switchToSeller').addEventListener('click', () => {
+                window.location.href = 'supplier-dashboard.html';
+            });
+
+            // Switch to buyer view
+            document.getElementById('switchToBuyer').addEventListener('click', () => {
+                window.location.href = 'buyer-dashboard.html';
+            });
+
+            // Messages
+            document.getElementById('messagesBtn').addEventListener('click', () => {
+                window.location.href = isSupplier ? 'supplier-chat.html' : 'messages.html';
+            });
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                try {
+                    await sb.auth.signOut();
+                    showToast('Logged out successfully');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    showToast('Error logging out');
+                }
+            });
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>

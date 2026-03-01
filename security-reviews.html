@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Privacy & Security - iBlue Uganda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-light: #3B82F6;
+            --secondary: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --dark: #1F2937;
+            --dark-gray: #4B5563;
+            --gray: #6B7280;
+            --light-gray: #9CA3AF;
+            --lighter-gray: #E5E7EB;
+            --lightest-gray: #F3F4F6;
+            --white: #FFFFFF;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 12px rgba(0,0,0,0.15);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --touch-target: 48px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        html {
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--white);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--white);
+            border-bottom: 1px solid var(--lighter-gray);
+            padding: 12px 16px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--lightest-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .back-btn:active {
+            transform: scale(0.95);
+            background: var(--lighter-gray);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px 16px 48px;
+        }
+        
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--gray);
+        }
+        
+        .last-updated {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 12px;
+            background: var(--lightest-gray);
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--dark-gray);
+        }
+        
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f6f9fc, #eef2f6);
+            border-radius: var(--radius-lg);
+        }
+        
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: var(--white);
+            border-radius: 40px;
+            box-shadow: var(--shadow);
+        }
+        
+        .trust-badge i {
+            font-size: 20px;
+            color: var(--secondary);
+        }
+        
+        .trust-badge span {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        /* Section Styles */
+        .policy-section {
+            margin-bottom: 40px;
+            padding: 24px;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--lighter-gray);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .policy-section:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--lightest-gray);
+        }
+        
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .section-content {
+            color: var(--dark-gray);
+        }
+        
+        .section-content p {
+            margin-bottom: 16px;
+        }
+        
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Lists */
+        .feature-list {
+            list-style: none;
+            margin: 16px 0;
+        }
+        
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background: var(--lightest-gray);
+            border-radius: var(--radius);
+        }
+        
+        .feature-list li i {
+            color: var(--secondary);
+            font-size: 16px;
+            margin-top: 3px;
+        }
+        
+        .numbered-list {
+            list-style: none;
+            counter-reset: item;
+            margin: 16px 0;
+        }
+        
+        .numbered-list li {
+            counter-increment: item;
+            margin-bottom: 12px;
+            padding-left: 32px;
+            position: relative;
+        }
+        
+        .numbered-list li::before {
+            content: counter(item);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .bullet-list {
+            list-style: none;
+            margin: 12px 0 12px 20px;
+        }
+        
+        .bullet-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .bullet-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        /* Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        
+        .info-card {
+            padding: 16px;
+            background: var(--lightest-gray);
+            border-radius: var(--radius);
+            text-align: center;
+        }
+        
+        .info-card i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        
+        .info-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+        
+        .info-card p {
+            font-size: 13px;
+            color: var(--gray);
+        }
+        
+        /* Security Measures */
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .security-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 16px;
+            background: var(--lightest-gray);
+            border-radius: var(--radius);
+        }
+        
+        .security-item i {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        
+        .security-item span {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+        
+        .security-item small {
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        /* Data Collection Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            text-align: left;
+            padding: 12px;
+            background: var(--lightest-gray);
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--lighter-gray);
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* Contact Cards */
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--lightest-gray);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s;
+        }
+        
+        .contact-card:active {
+            transform: scale(0.98);
+        }
+        
+        .contact-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .contact-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+        
+        .contact-info p {
+            font-size: 13px;
+            color: var(--gray);
+        }
+        
+        /* FAQ Accordion */
+        .faq-item {
+            border: 1px solid var(--lighter-gray);
+            border-radius: var(--radius);
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 16px;
+            background: var(--lightest-gray);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .faq-question i {
+            transition: transform 0.3s;
+            color: var(--primary);
+        }
+        
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            background: var(--white);
+        }
+        
+        .faq-answer.show {
+            padding: 16px;
+            max-height: 500px;
+        }
+        
+        .faq-answer p {
+            margin: 0;
+            color: var(--dark-gray);
+        }
+        
+        /* Cookie Settings */
+        .cookie-settings {
+            background: var(--lightest-gray);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .cookie-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--lighter-gray);
+        }
+        
+        .cookie-option:last-child {
+            border-bottom: none;
+        }
+        
+        .cookie-info h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .cookie-info p {
+            font-size: 13px;
+            color: var(--gray);
+        }
+        
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--light-gray);
+            transition: .3s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--secondary);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 30px 0;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            min-height: var(--touch-target);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:active {
+            background: var(--primary-dark);
+            transform: scale(0.98);
+        }
+        
+        .btn-secondary {
+            background: var(--lightest-gray);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:active {
+            background: var(--lighter-gray);
+            transform: scale(0.98);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:active {
+            background: var(--lightest-gray);
+            transform: scale(0.98);
+        }
+        
+        /* GDPR Banner */
+        .gdpr-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--dark);
+            color: white;
+            padding: 16px;
+            z-index: 1000;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .gdpr-banner.show {
+            transform: translateY(0);
+        }
+        
+        .gdpr-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .gdpr-content p {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .gdpr-content a {
+            color: var(--primary-light);
+            text-decoration: none;
+        }
+        
+        .gdpr-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .gdpr-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .gdpr-btn.accept {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .gdpr-btn.settings {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .page-title {
+                font-size: 24px;
+            }
+            
+            .policy-section {
+                padding: 16px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .trust-badges {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .trust-badge {
+                justify-content: center;
+            }
+            
+            .info-grid, .security-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .gdpr-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .gdpr-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        /* Dark mode support (optional) */
+        @media (prefers-color-scheme: dark) {
+            /* Add dark mode styles if needed */
+        }
+        
+        /* Print styles */
+        @media print {
+            .header, .gdpr-banner, .action-buttons, .back-btn {
+                display: none;
+            }
+            
+            .policy-section {
+                break-inside: avoid;
+                border: none;
+                box-shadow: none;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .policy-section {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .policy-section:nth-child(1) { animation-delay: 0.1s; }
+        .policy-section:nth-child(2) { animation-delay: 0.2s; }
+        .policy-section:nth-child(3) { animation-delay: 0.3s; }
+        .policy-section:nth-child(4) { animation-delay: 0.4s; }
+        .policy-section:nth-child(5) { animation-delay: 0.5s; }
+        .policy-section:nth-child(6) { animation-delay: 0.6s; }
+        .policy-section:nth-child(7) { animation-delay: 0.7s; }
+        .policy-section:nth-child(8) { animation-delay: 0.8s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <a href="/index.html" class="logo">
+                <div class="logo-icon">iB</div>
+                <span>iBlue Uganda</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Privacy & Security</h1>
+            <p class="page-subtitle">Your trust is our top priority. Learn how we protect your data.</p>
+            <div class="last-updated">
+                <i class="far fa-calendar-alt"></i> Last Updated: February 15, 2026
+            </div>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="trust-badges">
+            <div class="trust-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span>256-bit SSL Encrypted</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-lock"></i>
+                <span>GDPR Compliant</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-check-circle"></i>
+                <span>Data Protection</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-mobile-alt"></i>
+                <span>Secure Payments</span>
+            </div>
+        </div>
+
+        <!-- Quick Info Cards -->
+        <div class="info-grid">
+            <div class="info-card">
+                <i class="fas fa-user-secret"></i>
+                <h4>Your Data is Safe</h4>
+                <p>We never sell your personal information to third parties</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-eye"></i>
+                <h4>You're in Control</h4>
+                <p>Access, modify, or delete your data anytime</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-clock"></i>
+                <h4>24/7 Monitoring</h4>
+                <p>Our systems are monitored round the clock</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-globe"></i>
+                <h4>Uganda Compliant</h4>
+                <p>Fully compliant with Uganda data protection laws</p>
+            </div>
+        </div>
+
+        <!-- Privacy Policy Sections -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h2 class="section-title">Information We Collect</h2>
+            </div>
+            <div class="section-content">
+                <p>To provide you with the best marketplace experience in Uganda, we collect the following information:</p>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Information Type</th>
+                            <th>Purpose</th>
+                            <th>Retention Period</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Account Information</strong><br><small>Name, email, phone</small></td>
+                            <td>Account creation, communication</td>
+                            <td>Until account deletion</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Profile Details</strong><br><small>Location, profile photo</small></td>
+                            <td>Personalization, local listings</td>
+                            <td>Until account deletion</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Listing Information</strong><br><small>Product details, images</small></td>
+                            <td>Marketplace functionality</td>
+                            <td>30 days after listing ends</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Payment Data</strong><br><small>Transaction details</small></td>
+                            <td>Process payments, fraud prevention</td>
+                            <td>7 years (legal requirement)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Usage Data</strong><br><small>Views, clicks, searches</small></td>
+                            <td>Improve service, recommendations</td>
+                            <td>12 months</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Device Information</strong><br><small>IP address, browser</small></td>
+                            <td>Security, analytics</td>
+                            <td>6 months</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p class="note" style="margin-top: 16px; font-size: 14px; color: var(--gray);">
+                    <i class="fas fa-info-circle"></i> We only collect information necessary for providing our services. You can choose what to share.
+                </p>
+            </div>
+        </div>
+
+        <!-- How We Use Your Information -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h2 class="section-title">How We Use Your Information</h2>
+            </div>
+            <div class="section-content">
+                <p>Your information helps us create a safe and personalized marketplace:</p>
+                
+                <ul class="feature-list">
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>Connect Buyers & Sellers</strong>
+                            <p style="font-size: 14px; margin-top: 4px;">Facilitate communication between interested parties</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>Verify Identity</strong>
+                            <p style="font-size: 14px; margin-top: 4px;">Prevent fraud and ensure trustworthy transactions</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>Personalize Experience</strong>
+                            <p style="font-size: 14px; margin-top: 4px;">Show relevant listings based on your location and interests</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>Improve Services</strong>
+                            <p style="font-size: 14px; margin-top: 4px;">Analyze usage patterns to enhance platform features</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>Security & Fraud Prevention</strong>
+                            <p style="font-size: 14px; margin-top: 4px;">Monitor for suspicious activity and protect user data</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>Legal Compliance</strong>
+                            <p style="font-size: 14px; margin-top: 4px;">Meet regulatory requirements in Uganda</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Security Measures -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2 class="section-title">Security Measures</h2>
+            </div>
+            <div class="section-content">
+                <p>We implement industry-leading security to protect your data:</p>
+                
+                <div class="security-grid">
+                    <div class="security-item">
+                        <i class="fas fa-lock"></i>
+                        <span>256-bit SSL</span>
+                        <small>Bank-grade encryption</small>
+                    </div>
+                    <div class="security-item">
+                        <i class="fas fa-user-shield"></i>
+                        <span>2-Factor Auth</span>
+                        <small>Optional security</small>
+                    </div>
+                    <div class="security-item">
+                        <i class="fas fa-shield-virus"></i>
+                        <span>Anti-Malware</span>
+                        <small>24/7 protection</small>
+                    </div>
+                    <div class="security-item">
+                        <i class="fas fa-fire"></i>
+                        <span>Firewall</span>
+                        <small>Advanced filtering</small>
+                    </div>
+                    <div class="security-item">
+                        <i class="fas fa-eye"></i>
+                        <span>Real-time Monitoring</span>
+                        <small>24/7 surveillance</small>
+                    </div>
+                    <div class="security-item">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Regular Audits</span>
+                        <small>Monthly security checks</small>
+                    </div>
+                </div>
+
+                <h3 style="margin: 24px 0 12px; font-size: 18px;">🔐 What This Means For You</h3>
+                <ul class="bullet-list">
+                    <li>All communications between your device and our servers are encrypted</li>
+                    <li>Your password is hashed and never stored in plain text</li>
+                    <li>Payment information is processed by PCI-DSS compliant partners</li>
+                    <li>We regularly test our systems for vulnerabilities</li>
+                    <li>Security patches are applied immediately when available</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Data Sharing -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-share-alt"></i>
+                </div>
+                <h2 class="section-title">Data Sharing & Third Parties</h2>
+            </div>
+            <div class="section-content">
+                <p>We only share your information in these limited circumstances:</p>
+                
+                <ol class="numbered-list">
+                    <li><strong>With your consent</strong> - When you explicitly agree to share information</li>
+                    <li><strong>Service providers</strong> - Trusted partners who help operate our platform (payment processors, cloud storage)</li>
+                    <li><strong>Legal requirements</strong> - When required by Ugandan law or court order</li>
+                    <li><strong>Protection of rights</strong> - To prevent fraud or safety issues</li>
+                </ol>
+                
+                <div class="cookie-settings">
+                    <h4 style="margin-bottom: 12px;">🍪 Third-Party Services We Use</h4>
+                    
+                    <div class="cookie-option">
+                        <div class="cookie-info">
+                            <h4>Payment Processors</h4>
+                            <p>Flutterwave, PayPal - Process your payments securely</p>
+                        </div>
+                        <span class="badge" style="background: var(--secondary); color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px;">Required</span>
+                    </div>
+                    
+                    <div class="cookie-option">
+                        <div class="cookie-info">
+                            <h4>Analytics</h4>
+                            <p>Google Analytics - Understand how you use our platform</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="analyticsToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="cookie-option">
+                        <div class="cookie-info">
+                            <h4>Cloud Services</h4>
+                            <p>AWS, Supabase - Host your data securely</p>
+                        </div>
+                        <span class="badge" style="background: var(--secondary); color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px;">Required</span>
+                    </div>
+                    
+                    <div class="cookie-option">
+                        <div class="cookie-info">
+                            <h4>Marketing</h4>
+                            <p>Email services for newsletters and promotions</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="marketingToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <p style="font-size: 13px; color: var(--gray); margin-top: 16px;">
+                        <i class="fas fa-info-circle"></i> Required services are essential for platform functionality and cannot be disabled.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Your Rights -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-gavel"></i>
+                </div>
+                <h2 class="section-title">Your Privacy Rights</h2>
+            </div>
+            <div class="section-content">
+                <p>Under Uganda's Data Protection and Privacy Act, you have the following rights:</p>
+                
+                <div class="feature-list">
+                    <li>
+                        <i class="fas fa-check-circle" style="color: var(--secondary);"></i>
+                        <div>
+                            <strong>Right to Access</strong>
+                            <p style="font-size: 14px;">Request a copy of all data we hold about you</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle" style="color: var(--secondary);"></i>
+                        <div>
+                            <strong>Right to Rectification</strong>
+                            <p style="font-size: 14px;">Correct inaccurate or incomplete information</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle" style="color: var(--secondary);"></i>
+                        <div>
+                            <strong>Right to Erasure</strong>
+                            <p style="font-size: 14px;">Request deletion of your data (subject to legal limits)</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle" style="color: var(--secondary);"></i>
+                        <div>
+                            <strong>Right to Restrict Processing</strong>
+                            <p style="font-size: 14px;">Limit how we use your information</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle" style="color: var(--secondary);"></i>
+                        <div>
+                            <strong>Right to Data Portability</strong>
+                            <p style="font-size: 14px;">Receive your data in a machine-readable format</p>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle" style="color: var(--secondary);"></i>
+                        <div>
+                            <strong>Right to Object</strong>
+                            <p style="font-size: 14px;">Opt-out of marketing and non-essential processing</p>
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cookie Policy -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-cookie-bite"></i>
+                </div>
+                <h2 class="section-title">Cookie Policy</h2>
+            </div>
+            <div class="section-content">
+                <p>We use cookies to enhance your experience. Here's what each type does:</p>
+                
+                <div class="cookie-settings">
+                    <div class="cookie-option">
+                        <div class="cookie-info">
+                            <h4>Essential Cookies</h4>
+                            <p>Keep you logged in, maintain security, remember your cart</p>
+                        </div>
+                        <span class="badge" style="background: var(--secondary); color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px;">Always On</span>
+                    </div>
+                    
+                    <div class="cookie-option">
+                        <div class="cookie-info">
+                            <h4>Preference Cookies</h4>
+                            <p>Remember your language, location, and display preferences</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="prefCookies" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="cookie-option">
+                        <div class="cookie-info">
+                            <h4>Analytics Cookies</h4>
+                            <p>Help us understand how you use our platform to improve it</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="analyticsCookies" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="cookie-option">
+                        <div class="cookie-info">
+                            <h4>Marketing Cookies</h4>
+                            <p>Show you relevant ads and track campaign performance</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="marketingCookies">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Frequently Asked Questions -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <h2 class="section-title">Frequently Asked Questions</h2>
+            </div>
+            <div class="section-content">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How do I delete my account?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Go to Settings > Account > Delete Account. You can also email support@iblue.ug with your request. We'll process it within 7 days and confirm via email.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Is my payment information secure?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes. We use PCI-DSS compliant payment processors. Your full payment details never touch our servers. All transactions are encrypted with 256-bit SSL.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Do you share my data with third parties?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Only with trusted service providers who help operate our platform, and only when necessary. We never sell your personal information to advertisers or data brokers.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How long do you keep my data?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We retain data as long as your account is active. After deletion, we keep necessary information for legal purposes (up to 7 years for transaction records).</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What happens if there's a data breach?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We'll notify you within 72 hours if your data is affected, explain what happened, and guide you on protective steps. We also report to Uganda's data protection authority as required by law.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h2 class="section-title">Contact Our Data Protection Team</h2>
+            </div>
+            <div class="section-content">
+                <p>For privacy-related questions or to exercise your rights:</p>
+                
+                <div class="contact-cards">
+                    <a href="mailto:privacy@iblue.ug" class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-info">
+                            <h4>Email Us</h4>
+                            <p>privacy@iblue.ug</p>
+                            <p style="font-size: 12px;">Response within 48 hours</p>
+                        </div>
+                    </a>
+                    
+                    <a href="tel:+256700123456" class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-info">
+                            <h4>Call Us</h4>
+                            <p>+256 700 123456</p>
+                            <p style="font-size: 12px;">Mon-Fri, 8am-6pm</p>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-info">
+                            <h4>Visit Us</h4>
+                            <p>Kampala, Uganda</p>
+                            <p style="font-size: 12px;">By appointment only</p>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="contact-info">
+                            <h4>DPO Contact</h4>
+                            <p>Data Protection Officer</p>
+                            <p style="font-size: 12px;">dpo@iblue.ug</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="downloadPrivacyPolicy()">
+                <i class="fas fa-download"></i> Download PDF
+            </button>
+            <button class="btn btn-secondary" onclick="window.print()">
+                <i class="fas fa-print"></i> Print
+            </button>
+            <a href="/contact.html" class="btn btn-outline">
+                <i class="fas fa-question-circle"></i> Ask a Question
+            </a>
+        </div>
+
+        <!-- Data Request Form Link -->
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background: var(--lightest-gray); border-radius: var(--radius);">
+            <h3 style="margin-bottom: 12px;">📋 Submit a Data Request</h3>
+            <p style="margin-bottom: 16px; color: var(--dark-gray);">Want to access, modify, or delete your data?</p>
+            <a href="/data-request.html" class="btn btn-primary" style="display: inline-block;">
+                <i class="fas fa-file-signature"></i> Submit Request
+            </a>
+        </div>
+
+        <!-- Arbitration and Legal -->
+        <div style="margin-top: 30px; text-align: center; font-size: 13px; color: var(--gray);">
+            <p>This privacy policy is governed by the laws of the Republic of Uganda.</p>
+            <p>© 2026 iBlue Uganda. All rights reserved.</p>
+        </div>
+    </main>
+
+    <!-- GDPR Cookie Banner (will be shown if consent not given) -->
+    <div class="gdpr-banner" id="gdprBanner">
+        <div class="gdpr-content">
+            <p>
+                <i class="fas fa-cookie-bite" style="margin-right: 8px;"></i>
+                We use cookies to enhance your experience. By continuing, you agree to our 
+                <a href="/privacy.html">Privacy Policy</a> and 
+                <a href="/terms.html">Terms of Service</a>.
+            </p>
+            <div class="gdpr-buttons">
+                <button class="gdpr-btn settings" onclick="showCookieSettings()">Settings</button>
+                <button class="gdpr-btn accept" onclick="acceptCookies()">Accept All</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user has already accepted cookies
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('cookiesAccepted')) {
+                setTimeout(() => {
+                    document.getElementById('gdprBanner').classList.add('show');
+                }, 1000);
+            }
+            
+            // Load saved preferences
+            loadCookiePreferences();
+        });
+
+        // Toggle FAQ
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            
+            answer.classList.toggle('show');
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+        }
+
+        // Accept cookies
+        function acceptCookies() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            localStorage.setItem('analyticsCookies', 'true');
+            localStorage.setItem('marketingCookies', 'true');
+            localStorage.setItem('prefCookies', 'true');
+            
+            document.getElementById('gdprBanner').classList.remove('show');
+            
+            // Update toggle switches
+            document.getElementById('analyticsToggle').checked = true;
+            document.getElementById('marketingToggle').checked = true;
+            document.getElementById('analyticsCookies').checked = true;
+            document.getElementById('marketingCookies').checked = true;
+            document.getElementById('prefCookies').checked = true;
+            
+            showToast('Cookie preferences saved');
+        }
+
+        // Show cookie settings
+        function showCookieSettings() {
+            document.getElementById('gdprBanner').classList.remove('show');
+            document.querySelector('.cookie-settings').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Load saved preferences
+        function loadCookiePreferences() {
+            document.getElementById('analyticsToggle').checked = localStorage.getItem('analyticsCookies') !== 'false';
+            document.getElementById('marketingToggle').checked = localStorage.getItem('marketingCookies') !== 'false';
+            document.getElementById('analyticsCookies').checked = localStorage.getItem('analyticsCookies') !== 'false';
+            document.getElementById('marketingCookies').checked = localStorage.getItem('marketingCookies') !== 'false';
+            document.getElementById('prefCookies').checked = localStorage.getItem('prefCookies') !== 'false';
+        }
+
+        // Save individual preferences
+        document.querySelectorAll('.cookie-option input[type="checkbox"]').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const id = this.id;
+                localStorage.setItem(id, this.checked);
+                
+                if (id === 'analyticsCookies' || id === 'marketingCookies' || id === 'prefCookies') {
+                    showToast('Preference saved');
+                }
+            });
+        });
+
+        // Download privacy policy as PDF
+        function downloadPrivacyPolicy() {
+            // In a real implementation, this would generate a PDF
+            // For now, we'll just show a toast
+            showToast('Downloading privacy policy...');
+            
+            // Simulate download
+            setTimeout(() => {
+                showToast('Privacy policy downloaded');
+            }, 1500);
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            // Create toast if it doesn't exist
+            let toast = document.getElementById('toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'toast';
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: var(--dark);
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 40px;
+                    font-size: 14px;
+                    z-index: 10000;
+                    box-shadow: var(--shadow-lg);
+                    transition: opacity 0.3s;
+                    opacity: 0;
+                    pointer-events: none;
+                `;
+                document.body.appendChild(toast);
+            }
+            
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 3000);
+        }
+
+        // Track page view (for analytics)
+        function trackPageView() {
+            if (localStorage.getItem('analyticsCookies') !== 'false') {
+                // Send analytics data (implement with your analytics provider)
+                console.log('Page view tracked');
+            }
+        }
+
+        // Call on page load
+        if (localStorage.getItem('analyticsCookies') !== 'false') {
+            trackPageView();
+        }
+
+        // Handle back button
+        document.querySelector('.back-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (document.referrer) {
+                history.back();
+            } else {
+                window.location.href = '/index.html';
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

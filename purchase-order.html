@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Purchase Order - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/purchase-order.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            <div class="header-actions">
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+                <div class="header-icon" id="menuToggle">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- PO Status Bar -->
+        <div class="po-status-bar" id="poStatusBar">
+            <!-- Populated by JS -->
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Generating purchase order...</p>
+        </div>
+
+        <!-- PO Content (Hidden until loaded) -->
+        <div class="po-content" id="poContent" style="display: none;">
+            <!-- PO Header with Actions -->
+            <div class="po-header">
+                <div class="po-title-section">
+                    <h1 id="poTitle">Purchase Order</h1>
+                    <div class="po-reference">
+                        <span class="po-number" id="poNumber">PO-2024-00123</span>
+                        <span class="po-date" id="poDate">Issued: Jan 15, 2026</span>
+                    </div>
+                </div>
+                <div class="po-actions-top">
+                    <button class="btn-icon" id="printPOBtn" onclick="printPO()">
+                        <i class="fas fa-print"></i>
+                    </button>
+                    <button class="btn-icon" id="downloadPOBtn" onclick="downloadPO()">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="btn-icon" id="emailPOBtn" onclick="emailPO()">
+                        <i class="fas fa-envelope"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PO Document -->
+            <div class="po-document" id="poDocument">
+                <!-- Company Letterhead -->
+                <div class="po-letterhead">
+                    <div class="company-info">
+                        <div class="company-logo">iBlue B2B</div>
+                        <div class="company-details">
+                            <h2>PURCHASE ORDER</h2>
+                            <p>This document constitutes a legally binding agreement</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parties Section -->
+                <div class="parties-section">
+                    <div class="buyer-party">
+                        <h3><i class="fas fa-shopping-cart"></i> Buyer</h3>
+                        <div id="buyerInfo">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    <div class="supplier-party">
+                        <h3><i class="fas fa-warehouse"></i> Supplier</h3>
+                        <div id="supplierInfo">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reference Section -->
+                <div class="reference-section">
+                    <table class="reference-table">
+                        <tr>
+                            <td class="ref-label">Your Quote:</td>
+                            <td class="ref-value" id="quoteNumber">QTE-2024-00123</td>
+                            <td class="ref-label">Quote Date:</td>
+                            <td class="ref-value" id="quoteDate">Jan 10, 2026</td>
+                        </tr>
+                        <tr>
+                            <td class="ref-label">Inquiry:</td>
+                            <td class="ref-value" id="inquiryNumber">INQ-2024-00123</td>
+                            <td class="ref-label">Payment Terms:</td>
+                            <td class="ref-value" id="paymentTerms">30 Days Net</td>
+                        </tr>
+                        <tr>
+                            <td class="ref-label">Delivery Date:</td>
+                            <td class="ref-value" id="deliveryDate">Feb 15, 2026</td>
+                            <td class="ref-label">Delivery Terms:</td>
+                            <td class="ref-value" id="deliveryTerms">DAP - Buyer Location</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Items Table -->
+                <div class="items-section">
+                    <h3><i class="fas fa-boxes"></i> Ordered Items</h3>
+                    <div class="items-table-container">
+                        <table class="items-table" id="itemsTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Product Description</th>
+                                    <th>SKU</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price (UGX)</th>
+                                    <th>Total (UGX)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemsTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                            <tfoot id="itemsTableFooter">
+                                <!-- Populated by JS -->
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Summary Section -->
+                <div class="summary-section">
+                    <div class="summary-box">
+                        <div class="summary-row">
+                            <span class="summary-label">Subtotal:</span>
+                            <span class="summary-value" id="subtotal">UGX 0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">VAT (18%):</span>
+                            <span class="summary-value" id="vat">UGX 0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Shipping:</span>
+                            <span class="summary-value" id="shipping">UGX 0</span>
+                        </div>
+                        <div class="summary-row total-row">
+                            <span class="summary-label">TOTAL:</span>
+                            <span class="summary-value" id="totalAmount">UGX 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terms and Conditions -->
+                <div class="terms-section">
+                    <h3><i class="fas fa-file-contract"></i> Terms and Conditions</h3>
+                    <div class="terms-content" id="termsContent">
+                        <p>1. This Purchase Order is governed by the laws of Uganda.</p>
+                        <p>2. Supplier agrees to deliver goods as specified within the agreed timeframe.</p>
+                        <p>3. Payment shall be made within the agreed payment terms after successful delivery and inspection.</p>
+                        <p>4. Any disputes shall be resolved through arbitration in Kampala, Uganda.</p>
+                        <p>5. This PO is valid only when signed by both parties.</p>
+                    </div>
+                </div>
+
+                <!-- Signatures -->
+                <div class="signatures-section">
+                    <div class="signature-box">
+                        <div class="signature-label">AUTHORIZED BY (BUYER)</div>
+                        <div class="signature-line" id="buyerSignature"></div>
+                        <div class="signature-name" id="buyerName"></div>
+                        <div class="signature-date" id="buyerDate"></div>
+                    </div>
+                    <div class="signature-box">
+                        <div class="signature-label">AUTHORIZED BY (SUPPLIER)</div>
+                        <div class="signature-line" id="supplierSignature"></div>
+                        <div class="signature-name" id="supplierName"></div>
+                        <div class="signature-date" id="supplierDate"></div>
+                    </div>
+                </div>
+
+                <!-- Footer Note -->
+                <div class="po-footer-note">
+                    <p>This is a computer-generated document. No signature is required if properly authenticated through the iBlue B2B platform.</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons" id="actionButtons">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>Purchase Order Not Found</h3>
+            <p>The purchase order you're looking for doesn't exist or has been cancelled</p>
+            <a href="orders.html" class="btn-primary">View All Orders</a>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="my-inquiries.html" class="nav-item">
+            <i class="fas fa-file-invoice"></i>
+            <span>Inquiries</span>
+        </a>
+        <a href="orders.html" class="nav-item active">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Orders</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Confirm Action Modal -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="confirmModalTitle">Confirm Action</h3>
+                <button class="modal-close" onclick="closeConfirmModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="confirmModalBody">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Purchase order created successfully</p>
+            <div class="modal-actions">
+                <a href="orders.html" class="btn-primary">View All Orders</a>
+                <button class="btn-secondary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="js/purchase-order.js"></script>
+</body>
+</html>

@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>iBlue B2B • Search Products</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1F2937;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: #0B4F6C;
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .search-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            padding-left: 44px;
+            border-radius: 30px;
+            border: none;
+            font-size: 14px;
+            background: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+            font-size: 16px;
+        }
+
+        .filter-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Location Bar */
+        .location-bar {
+            background: white;
+            padding: 8px 16px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .location-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .location-chip {
+            background: #F3F4F6;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #4B5563;
+            cursor: pointer;
+        }
+
+        .location-chip.active {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .location-chip i {
+            font-size: 12px;
+        }
+
+        /* Filter Sidebar */
+        .filter-sidebar {
+            position: fixed;
+            right: -320px;
+            top: 0;
+            bottom: 0;
+            width: 320px;
+            background: white;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+            transition: right 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .filter-sidebar.open {
+            right: 0;
+        }
+
+        .filter-header {
+            background: #0B4F6C;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .filter-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .filter-close {
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .filter-section {
+            padding: 16px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .filter-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0B4F6C;
+        }
+
+        .filter-option label {
+            font-size: 14px;
+            color: #4B5563;
+            cursor: pointer;
+        }
+
+        .filter-option .count {
+            margin-left: auto;
+            color: #9CA3AF;
+            font-size: 12px;
+        }
+
+        .price-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .price-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .price-input:focus {
+            outline: none;
+            border-color: #0B4F6C;
+        }
+
+        .range-slider {
+            width: 100%;
+            margin: 16px 0;
+        }
+
+        .filter-actions {
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .apply-btn {
+            flex: 1;
+            background: #0B4F6C;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .clear-btn {
+            flex: 1;
+            background: white;
+            color: #4B5563;
+            border: 1px solid #E5E7EB;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 16px;
+        }
+
+        /* Popular Categories */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 16px;
+        }
+
+        .popular-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .popular-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .popular-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(11, 79, 108, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0B4F6C;
+            font-size: 20px;
+        }
+
+        .popular-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .popular-info span {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        /* Recent Searches */
+        .recent-searches {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .recent-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .recent-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #F3F4F6;
+            cursor: pointer;
+        }
+
+        .recent-item:last-child {
+            border-bottom: none;
+        }
+
+        .recent-query {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #4B5563;
+        }
+
+        .recent-query i {
+            color: #9CA3AF;
+            font-size: 12px;
+        }
+
+        .recent-remove {
+            color: #9CA3AF;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            padding: 8px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 11px;
+            gap: 4px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: #0B4F6C;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (min-width: 768px) {
+            .popular-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search products, suppliers..." autocomplete="off">
+        </div>
+        <div class="filter-toggle" id="filterToggle">
+            <i class="fas fa-sliders-h"></i>
+        </div>
+    </header>
+
+    <!-- Location Bar -->
+    <div class="location-bar" id="locationBar">
+        <span class="location-chip active" id="currentLocationChip">
+            <i class="fas fa-map-marker-alt"></i>
+            <span id="currentLocation">Kampala</span>
+        </span>
+        <span class="location-chip" onclick="changeLocation()">
+            <i class="fas fa-edit"></i> Change
+        </span>
+        <span class="location-chip" onclick="filterByLocation('nationwide')">
+            <i class="fas fa-globe"></i> Nationwide
+        </span>
+    </div>
+
+    <!-- Filter Sidebar -->
+    <div class="filter-sidebar" id="filterSidebar">
+        <div class="filter-header">
+            <div class="filter-title">Filter Products</div>
+            <div class="filter-close" id="filterClose">&times;</div>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-section-title">
+                <i class="fas fa-check-circle" style="color: #10B981;"></i>
+                Supplier Type
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="verifiedOnly">
+                <label for="verifiedOnly">Verified Suppliers Only</label>
+                <span class="count" id="verifiedCount">0</span>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="featuredOnly">
+                <label for="featuredOnly">Featured Suppliers</label>
+                <span class="count" id="featuredCount">0</span>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-section-title">
+                <i class="fas fa-tags"></i>
+                Product Type
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="bulkOnly">
+                <label for="bulkOnly">Bulk Only</label>
+                <span class="count" id="bulkCount">0</span>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="negotiable">
+                <label for="negotiable">Price Negotiable</label>
+                <span class="count" id="negotiableCount">0</span>
+            </div>
+        </div>
+
+        <div class="filter-actions">
+            <button class="apply-btn" id="applyFilters">Apply Filters</button>
+            <button class="clear-btn" id="clearFilters">Clear All</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Recent Searches -->
+        <div id="recentSearches" class="recent-searches" style="display: none;">
+            <div class="recent-title">
+                <i class="fas fa-history"></i> Recent Searches
+            </div>
+            <div id="recentList"></div>
+        </div>
+
+        <!-- Popular Categories -->
+        <h2 class="section-title">Popular Categories</h2>
+        <div class="popular-grid" id="popularCategories"></div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="B2B-search.html" class="nav-item active">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <i class="fas fa-th-large"></i>
+            <span>Categories</span>
+        </a>
+        <a href="wholesalers.html" class="nav-item">
+            <i class="fas fa-store"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let recentSearches = [];
+        let selectedDistrict = localStorage.getItem('selectedDistrict') || 'Kampala';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadRecentSearches();
+            loadPopularCategories();
+            setupEventListeners();
+            document.getElementById('currentLocation').textContent = selectedDistrict;
+        });
+
+        function setupEventListeners() {
+            // Search on enter - redirect to results page
+            document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const query = e.target.value.trim();
+                    if (query) {
+                        saveRecentSearch(query);
+                        window.location.href = `B2B-search-results.html?q=${encodeURIComponent(query)}`;
+                    }
+                }
+            });
+
+            // Filter toggle
+            document.getElementById('filterToggle').addEventListener('click', () => {
+                document.getElementById('filterSidebar').classList.add('open');
+            });
+
+            document.getElementById('filterClose').addEventListener('click', () => {
+                document.getElementById('filterSidebar').classList.remove('open');
+            });
+
+            // Apply filters
+            document.getElementById('applyFilters').addEventListener('click', () => {
+                const verified = document.getElementById('verifiedOnly').checked;
+                const featured = document.getElementById('featuredOnly').checked;
+                const bulk = document.getElementById('bulkOnly').checked;
+                const negotiable = document.getElementById('negotiable').checked;
+                
+                // Build filters string
+                const filters = [];
+                if (verified) filters.push('verified=true');
+                if (featured) filters.push('featured=true');
+                if (bulk) filters.push('bulk=true');
+                if (negotiable) filters.push('negotiable=true');
+                
+                const query = document.getElementById('searchInput').value.trim();
+                const filterString = filters.length > 0 ? '&' + filters.join('&') : '';
+                
+                window.location.href = `B2B-search-results.html?q=${encodeURIComponent(query)}${filterString}`;
+            });
+
+            // Clear filters
+            document.getElementById('clearFilters').addEventListener('click', () => {
+                document.getElementById('verifiedOnly').checked = false;
+                document.getElementById('featuredOnly').checked = false;
+                document.getElementById('bulkOnly').checked = false;
+                document.getElementById('negotiable').checked = false;
+            });
+
+            // Click outside to close filter
+            document.addEventListener('click', (e) => {
+                const sidebar = document.getElementById('filterSidebar');
+                const toggle = document.getElementById('filterToggle');
+                
+                if (sidebar.classList.contains('open') && 
+                    !sidebar.contains(e.target) && 
+                    !toggle.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        }
+
+        async function loadPopularCategories() {
+            try {
+                const { data: categories, error } = await sb
+                    .from('categories')
+                    .select('*')
+                    .eq('is_active', true)
+                    .is('parent_id', null)
+                    .limit(6);
+
+                if (error) throw error;
+
+                const popularGrid = document.getElementById('popularCategories');
+                
+                if (categories && categories.length > 0) {
+                    popularGrid.innerHTML = categories.map(cat => `
+                        <a href="B2B-search-results.html?category_id=${cat.id}" class="popular-card">
+                            <div class="popular-icon">
+                                <i class="fas fa-${cat.icon || 'tag'}"></i>
+                            </div>
+                            <div class="popular-info">
+                                <h4>${escapeHtml(cat.name)}</h4>
+                                <span>View products</span>
+                            </div>
+                        </a>
+                    `).join('');
+                } else {
+                    // Fallback popular categories
+                    popularGrid.innerHTML = `
+                        <a href="B2B-search-results.html?category=Construction" class="popular-card">
+                            <div class="popular-icon"><i class="fas fa-building"></i></div>
+                            <div class="popular-info"><h4>Construction</h4><span>View products</span></div>
+                        </a>
+                        <a href="B2B-search-results.html?category=Real%20Estate" class="popular-card">
+                            <div class="popular-icon"><i class="fas fa-home"></i></div>
+                            <div class="popular-info"><h4>Real Estate</h4><span>View products</span></div>
+                        </a>
+                        <a href="B2B-search-results.html?category=Electronics" class="popular-card">
+                            <div class="popular-icon"><i class="fas fa-tv"></i></div>
+                            <div class="popular-info"><h4>Electronics</h4><span>View products</span></div>
+                        </a>
+                        <a href="B2B-search-results.html?category=Furniture" class="popular-card">
+                            <div class="popular-icon"><i class="fas fa-couch"></i></div>
+                            <div class="popular-info"><h4>Furniture</h4><span>View products</span></div>
+                        </a>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        function loadRecentSearches() {
+            try {
+                const saved = localStorage.getItem('recentSearches');
+                if (saved) {
+                    recentSearches = JSON.parse(saved).slice(0, 5);
+                    renderRecentSearches();
+                }
+            } catch (e) {
+                console.error('Error loading recent searches:', e);
+            }
+        }
+
+        function saveRecentSearch(query) {
+            if (!query.trim()) return;
+            
+            recentSearches = recentSearches.filter(q => q !== query);
+            recentSearches.unshift(query);
+            recentSearches = recentSearches.slice(0, 5);
+            
+            localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+            renderRecentSearches();
+        }
+
+        function renderRecentSearches() {
+            const container = document.getElementById('recentSearches');
+            const list = document.getElementById('recentList');
+            
+            if (recentSearches.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'block';
+            
+            list.innerHTML = recentSearches.map(query => `
+                <div class="recent-item" onclick="useRecentSearch('${query.replace(/'/g, "\\'")}')">
+                    <div class="recent-query">
+                        <i class="fas fa-history"></i>
+                        <span>${escapeHtml(query)}</span>
+                    </div>
+                    <div class="recent-remove" onclick="event.stopPropagation(); removeRecentSearch('${query.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.useRecentSearch = function(query) {
+            window.location.href = `B2B-search-results.html?q=${encodeURIComponent(query)}`;
+        };
+
+        window.removeRecentSearch = function(query) {
+            recentSearches = recentSearches.filter(q => q !== query);
+            localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+            renderRecentSearches();
+        };
+
+        window.changeLocation = function() {
+            window.location.href = 'location-selector.html?redirect=B2B-search.html';
+        };
+
+        window.filterByLocation = function(location) {
+            if (location === 'nationwide') {
+                localStorage.removeItem('selectedDistrict');
+                document.getElementById('currentLocation').textContent = 'Nationwide';
+            }
+        };
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>

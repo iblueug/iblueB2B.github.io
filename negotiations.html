@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>iBlue B2B • Negotiations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1F2937;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: #0B4F6C;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .filter-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: white;
+            padding: 16px;
+            border-bottom: 1px solid #E5E7EB;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+            padding: 0 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 16px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6B7280;
+            cursor: pointer;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: #0B4F6C;
+            border-bottom-color: #0B4F6C;
+        }
+
+        .tab i {
+            margin-right: 8px;
+        }
+
+        /* Filter Sidebar */
+        .filter-sidebar {
+            position: fixed;
+            right: -320px;
+            top: 0;
+            bottom: 0;
+            width: 320px;
+            background: white;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+            transition: right 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .filter-sidebar.open {
+            right: 0;
+        }
+
+        .filter-header {
+            background: #0B4F6C;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .filter-close {
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .filter-section {
+            padding: 16px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .filter-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 12px;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0B4F6C;
+        }
+
+        .filter-option label {
+            font-size: 14px;
+            color: #4B5563;
+            cursor: pointer;
+        }
+
+        .filter-option .count {
+            margin-left: auto;
+            color: #9CA3AF;
+            font-size: 12px;
+        }
+
+        .filter-actions {
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .apply-btn {
+            flex: 1;
+            background: #0B4F6C;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .clear-btn {
+            flex: 1;
+            background: white;
+            color: #4B5563;
+            border: 1px solid #E5E7EB;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 16px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 16px;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 16px;
+            padding-left: 44px;
+            border-radius: 30px;
+            border: 1.5px solid #E5E7EB;
+            font-size: 14px;
+            background: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #0B4F6C;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+            font-size: 16px;
+        }
+
+        /* Negotiation Cards */
+        .negotiations-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .negotiation-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid #E5E7EB;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .negotiation-card:active {
+            transform: scale(0.99);
+        }
+
+        .negotiation-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .negotiation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .negotiation-party {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .party-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+            overflow: hidden;
+        }
+
+        .party-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .party-info {
+            flex: 1;
+        }
+
+        .party-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .verified-badge {
+            color: #10B981;
+            font-size: 14px;
+        }
+
+        .party-role {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .negotiation-status {
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-accepted {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-rejected {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .status-countered {
+            background: #E1F0FA;
+            color: #0B4F6C;
+        }
+
+        .status-expired {
+            background: #F3F4F6;
+            color: #6B7280;
+        }
+
+        /* Product Info */
+        .product-info {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 12px;
+            background: #F9FAFB;
+            border-radius: 12px;
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            background: #F3F4F6;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .product-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .product-meta {
+            font-size: 12px;
+            color: #6B7280;
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Offer Summary */
+        .offer-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0;
+        }
+
+        .offer-details {
+            display: flex;
+            gap: 16px;
+        }
+
+        .offer-item {
+            text-align: center;
+        }
+
+        .offer-label {
+            font-size: 11px;
+            color: #6B7280;
+            margin-bottom: 2px;
+        }
+
+        .offer-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        .offer-value small {
+            font-size: 10px;
+            font-weight: 400;
+            color: #6B7280;
+        }
+
+        .offer-total {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        /* Last Message */
+        .last-message {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            border-top: 1px solid #F3F4F6;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #6B7280;
+        }
+
+        .last-message i {
+            color: #9CA3AF;
+        }
+
+        .message-preview {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #9CA3AF;
+        }
+
+        /* Unread Badge */
+        .unread-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #EF4444;
+            color: white;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            background: #F3F4F6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: #9CA3AF;
+            font-size: 32px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            color: #6B7280;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .empty-btn {
+            background: #0B4F6C;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        /* Loading Skeleton */
+        .skeleton-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .skeleton-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .skeleton-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        .skeleton-line {
+            height: 16px;
+            background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            padding: 8px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #9CA3AF;
+            font-size: 11px;
+            gap: 4px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: #0B4F6C;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .main-content {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="header-title">Negotiations</div>
+        <div class="filter-toggle" id="filterToggle">
+            <i class="fas fa-sliders-h"></i>
+        </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-value" id="statActive">0</div>
+            <div class="stat-label">Active</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="statPending">0</div>
+            <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="statCountered">0</div>
+            <div class="stat-label">Countered</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="statAccepted">0</div>
+            <div class="stat-label">Accepted</div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs" id="tabs">
+        <div class="tab active" data-status="all">
+            <i class="fas fa-comments"></i> All
+        </div>
+        <div class="tab" data-status="pending">
+            <i class="fas fa-clock"></i> Pending
+        </div>
+        <div class="tab" data-status="countered">
+            <i class="fas fa-handshake"></i> Countered
+        </div>
+        <div class="tab" data-status="accepted">
+            <i class="fas fa-check-circle"></i> Accepted
+        </div>
+        <div class="tab" data-status="rejected">
+            <i class="fas fa-times-circle"></i> Rejected
+        </div>
+    </div>
+
+    <!-- Filter Sidebar -->
+    <div class="filter-sidebar" id="filterSidebar">
+        <div class="filter-header">
+            <div class="filter-title">Filter Negotiations</div>
+            <div class="filter-close" id="filterClose">&times;</div>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-section-title">Date Range</div>
+            <select class="form-input" id="dateRange" style="width:100%; padding:10px; border:1px solid #E5E7EB; border-radius:8px;">
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="custom">Custom Range</option>
+            </select>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-section-title">Status</div>
+            <div class="filter-option">
+                <input type="checkbox" id="filterPending" value="pending">
+                <label for="filterPending">Pending</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="filterCountered" value="countered">
+                <label for="filterCountered">Countered</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="filterAccepted" value="accepted">
+                <label for="filterAccepted">Accepted</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="filterRejected" value="rejected">
+                <label for="filterRejected">Rejected</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="filterExpired" value="expired">
+                <label for="filterExpired">Expired</label>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-section-title">Sort By</div>
+            <select class="form-input" id="sortBy" style="width:100%; padding:10px; border:1px solid #E5E7EB; border-radius:8px;">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="expiring">Expiring Soon</option>
+                <option value="amount">Highest Amount</option>
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button class="apply-btn" id="applyFilters">Apply Filters</button>
+            <button class="clear-btn" id="clearFilters">Clear All</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by product, supplier, or buyer...">
+            </div>
+        </div>
+
+        <!-- Negotiations List -->
+        <div class="negotiations-list" id="negotiationsList">
+            <!-- Loading Skeletons -->
+            <div class="skeleton-card">
+                <div class="skeleton-row">
+                    <div class="skeleton-avatar"></div>
+                    <div style="flex:1">
+                        <div class="skeleton-line" style="width: 60%; height: 20px; margin-bottom: 8px;"></div>
+                        <div class="skeleton-line" style="width: 40%; height: 16px;"></div>
+                    </div>
+                </div>
+                <div class="skeleton-line" style="width: 100%; height: 60px; margin: 12px 0;"></div>
+                <div class="skeleton-line" style="width: 80%; height: 16px;"></div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-row">
+                    <div class="skeleton-avatar"></div>
+                    <div style="flex:1">
+                        <div class="skeleton-line" style="width: 60%; height: 20px; margin-bottom: 8px;"></div>
+                        <div class="skeleton-line" style="width: 40%; height: 16px;"></div>
+                    </div>
+                </div>
+                <div class="skeleton-line" style="width: 100%; height: 60px; margin: 12px 0;"></div>
+                <div class="skeleton-line" style="width: 80%; height: 16px;"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="B2B-search.html" class="nav-item">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-store"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="negotiations.html" class="nav-item active">
+            <i class="fas fa-handshake"></i>
+            <span>Deals</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ============================================
+        // SUPABASE CONFIGURATION
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // STATE
+        // ============================================
+        let currentUser = null;
+        let negotiations = [];
+        let filteredNegotiations = [];
+        let isSupplier = false;
+        let currentFilters = {
+            status: 'all',
+            dateRange: 'all',
+            selectedStatuses: [],
+            sortBy: 'newest',
+            searchQuery: ''
+        };
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            setupEventListeners();
+            await loadNegotiations();
+        });
+
+        // ============================================
+        // CHECK AUTH
+        // ============================================
+        async function checkAuth() {
+            try {
+                const { data: { user }, error } = await sb.auth.getUser();
+                
+                if (error || !user) {
+                    showToast('Please login to view negotiations');
+                    setTimeout(() => {
+                        window.location.href = 'login.html?redirect=negotiations.html';
+                    }, 2000);
+                    return;
+                }
+                
+                currentUser = user;
+                
+                // Check if user is supplier
+                const { data: profile } = await sb
+                    .from('profiles')
+                    .select('is_supplier')
+                    .eq('id', user.id)
+                    .single();
+                
+                isSupplier = profile?.is_supplier || false;
+                
+            } catch (error) {
+                console.error('Auth check error:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD NEGOTIATIONS
+        // ============================================
+        async function loadNegotiations() {
+            try {
+                let query = sb
+                    .from('negotiations')
+                    .select(`
+                        *,
+                        buyer:profiles!negotiations_buyer_id_fkey (
+                            id,
+                            full_name,
+                            avatar_url,
+                            is_verified
+                        ),
+                        supplier:suppliers!negotiations_supplier_id_fkey (
+                            id,
+                            business_name,
+                            profiles!suppliers_profile_id_fkey (
+                                full_name,
+                                avatar_url,
+                                is_verified
+                            )
+                        ),
+                        ad:ads!negotiations_ad_id_fkey (
+                            id,
+                            title,
+                            image_urls,
+                            wholesale_price,
+                            price,
+                            moq
+                        )
+                    `);
+
+                // Filter by user role
+                if (isSupplier) {
+                    // Get supplier ID first
+                    const { data: supplier } = await sb
+                        .from('suppliers')
+                        .select('id')
+                        .eq('profile_id', currentUser.id)
+                        .single();
+                    
+                    if (supplier) {
+                        query = query.eq('supplier_id', supplier.id);
+                    }
+                } else {
+                    query = query.eq('buyer_id', currentUser.id);
+                }
+
+                // Apply sorting
+                query = query.order('created_at', { ascending: false });
+
+                const { data, error } = await query;
+
+                if (error) throw error;
+
+                negotiations = data || [];
+                filteredNegotiations = [...negotiations];
+                
+                updateStats();
+                renderNegotiations();
+                
+            } catch (error) {
+                console.error('Error loading negotiations:', error);
+                showToast('Error loading negotiations');
+            }
+        }
+
+        // ============================================
+        // UPDATE STATS
+        // ============================================
+        function updateStats() {
+            const stats = {
+                active: negotiations.filter(n => ['pending', 'countered'].includes(n.status)).length,
+                pending: negotiations.filter(n => n.status === 'pending').length,
+                countered: negotiations.filter(n => n.status === 'countered').length,
+                accepted: negotiations.filter(n => n.status === 'accepted').length
+            };
+
+            document.getElementById('statActive').textContent = stats.active;
+            document.getElementById('statPending').textContent = stats.pending;
+            document.getElementById('statCountered').textContent = stats.countered;
+            document.getElementById('statAccepted').textContent = stats.accepted;
+        }
+
+        // ============================================
+        // RENDER NEGOTIATIONS
+        // ============================================
+        function renderNegotiations() {
+            const container = document.getElementById('negotiationsList');
+
+            if (filteredNegotiations.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3 class="empty-title">No Negotiations Found</h3>
+                        <p class="empty-text">
+                            ${isSupplier ? 
+                                'You haven\'t received any price negotiations yet.' : 
+                                'You haven\'t started any price negotiations yet.'}
+                        </p>
+                        <a href="suppliers.html" class="empty-btn">
+                            ${isSupplier ? 'Browse Products' : 'Find Suppliers'}
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredNegotiations.map(nego => {
+                const otherParty = isSupplier ? nego.buyer : nego.supplier?.profiles;
+                const partyName = isSupplier ? 
+                    (otherParty?.full_name || 'Buyer') : 
+                    (nego.supplier?.business_name || otherParty?.full_name || 'Supplier');
+                
+                const partyInitials = partyName
+                    .split(' ')
+                    .map(n => n[0])
+                    .join('')
+                    .toUpperCase()
+                    .substring(0, 2);
+
+                const product = nego.ad;
+                const unitPrice = nego.requested_price || 
+                    (product?.wholesale_price || product?.price || 0);
+                const total = unitPrice * nego.requested_quantity;
+
+                const lastMessage = nego.supplier_message || nego.buyer_message || 'No messages yet';
+                const messageTime = nego.supplier_response_at || nego.updated_at || nego.created_at;
+
+                // Check if expired
+                const isExpired = new Date(nego.expires_at) < new Date();
+                const status = isExpired ? 'expired' : nego.status;
+
+                return `
+                    <a href="negotiation-detail.html?id=${nego.id}" class="negotiation-card">
+                        <div class="negotiation-header">
+                            <div class="negotiation-party">
+                                <div class="party-avatar">
+                                    ${otherParty?.avatar_url ? 
+                                        `<img src="${otherParty.avatar_url}" alt="${partyName}">` : 
+                                        partyInitials}
+                                </div>
+                                <div class="party-info">
+                                    <div class="party-name">
+                                        ${partyName}
+                                        ${otherParty?.is_verified ? 
+                                            '<i class="fas fa-check-circle verified-badge"></i>' : ''}
+                                    </div>
+                                    <div class="party-role">
+                                        ${isSupplier ? 'Buyer' : 'Supplier'}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="negotiation-status status-${status}">
+                                ${formatStatus(status)}
+                            </div>
+                        </div>
+
+                        ${product ? `
+                            <div class="product-info">
+                                <div class="product-image">
+                                    <img src="${product.image_urls?.[0] || 'https://via.placeholder.com/60'}" alt="${product.title}">
+                                </div>
+                                <div class="product-details">
+                                    <div class="product-title">${product.title}</div>
+                                    <div class="product-meta">
+                                        <span><i class="fas fa-boxes"></i> MOQ: ${product.moq || 1}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <div class="offer-summary">
+                            <div class="offer-details">
+                                <div class="offer-item">
+                                    <div class="offer-label">Qty</div>
+                                    <div class="offer-value">${nego.requested_quantity}</div>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-label">Price</div>
+                                    <div class="offer-value">UGX ${parseInt(unitPrice).toLocaleString()}</div>
+                                </div>
+                            </div>
+                            <div class="offer-total">UGX ${total.toLocaleString()}</div>
+                        </div>
+
+                        <div class="last-message">
+                            <i class="far fa-comment"></i>
+                            <span class="message-preview">${lastMessage.substring(0, 60)}${lastMessage.length > 60 ? '...' : ''}</span>
+                            <span class="message-time">${formatTimeAgo(new Date(messageTime))}</span>
+                        </div>
+
+                        ${nego.status === 'pending' && isSupplier ? `
+                            <div class="unread-badge">New</div>
+                        ` : ''}
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // ============================================
+        // FILTER NEGOTIATIONS
+        // ============================================
+        function filterNegotiations() {
+            let filtered = [...negotiations];
+
+            // Filter by status tab
+            if (currentFilters.status !== 'all') {
+                filtered = filtered.filter(n => n.status === currentFilters.status);
+            }
+
+            // Filter by selected statuses
+            if (currentFilters.selectedStatuses.length > 0) {
+                filtered = filtered.filter(n => currentFilters.selectedStatuses.includes(n.status));
+            }
+
+            // Filter by search query
+            if (currentFilters.searchQuery) {
+                const query = currentFilters.searchQuery.toLowerCase();
+                filtered = filtered.filter(nego => {
+                    const partyName = isSupplier ? 
+                        nego.buyer?.full_name?.toLowerCase() : 
+                        nego.supplier?.business_name?.toLowerCase();
+                    const productTitle = nego.ad?.title?.toLowerCase() || '';
+                    
+                    return (partyName && partyName.includes(query)) || 
+                           productTitle.includes(query);
+                });
+            }
+
+            // Filter by date range
+            if (currentFilters.dateRange !== 'all') {
+                const now = new Date();
+                const ranges = {
+                    'today': new Date(now.setHours(0,0,0,0)),
+                    'week': new Date(now.setDate(now.getDate() - 7)),
+                    'month': new Date(now.setMonth(now.getMonth() - 1))
+                };
+                
+                if (currentFilters.dateRange !== 'custom') {
+                    const cutoff = ranges[currentFilters.dateRange];
+                    filtered = filtered.filter(n => new Date(n.created_at) >= cutoff);
+                }
+            }
+
+            // Sort
+            switch(currentFilters.sortBy) {
+                case 'oldest':
+                    filtered.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                    break;
+                case 'expiring':
+                    filtered.sort((a, b) => new Date(a.expires_at) - new Date(b.expires_at));
+                    break;
+                case 'amount':
+                    filtered.sort((a, b) => {
+                        const totalA = (a.requested_price || 0) * a.requested_quantity;
+                        const totalB = (b.requested_price || 0) * b.requested_quantity;
+                        return totalB - totalA;
+                    });
+                    break;
+                default:
+                    filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            }
+
+            filteredNegotiations = filtered;
+            renderNegotiations();
+        }
+
+        // ============================================
+        // SETUP EVENT LISTENERS
+        // ============================================
+        function setupEventListeners() {
+            // Tab switching
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    currentFilters.status = tab.dataset.status;
+                    filterNegotiations();
+                });
+            });
+
+            // Search
+            let searchTimeout;
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    currentFilters.searchQuery = e.target.value;
+                    filterNegotiations();
+                }, 500);
+            });
+
+            // Filter toggle
+            document.getElementById('filterToggle').addEventListener('click', () => {
+                document.getElementById('filterSidebar').classList.add('open');
+            });
+
+            document.getElementById('filterClose').addEventListener('click', () => {
+                document.getElementById('filterSidebar').classList.remove('open');
+            });
+
+            // Apply filters
+            document.getElementById('applyFilters').addEventListener('click', () => {
+                collectFilters();
+                document.getElementById('filterSidebar').classList.remove('open');
+                filterNegotiations();
+            });
+
+            // Clear filters
+            document.getElementById('clearFilters').addEventListener('click', () => {
+                clearFilters();
+                document.getElementById('filterSidebar').classList.remove('open');
+            });
+
+            // Click outside to close filter
+            document.addEventListener('click', (e) => {
+                const sidebar = document.getElementById('filterSidebar');
+                const toggle = document.getElementById('filterToggle');
+                
+                if (sidebar.classList.contains('open') && 
+                    !sidebar.contains(e.target) && 
+                    !toggle.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        }
+
+        // ============================================
+        // COLLECT FILTERS
+        // ============================================
+        function collectFilters() {
+            const selectedStatuses = [];
+            if (document.getElementById('filterPending').checked) selectedStatuses.push('pending');
+            if (document.getElementById('filterCountered').checked) selectedStatuses.push('countered');
+            if (document.getElementById('filterAccepted').checked) selectedStatuses.push('accepted');
+            if (document.getElementById('filterRejected').checked) selectedStatuses.push('rejected');
+            if (document.getElementById('filterExpired').checked) selectedStatuses.push('expired');
+
+            currentFilters = {
+                ...currentFilters,
+                dateRange: document.getElementById('dateRange').value,
+                selectedStatuses: selectedStatuses,
+                sortBy: document.getElementById('sortBy').value
+            };
+        }
+
+        // ============================================
+        // CLEAR FILTERS
+        // ============================================
+        function clearFilters() {
+            // Reset form
+            document.getElementById('dateRange').value = 'all';
+            document.getElementById('sortBy').value = 'newest';
+            
+            document.getElementById('filterPending').checked = false;
+            document.getElementById('filterCountered').checked = false;
+            document.getElementById('filterAccepted').checked = false;
+            document.getElementById('filterRejected').checked = false;
+            document.getElementById('filterExpired').checked = false;
+
+            // Reset filters
+            currentFilters = {
+                status: document.querySelector('.tab.active').dataset.status,
+                dateRange: 'all',
+                selectedStatuses: [],
+                sortBy: 'newest',
+                searchQuery: currentFilters.searchQuery
+            };
+
+            filterNegotiations();
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function formatStatus(status) {
+            const formats = {
+                'pending': 'Pending',
+                'accepted': 'Accepted',
+                'rejected': 'Rejected',
+                'countered': 'Countered',
+                'expired': 'Expired'
+            };
+            return formats[status] || status;
+        }
+
+        function formatTimeAgo(date) {
+            const now = new Date();
+            const diff = now - date;
+            
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (days > 0) return `${days}d ago`;
+            if (hours > 0) return `${hours}h ago`;
+            if (minutes > 0) return `${minutes}m ago`;
+            return 'just now';
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>

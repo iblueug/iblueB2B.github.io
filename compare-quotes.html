@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Compare Quotes - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/compare-quotes.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            <div class="header-actions">
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <div>
+                <h1>Compare Quotations</h1>
+                <p class="inquiry-ref" id="inquiryRef">Loading...</p>
+            </div>
+            <a href="my-inquiries.html" class="back-to-inquiries">
+                <i class="fas fa-arrow-left"></i> Back to Inquiries
+            </a>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards" id="summaryCards">
+            <!-- Populated by JS -->
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading quotations for comparison...</p>
+        </div>
+
+        <!-- Comparison Content (Hidden until loaded) -->
+        <div class="comparison-content" id="comparisonContent" style="display: none;">
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-tabs">
+                    <button class="filter-btn active" data-filter="all">All Quotes</button>
+                    <button class="filter-btn" data-filter="lowest">Lowest Price</button>
+                    <button class="filter-btn" data-filter="fastest">Fastest Delivery</button>
+                    <button class="filter-btn" data-filter="verified">Verified Only</button>
+                </div>
+                <div class="view-options">
+                    <button class="view-btn active" data-view="table">
+                        <i class="fas fa-table"></i>
+                    </button>
+                    <button class="view-btn" data-view="card">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Comparison Table View -->
+            <div class="comparison-table-view active" id="tableView">
+                <div class="comparison-scroll">
+                    <table class="comparison-table">
+                        <thead id="tableHeader">
+                            <!-- Populated by JS -->
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Comparison Card View -->
+            <div class="comparison-card-view" id="cardView">
+                <div class="cards-grid" id="cardsGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Recommendation Section -->
+            <div class="recommendation-section" id="recommendationSection">
+                <h3><i class="fas fa-star"></i> Best Value Recommendation</h3>
+                <div class="recommendation-card" id="recommendationCard">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Action Bar -->
+            <div class="action-bar" id="actionBar">
+                <div class="selected-count" id="selectedCount">
+                    <span>0</span> quotes selected
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-compare" id="compareSelectedBtn" disabled>
+                        <i class="fas fa-balance-scale"></i> Compare Selected
+                    </button>
+                    <button class="btn-accept" id="acceptSelectedBtn" disabled>
+                        <i class="fas fa-check-circle"></i> Accept Selected
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-balance-scale"></i>
+            <h3>No quotes to compare</h3>
+            <p>You need at least 2 quotations to enable comparison</p>
+            <a href="my-inquiries.html" class="btn-primary">Back to Inquiries</a>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="my-inquiries.html" class="nav-item active">
+            <i class="fas fa-file-invoice"></i>
+            <span>Inquiries</span>
+        </a>
+        <a href="orders.html" class="nav-item">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Orders</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Quote Details Modal -->
+    <div class="modal" id="quoteModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3>Quote Details</h3>
+                <button class="modal-close" onclick="closeQuoteModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="quoteModalBody">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Accept Quote Modal -->
+    <div class="modal" id="acceptModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Accept Quotation</h3>
+                <button class="modal-close" onclick="closeAcceptModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="acceptModalBody">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Quote accepted successfully</p>
+            <div class="modal-actions">
+                <a href="orders.html" class="btn-primary">View Orders</a>
+                <button class="btn-secondary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/compare-quotes.js"></script>
+</body>
+</html>

@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>iBlue B2B • Negotiation Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1F2937;
+            padding-bottom: 100px;
+        }
+
+        /* Header */
+        .header {
+            background: #0B4F6C;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .status-badge {
+            background: #F59E0B;
+            color: #1F2937;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* Negotiation Header */
+        .negotiation-header {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .negotiation-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 12px;
+        }
+
+        .negotiation-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 13px;
+            color: #6B7280;
+            margin-bottom: 16px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .meta-item i {
+            color: #0B4F6C;
+        }
+
+        .expiry-timer {
+            background: #FEF3C7;
+            border-radius: 30px;
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #92400E;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .expiry-timer i {
+            color: #F59E0B;
+        }
+
+        .expiry-timer.warning {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .expiry-timer.warning i {
+            color: #EF4444;
+        }
+
+        /* Supplier Card */
+        .supplier-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #E5E7EB;
+            display: flex;
+            gap: 12px;
+        }
+
+        .supplier-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .supplier-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .supplier-info {
+            flex: 1;
+        }
+
+        .supplier-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .verified-badge {
+            color: #10B981;
+            font-size: 14px;
+        }
+
+        .supplier-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 12px;
+            color: #6B7280;
+            margin-bottom: 8px;
+        }
+
+        .rating {
+            color: #F59E0B;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .response-time {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Product Card */
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #E5E7EB;
+            display: flex;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: #F3F4F6;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0B4F6C;
+            margin-bottom: 4px;
+        }
+
+        .product-moq {
+            font-size: 12px;
+            color: #6B7280;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Current Offer */
+        .offer-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .offer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .offer-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .offer-badge {
+            background: #F3F4F6;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #4B5563;
+        }
+
+        .offer-details {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .offer-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .offer-row:last-child {
+            border-bottom: none;
+        }
+
+        .offer-label {
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .offer-value {
+            font-weight: 600;
+            color: #1F2937;
+        }
+
+        .offer-value.highlight {
+            color: #0B4F6C;
+            font-size: 18px;
+        }
+
+        .offer-message {
+            background: #F3F4F6;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .offer-message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #4B5563;
+        }
+
+        .offer-message-text {
+            font-size: 14px;
+            color: #1F2937;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        /* Negotiation Timeline */
+        .timeline-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px 0;
+            border-bottom: 1px solid #F3F4F6;
+            position: relative;
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+
+        .timeline-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #F3F4F6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0B4F6C;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .timeline-icon.sent {
+            background: #E1F0FA;
+            color: #0B4F6C;
+        }
+
+        .timeline-icon.received {
+            background: #FEF3C7;
+            color: #F59E0B;
+        }
+
+        .timeline-icon.accepted {
+            background: #D1FAE5;
+            color: #10B981;
+        }
+
+        .timeline-icon.rejected {
+            background: #FEE2E2;
+            color: #EF4444;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #1F2937;
+        }
+
+        .timeline-time {
+            font-size: 11px;
+            color: #9CA3AF;
+        }
+
+        .timeline-subtitle {
+            font-size: 12px;
+            color: #6B7280;
+            margin-bottom: 4px;
+        }
+
+        .timeline-details {
+            background: #F9FAFB;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        .timeline-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+        }
+
+        /* Counter Offer Form */
+        .counter-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .counter-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-label i {
+            color: #0B4F6C;
+            margin-right: 6px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: #0B4F6C;
+            outline: none;
+        }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .counter-preview {
+            background: #F3F4F6;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .preview-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .preview-row.total {
+            border-bottom: none;
+            font-weight: 700;
+            color: #0B4F6C;
+            font-size: 16px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            padding: 12px 16px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .btn-success {
+            background: #10B981;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #EF4444;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 1.5px solid #0B4F6C;
+            color: #0B4F6C;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1.5px solid #E5E7EB;
+            color: #4B5563;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Accept/Reject Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            padding: 24px;
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .modal-icon.success {
+            background: #D1FAE5;
+            color: #10B981;
+        }
+
+        .modal-icon.warning {
+            background: #FEF3C7;
+            color: #F59E0B;
+        }
+
+        .modal-icon.danger {
+            background: #FEE2E2;
+            color: #EF4444;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .modal-text {
+            text-align: center;
+            color: #6B7280;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .action-buttons {
+                max-width: 600px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 30px 30px 0 0;
+            }
+            
+            .main-content {
+                padding-bottom: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="header-title">Negotiation Details</div>
+        <div class="status-badge" id="statusBadge">Pending</div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Loading State -->
+        <div id="loadingState" style="padding: 40px; text-align: center;">
+            <div class="skeleton" style="height: 200px; border-radius: 16px; margin-bottom: 16px;"></div>
+            <div class="skeleton" style="height: 150px; border-radius: 16px; margin-bottom: 16px;"></div>
+            <div class="skeleton" style="height: 300px; border-radius: 16px;"></div>
+        </div>
+
+        <!-- Negotiation Content (hidden initially) -->
+        <div id="negotiationContent" style="display: none;">
+            <!-- Negotiation Header -->
+            <div class="negotiation-header">
+                <h2 class="negotiation-title" id="negotiationTitle">Price Negotiation</h2>
+                <div class="negotiation-meta">
+                    <span class="meta-item">
+                        <i class="fas fa-hashtag"></i>
+                        <span id="negotiationId">NEG-001</span>
+                    </span>
+                    <span class="meta-item">
+                        <i class="far fa-clock"></i>
+                        <span id="createdDate">Started 2 days ago</span>
+                    </span>
+                    <span class="meta-item">
+                        <i class="far fa-hourglass"></i>
+                        <span id="expiresIn">Expires in 5 days</span>
+                    </span>
+                </div>
+                <div class="expiry-timer" id="expiryTimer">
+                    <i class="fas fa-hourglass-half"></i>
+                    <span>This negotiation expires in 5 days</span>
+                </div>
+            </div>
+
+            <!-- Supplier Card (for buyer view) -->
+            <div class="supplier-card" id="supplierCard">
+                <div class="supplier-avatar" id="supplierAvatar">
+                    <span id="supplierInitials">S</span>
+                </div>
+                <div class="supplier-info">
+                    <div class="supplier-name">
+                        <span id="supplierName">Supplier Name</span>
+                        <i class="fas fa-check-circle verified-badge" id="supplierVerified" style="display: none;"></i>
+                    </div>
+                    <div class="supplier-meta">
+                        <span class="rating" id="supplierRating">
+                            <i class="fas fa-star"></i> 4.5
+                        </span>
+                        <span class="response-time" id="responseTime">
+                            <i class="fas fa-clock"></i> Responds in 2h
+                        </span>
+                    </div>
+                    <div class="supplier-location" id="supplierLocation">
+                        <i class="fas fa-map-marker-alt"></i> Kampala, Uganda
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card -->
+            <a href="#" class="product-card" id="productCard">
+                <div class="product-image" id="productImage">
+                    <img src="" alt="Product">
+                </div>
+                <div class="product-info">
+                    <div class="product-title" id="productTitle">Product Name</div>
+                    <div class="product-price" id="productPrice">UGX 0</div>
+                    <div class="product-moq">
+                        <i class="fas fa-boxes"></i>
+                        <span id="productMoq">MOQ: 100 units</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Current Offer -->
+            <div class="offer-card">
+                <div class="offer-header">
+                    <div class="offer-title">Current Offer</div>
+                    <div class="offer-badge" id="offerType">Buyer's Initial Offer</div>
+                </div>
+
+                <div class="offer-details">
+                    <div class="offer-row">
+                        <span class="offer-label">Quantity</span>
+                        <span class="offer-value" id="offerQuantity">500 units</span>
+                    </div>
+                    <div class="offer-row">
+                        <span class="offer-label">Price per unit</span>
+                        <span class="offer-value" id="offerUnitPrice">UGX 45,000</span>
+                    </div>
+                    <div class="offer-row">
+                        <span class="offer-label">Total amount</span>
+                        <span class="offer-value highlight" id="offerTotal">UGX 22,500,000</span>
+                    </div>
+                </div>
+
+                <div class="offer-message" id="offerMessage">
+                    <div class="offer-message-header">
+                        <i class="fas fa-comment"></i>
+                        <span>Message from buyer</span>
+                    </div>
+                    <div class="offer-message-text" id="offerMessageText">
+                        I'm interested in bulk purchase. Can you offer better pricing for this quantity?
+                    </div>
+                </div>
+            </div>
+
+            <!-- Negotiation Timeline -->
+            <div class="timeline-card">
+                <div class="offer-header">
+                    <div class="offer-title">Negotiation Timeline</div>
+                </div>
+                <div id="timelineContainer">
+                    <!-- Timeline populated by JS -->
+                </div>
+            </div>
+
+            <!-- Counter Offer Form (visible to appropriate party) -->
+            <div class="counter-card" id="counterForm" style="display: none;">
+                <div class="counter-title">Make a Counter Offer</div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-boxes"></i>
+                        Quantity
+                    </label>
+                    <input type="number" class="form-input" id="counterQuantity" min="1" value="500">
+                </div>
+
+                <div class="row-2">
+                    <div class="form-group">
+                        <label class="form-label">Price per unit</label>
+                        <input type="number" class="form-input" id="counterPrice" min="0" step="100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Currency</label>
+                        <select class="form-select" id="counterCurrency">
+                            <option value="UGX">UGX</option>
+                            <option value="USD">USD</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-comment"></i>
+                        Message
+                    </label>
+                    <textarea class="form-textarea" id="counterMessage" rows="3" placeholder="Explain your counter offer..."></textarea>
+                </div>
+
+                <!-- Price Preview -->
+                <div class="counter-preview">
+                    <div class="preview-row">
+                        <span>Subtotal</span>
+                        <span id="previewSubtotal">UGX 0</span>
+                    </div>
+                    <div class="preview-row total">
+                        <span>Total</span>
+                        <span id="previewTotal">UGX 0</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" id="sendCounterBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    Send Counter Offer
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons" id="actionButtons">
+        <button class="btn btn-outline" id="messageBtn">
+            <i class="far fa-comment"></i>
+            Message
+        </button>
+        <button class="btn btn-success" id="acceptBtn">
+            <i class="fas fa-check"></i>
+            Accept
+        </button>
+        <button class="btn btn-secondary" id="counterBtn">
+            <i class="fas fa-handshake"></i>
+            Counter
+        </button>
+        <button class="btn btn-danger" id="rejectBtn">
+            <i class="fas fa-times"></i>
+            Reject
+        </button>
+    </div>
+
+    <!-- Accept Modal -->
+    <div class="modal" id="acceptModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 class="modal-title">Accept Offer</h3>
+            <p class="modal-text">Are you sure you want to accept this offer? This will create an order.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn" onclick="closeModal('acceptModal')">Cancel</button>
+                <button class="modal-btn" style="background: #10B981; color: white;" onclick="confirmAccept()">Yes, Accept</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Modal -->
+    <div class="modal" id="rejectModal">
+        <div class="modal-content">
+            <div class="modal-icon danger">
+                <i class="fas fa-times"></i>
+            </div>
+            <h3 class="modal-title">Reject Offer</h3>
+            <p class="modal-text">Are you sure you want to reject this offer? This action cannot be undone.</p>
+            <textarea class="form-textarea" id="rejectReason" placeholder="Reason for rejection (optional)" style="margin-bottom: 16px;"></textarea>
+            <div class="modal-buttons">
+                <button class="modal-btn" onclick="closeModal('rejectModal')">Cancel</button>
+                <button class="modal-btn" style="background: #EF4444; color: white;" onclick="confirmReject()">Yes, Reject</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ============================================
+        // SUPABASE CONFIGURATION
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // STATE
+        // ============================================
+        let currentUser = null;
+        let negotiationData = null;
+        let isSupplier = false;
+        let timerInterval = null;
+
+        // Get negotiation ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const negotiationId = urlParams.get('id');
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!negotiationId) {
+                showToast('Negotiation ID not found');
+                setTimeout(() => window.history.back(), 2000);
+                return;
+            }
+
+            await checkAuth();
+            await loadNegotiationData();
+            setupEventListeners();
+            startExpiryTimer();
+        });
+
+        // ============================================
+        // CHECK AUTH
+        // ============================================
+        async function checkAuth() {
+            try {
+                const { data: { user }, error } = await sb.auth.getUser();
+                
+                if (error || !user) {
+                    showToast('Please login to view negotiation');
+                    setTimeout(() => {
+                        window.location.href = `login.html?redirect=negotiation-detail.html?id=${negotiationId}`;
+                    }, 2000);
+                    return;
+                }
+                
+                currentUser = user;
+                
+            } catch (error) {
+                console.error('Auth check error:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD NEGOTIATION DATA
+        // ============================================
+        async function loadNegotiationData() {
+            try {
+                // Load negotiation
+                const { data: negotiation, error } = await sb
+                    .from('negotiations')
+                    .select(`
+                        *,
+                        buyer:profiles!negotiations_buyer_id_fkey (
+                            id,
+                            full_name,
+                            avatar_url,
+                            is_verified
+                        ),
+                        supplier:suppliers!negotiations_supplier_id_fkey (
+                            id,
+                            business_name,
+                            profiles!suppliers_profile_id_fkey (
+                                full_name,
+                                avatar_url,
+                                is_verified,
+                                district
+                            )
+                        ),
+                        ad:ads!negotiations_ad_id_fkey (
+                            id,
+                            title,
+                            price,
+                            wholesale_price,
+                            image_urls,
+                            moq
+                        )
+                    `)
+                    .eq('id', negotiationId)
+                    .single();
+
+                if (error) throw error;
+
+                negotiationData = negotiation;
+
+                // Determine if current user is supplier
+                const supplierProfileId = negotiation.supplier?.profile_id;
+                isSupplier = currentUser.id === supplierProfileId;
+
+                // Hide loading, show content
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('negotiationContent').style.display = 'block';
+
+                // Render data
+                renderNegotiation();
+
+            } catch (error) {
+                console.error('Error loading negotiation:', error);
+                showToast('Error loading negotiation data');
+            }
+        }
+
+        // ============================================
+        // RENDER NEGOTIATION
+        // ============================================
+        function renderNegotiation() {
+            // Update status badge
+            const statusBadge = document.getElementById('statusBadge');
+            statusBadge.textContent = formatStatus(negotiationData.status);
+            statusBadge.style.background = getStatusColor(negotiationData.status);
+
+            // Negotiation header
+            document.getElementById('negotiationTitle').textContent = 
+                `Price Negotiation ${isSupplier ? 'with ' + (negotiationData.buyer?.full_name || 'Buyer') : ''}`;
+            document.getElementById('negotiationId').textContent = `NEG-${String(negotiationData.id).padStart(6, '0')}`;
+            
+            const created = new Date(negotiationData.created_at);
+            document.getElementById('createdDate').textContent = `Started ${formatDate(created)}`;
+
+            // Supplier card (hide if user is supplier)
+            if (isSupplier) {
+                document.getElementById('supplierCard').style.display = 'none';
+            } else {
+                const supplier = negotiationData.supplier;
+                const profile = supplier?.profiles || {};
+                
+                document.getElementById('supplierName').textContent = supplier?.business_name || profile.full_name || 'Supplier';
+                
+                const initials = (supplier?.business_name || profile.full_name || 'Supplier')
+                    .split(' ')
+                    .map(n => n[0])
+                    .join('')
+                    .toUpperCase()
+                    .substring(0, 2);
+                document.getElementById('supplierInitials').textContent = initials;
+                
+                if (profile.is_verified) {
+                    document.getElementById('supplierVerified').style.display = 'inline';
+                }
+                
+                document.getElementById('supplierLocation').innerHTML = 
+                    `<i class="fas fa-map-marker-alt"></i> ${profile.district || 'Uganda'}`;
+            }
+
+            // Product card
+            const ad = negotiationData.ad;
+            if (ad) {
+                document.getElementById('productTitle').textContent = ad.title;
+                document.getElementById('productPrice').textContent = 
+                    `UGX ${parseInt(ad.wholesale_price || ad.price || 0).toLocaleString()}`;
+                document.getElementById('productMoq').innerHTML = 
+                    `<i class="fas fa-boxes"></i> MOQ: ${ad.moq || 1} units`;
+                
+                if (ad.image_urls?.[0]) {
+                    document.querySelector('#productImage img').src = ad.image_urls[0];
+                }
+                
+                document.getElementById('productCard').href = `B2B-ad-detail.html?id=${ad.id}`;
+            }
+
+            // Current offer
+            document.getElementById('offerQuantity').textContent = 
+                `${negotiationData.requested_quantity} units`;
+            
+            const unitPrice = negotiationData.requested_price || 
+                (ad?.wholesale_price || ad?.price || 0);
+            document.getElementById('offerUnitPrice').textContent = 
+                `UGX ${parseInt(unitPrice).toLocaleString()}`;
+            
+            const total = unitPrice * negotiationData.requested_quantity;
+            document.getElementById('offerTotal').textContent = 
+                `UGX ${total.toLocaleString()}`;
+            
+            document.getElementById('offerMessageText').textContent = 
+                negotiationData.buyer_message || 'No message provided';
+
+            // Set offer type
+            document.getElementById('offerType').textContent = 
+                isSupplier ? 'Buyer\'s Initial Offer' : 'Your Initial Offer';
+
+            // Render timeline
+            renderTimeline();
+
+            // Show/hide counter form based on status and role
+            if (negotiationData.status === 'pending' || negotiationData.status === 'countered') {
+                document.getElementById('counterForm').style.display = 'block';
+                setupCounterForm();
+            }
+
+            // Show/hide action buttons based on status
+            updateActionButtons();
+        }
+
+        // ============================================
+        // RENDER TIMELINE
+        // ============================================
+        function renderTimeline() {
+            const container = document.getElementById('timelineContainer');
+            
+            // This is simplified - you'd fetch negotiation history from a table
+            const timeline = [
+                {
+                    type: 'created',
+                    title: 'Negotiation Started',
+                    subtitle: `By ${isSupplier ? negotiationData.buyer?.full_name : 'You'}`,
+                    time: negotiationData.created_at,
+                    details: {
+                        quantity: negotiationData.requested_quantity,
+                        price: negotiationData.requested_price
+                    }
+                }
+            ];
+
+            // Add counter if exists
+            if (negotiationData.counter_quantity || negotiationData.counter_price) {
+                timeline.push({
+                    type: 'countered',
+                    title: 'Counter Offer Made',
+                    subtitle: `By ${isSupplier ? 'You' : negotiationData.supplier?.business_name || 'Supplier'}`,
+                    time: negotiationData.supplier_response_at || new Date(),
+                    details: {
+                        quantity: negotiationData.counter_quantity,
+                        price: negotiationData.counter_price,
+                        message: negotiationData.supplier_message
+                    }
+                });
+            }
+
+            // Add response if exists
+            if (negotiationData.status === 'accepted' || negotiationData.status === 'rejected') {
+                timeline.push({
+                    type: negotiationData.status,
+                    title: negotiationData.status === 'accepted' ? 'Offer Accepted' : 'Offer Rejected',
+                    subtitle: `By ${isSupplier ? negotiationData.buyer?.full_name : negotiationData.supplier?.business_name || 'Supplier'}`,
+                    time: negotiationData.updated_at
+                });
+            }
+
+            container.innerHTML = timeline.map((item, index) => {
+                const iconClass = {
+                    'created': 'sent',
+                    'countered': 'received',
+                    'accepted': 'accepted',
+                    'rejected': 'rejected'
+                }[item.type] || 'sent';
+
+                const icon = {
+                    'created': 'fa-file',
+                    'countered': 'fa-handshake',
+                    'accepted': 'fa-check',
+                    'rejected': 'fa-times'
+                }[item.type] || 'fa-clock';
+
+                const details = item.details ? `
+                    <div class="timeline-details">
+                        ${item.details.quantity ? `
+                            <div class="timeline-detail-row">
+                                <span>Quantity</span>
+                                <span>${item.details.quantity} units</span>
+                            </div>
+                        ` : ''}
+                        ${item.details.price ? `
+                            <div class="timeline-detail-row">
+                                <span>Price per unit</span>
+                                <span>UGX ${parseInt(item.details.price).toLocaleString()}</span>
+                            </div>
+                        ` : ''}
+                        ${item.details.message ? `
+                            <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #E5E7EB;">
+                                <div style="font-size: 12px; color: #6B7280; margin-bottom: 4px;">Message:</div>
+                                <div style="font-size: 13px;">${item.details.message}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                ` : '';
+
+                return `
+                    <div class="timeline-item">
+                        <div class="timeline-icon ${iconClass}">
+                            <i class="fas ${icon}"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <span class="timeline-title">${item.title}</span>
+                                <span class="timeline-time">${formatTimeAgo(new Date(item.time))}</span>
+                            </div>
+                            <div class="timeline-subtitle">${item.subtitle}</div>
+                            ${details}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================
+        // SETUP COUNTER FORM
+        // ============================================
+        function setupCounterForm() {
+            const ad = negotiationData.ad;
+            
+            document.getElementById('counterQuantity').value = 
+                negotiationData.counter_quantity || negotiationData.requested_quantity;
+            document.getElementById('counterPrice').value = 
+                negotiationData.counter_price || negotiationData.requested_price || 
+                (ad?.wholesale_price || ad?.price || 0);
+
+            // Update preview on input
+            ['counterQuantity', 'counterPrice'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateCounterPreview);
+            });
+
+            updateCounterPreview();
+        }
+
+        function updateCounterPreview() {
+            const quantity = parseInt(document.getElementById('counterQuantity').value) || 0;
+            const price = parseInt(document.getElementById('counterPrice').value) || 0;
+            const total = quantity * price;
+
+            document.getElementById('previewSubtotal').textContent = `UGX ${total.toLocaleString()}`;
+            document.getElementById('previewTotal').textContent = `UGX ${total.toLocaleString()}`;
+        }
+
+        // ============================================
+        // UPDATE ACTION BUTTONS
+        // ============================================
+        function updateActionButtons() {
+            const actions = document.getElementById('actionButtons');
+            
+            if (negotiationData.status === 'accepted' || negotiationData.status === 'rejected' || negotiationData.status === 'expired') {
+                actions.style.display = 'none';
+                return;
+            }
+
+            actions.style.display = 'flex';
+
+            // Show different buttons based on who can act
+            if (isSupplier) {
+                // Supplier can accept/reject/counter
+                document.getElementById('acceptBtn').style.display = 'flex';
+                document.getElementById('rejectBtn').style.display = 'flex';
+                document.getElementById('counterBtn').style.display = 'flex';
+                document.getElementById('messageBtn').style.display = 'flex';
+            } else {
+                // Buyer can only counter or message after supplier response
+                if (negotiationData.status === 'countered') {
+                    document.getElementById('acceptBtn').style.display = 'flex';
+                    document.getElementById('rejectBtn').style.display = 'flex';
+                    document.getElementById('counterBtn').style.display = 'flex';
+                } else {
+                    document.getElementById('acceptBtn').style.display = 'none';
+                    document.getElementById('rejectBtn').style.display = 'none';
+                }
+                document.getElementById('messageBtn').style.display = 'flex';
+            }
+        }
+
+        // ============================================
+        // SEND COUNTER OFFER
+        // ============================================
+        async function sendCounterOffer() {
+            const quantity = parseInt(document.getElementById('counterQuantity').value);
+            const price = parseInt(document.getElementById('counterPrice').value);
+            const message = document.getElementById('counterMessage').value;
+
+            if (!quantity || !price) {
+                showToast('Please enter quantity and price');
+                return;
+            }
+
+            try {
+                const updateData = {
+                    counter_quantity: quantity,
+                    counter_price: price,
+                    supplier_message: message,
+                    supplier_response_at: new Date().toISOString(),
+                    status: 'countered'
+                };
+
+                const { error } = await sb
+                    .from('negotiations')
+                    .update(updateData)
+                    .eq('id', negotiationId);
+
+                if (error) throw error;
+
+                // Create notification for buyer
+                await sb
+                    .from('notifications')
+                    .insert({
+                        user_id: negotiationData.buyer_id,
+                        type: 'new_message',
+                        title: 'Counter Offer Received',
+                        message: `Supplier responded with a counter offer`,
+                        link: `/negotiation-detail.html?id=${negotiationId}`
+                    });
+
+                showToast('Counter offer sent');
+                setTimeout(() => window.location.reload(), 1500);
+
+            } catch (error) {
+                console.error('Error sending counter:', error);
+                showToast('Error sending counter offer');
+            }
+        }
+
+        // ============================================
+        // ACCEPT OFFER
+        // ============================================
+        async function acceptOffer() {
+            try {
+                const { error } = await sb
+                    .from('negotiations')
+                    .update({
+                        status: 'accepted',
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', negotiationId);
+
+                if (error) throw error;
+
+                // Create notification
+                const notifyUserId = isSupplier ? negotiationData.buyer_id : negotiationData.supplier_id;
+                await sb
+                    .from('notifications')
+                    .insert({
+                        user_id: notifyUserId,
+                        type: 'new_message',
+                        title: 'Offer Accepted',
+                        message: `Your offer has been accepted!`,
+                        link: `/negotiation-detail.html?id=${negotiationId}`
+                    });
+
+                // Create order (simplified - you'd create actual order)
+                showToast('Offer accepted! Creating order...');
+                setTimeout(() => {
+                    window.location.href = `order-confirmation.html?negotiation=${negotiationId}`;
+                }, 1500);
+
+            } catch (error) {
+                console.error('Error accepting offer:', error);
+                showToast('Error accepting offer');
+            }
+        }
+
+        // ============================================
+        // REJECT OFFER
+        // ============================================
+        async function rejectOffer() {
+            const reason = document.getElementById('rejectReason').value;
+
+            try {
+                const { error } = await sb
+                    .from('negotiations')
+                    .update({
+                        status: 'rejected',
+                        supplier_message: reason || 'Offer rejected',
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', negotiationId);
+
+                if (error) throw error;
+
+                // Create notification
+                const notifyUserId = isSupplier ? negotiationData.buyer_id : negotiationData.supplier_id;
+                await sb
+                    .from('notifications')
+                    .insert({
+                        user_id: notifyUserId,
+                        type: 'new_message',
+                        title: 'Offer Rejected',
+                        message: reason || 'Your offer has been rejected',
+                        link: `/negotiation-detail.html?id=${negotiationId}`
+                    });
+
+                showToast('Offer rejected');
+                setTimeout(() => window.location.reload(), 1500);
+
+            } catch (error) {
+                console.error('Error rejecting offer:', error);
+                showToast('Error rejecting offer');
+            }
+        }
+
+        // ============================================
+        // EXPIRY TIMER
+        // ============================================
+        function startExpiryTimer() {
+            const expiryDate = new Date(negotiationData.expires_at);
+            const timerElement = document.getElementById('expiryTimer');
+            const expiresInElement = document.getElementById('expiresIn');
+
+            function updateTimer() {
+                const now = new Date();
+                const diff = expiryDate - now;
+
+                if (diff <= 0) {
+                    timerElement.innerHTML = '<i class="fas fa-hourglass-end"></i> This negotiation has expired';
+                    timerElement.classList.add('warning');
+                    expiresInElement.textContent = 'Expired';
+                    
+                    // Auto-update status if expired
+                    if (negotiationData.status === 'pending') {
+                        sb.from('negotiations')
+                            .update({ status: 'expired' })
+                            .eq('id', negotiationId)
+                            .then(() => {
+                                document.getElementById('statusBadge').textContent = 'Expired';
+                                document.getElementById('statusBadge').style.background = '#9CA3AF';
+                            });
+                    }
+                    
+                    clearInterval(timerInterval);
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                
+                if (days > 0) {
+                    timerElement.innerHTML = `<i class="fas fa-hourglass-half"></i> Expires in ${days} day${days > 1 ? 's' : ''}`;
+                    expiresInElement.textContent = `Expires in ${days} day${days > 1 ? 's' : ''}`;
+                } else {
+                    timerElement.innerHTML = `<i class="fas fa-hourglass-half"></i> Expires in ${hours} hour${hours > 1 ? 's' : ''}`;
+                    expiresInElement.textContent = `Expires in ${hours} hour${hours > 1 ? 's' : ''}`;
+                }
+
+                if (days === 0 && hours <= 24) {
+                    timerElement.classList.add('warning');
+                }
+            }
+
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 60000); // Update every minute
+        }
+
+        // ============================================
+        // SETUP EVENT LISTENERS
+        // ============================================
+        function setupEventListeners() {
+            // Message button
+            document.getElementById('messageBtn').addEventListener('click', () => {
+                const recipientId = isSupplier ? negotiationData.buyer_id : negotiationData.supplier_id;
+                window.location.href = `supplier-chat.html?user=${recipientId}&negotiation=${negotiationId}`;
+            });
+
+            // Accept button
+            document.getElementById('acceptBtn').addEventListener('click', () => {
+                document.getElementById('acceptModal').classList.add('show');
+            });
+
+            // Reject button
+            document.getElementById('rejectBtn').addEventListener('click', () => {
+                document.getElementById('rejectModal').classList.add('show');
+            });
+
+            // Counter button
+            document.getElementById('counterBtn').addEventListener('click', () => {
+                document.getElementById('counterForm').scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Send counter
+            document.getElementById('sendCounterBtn').addEventListener('click', sendCounterOffer);
+
+            // Close modals on outside click
+            window.onclick = function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.classList.remove('show');
+                }
+            };
+        }
+
+        // ============================================
+        // MODAL FUNCTIONS
+        // ============================================
+        window.closeModal = function(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        };
+
+        window.confirmAccept = function() {
+            closeModal('acceptModal');
+            acceptOffer();
+        };
+
+        window.confirmReject = function() {
+            closeModal('rejectModal');
+            rejectOffer();
+        };
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function formatStatus(status) {
+            return status.split('_').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                'pending': '#F59E0B',
+                'accepted': '#10B981',
+                'rejected': '#EF4444',
+                'expired': '#9CA3AF',
+                'countered': '#0B4F6C'
+            };
+            return colors[status] || '#6B7280';
+        }
+
+        function formatDate(date) {
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 86400000) {
+                const hours = Math.floor(diff / 3600000);
+                return hours === 0 ? 'just now' : `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            } else {
+                return date.toLocaleDateString('en-UG', { 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+            }
+        }
+
+        function formatTimeAgo(date) {
+            const now = new Date();
+            const diff = now - date;
+            
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (days > 0) return `${days}d ago`;
+            if (hours > 0) return `${hours}h ago`;
+            if (minutes > 0) return `${minutes}m ago`;
+            return 'just now';
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Cleanup timer on page unload
+        window.addEventListener('beforeunload', () => {
+            if (timerInterval) clearInterval(timerInterval);
+        });
+    </script>
+</body>
+</html>

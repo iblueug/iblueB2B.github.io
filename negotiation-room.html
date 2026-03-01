@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iBlue B2B • Negotiation Room</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Keep the same styling but remove payment-specific styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1F2937;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: #0B4F6C;
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .negotiation-info {
+            flex: 1;
+        }
+
+        .negotiation-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .negotiation-meta {
+            font-size: 12px;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-pending { background: #F59E0B; color: white; }
+        .status-accepted { background: #10B981; color: white; }
+        .status-countered { background: #0B4F6C; color: white; }
+        .status-rejected { background: #EF4444; color: white; }
+
+        /* Split View */
+        .split-view {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Chat Panel */
+        .chat-panel {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #E5E7EB;
+            background: #f5f7fa;
+        }
+
+        /* Product Context */
+        .product-context {
+            background: white;
+            padding: 16px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            gap: 16px;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: #F3F4F6;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .product-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .product-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: #6B7280;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        /* Participants */
+        .participants {
+            background: white;
+            padding: 12px 16px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .participant {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .participant-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #0B4F6C;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            overflow: hidden;
+        }
+
+        .participant-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .participant-name {
+            font-weight: 600;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .verified-badge {
+            color: #10B981;
+            font-size: 12px;
+        }
+
+        .participant-role {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        .vs-divider {
+            color: #9CA3AF;
+            font-weight: 600;
+        }
+
+        /* Messages */
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message-date {
+            text-align: center;
+            margin: 16px 0;
+            font-size: 11px;
+            color: #9CA3AF;
+        }
+
+        .message-date span {
+            background: #f5f7fa;
+            padding: 0 12px;
+        }
+
+        .message {
+            display: flex;
+            gap: 8px;
+            max-width: 80%;
+            margin-bottom: 8px;
+        }
+
+        .message.sent {
+            margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #E5E7EB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .message-bubble {
+            background: white;
+            padding: 10px 14px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .message.sent .message-bubble {
+            background: #0B4F6C;
+            color: white;
+            border-bottom-right-radius: 4px;
+            border-bottom-left-radius: 18px;
+        }
+
+        .message-text {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: #9CA3AF;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        /* Offer Message */
+        .offer-message {
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 8px 0;
+        }
+
+        .offer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .offer-badge {
+            background: #0B4F6C;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .offer-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .offer-item {
+            text-align: center;
+        }
+
+        .offer-label {
+            font-size: 11px;
+            color: #6B7280;
+            margin-bottom: 2px;
+        }
+
+        .offer-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        .offer-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .offer-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-accept { background: #10B981; color: white; }
+        .btn-counter { background: #0B4F6C; color: white; }
+        .btn-reject { background: #EF4444; color: white; }
+
+        /* Input Area */
+        .input-area {
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            padding: 12px 16px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #F9FAFB;
+            border-radius: 30px;
+            padding: 4px 4px 4px 16px;
+        }
+
+        .message-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px 0;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .input-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: #6B7280;
+            cursor: pointer;
+        }
+
+        .input-btn.send {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .input-btn.send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Offer Panel */
+        .offer-panel {
+            flex: 1;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .panel-header {
+            padding: 20px 16px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .panel-subtitle {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .offer-form {
+            padding: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-label i {
+            color: #0B4F6C;
+            margin-right: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 13px;
+        }
+
+        .form-input:focus {
+            border-color: #0B4F6C;
+            outline: none;
+        }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* Price Calculator */
+        .price-calculator {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+
+        .calc-row.total {
+            border-top: 1px solid #E5E7EB;
+            margin-top: 8px;
+            padding-top: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            color: #0B4F6C;
+        }
+
+        /* Quick Suggestions */
+        .suggestions {
+            padding: 16px;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .suggestions-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6B7280;
+            margin-bottom: 12px;
+        }
+
+        .suggestion-chip {
+            background: #F3F4F6;
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            margin: 0 8px 8px 0;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .suggestion-chip:hover {
+            background: #E5E7EB;
+        }
+
+        .suggestion-chip i {
+            color: #0B4F6C;
+            margin-right: 4px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="negotiation-info">
+            <div class="negotiation-title" id="negotiationTitle">Price Negotiation</div>
+            <div class="negotiation-meta">
+                <span id="negotiationId">NEG-001</span>
+                <span class="status-badge status-pending" id="statusBadge">Pending</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Split View -->
+    <div class="split-view">
+        <!-- Chat Panel -->
+        <div class="chat-panel">
+            <!-- Product Context -->
+            <div class="product-context" id="productContext">
+                <div class="product-image" id="productImage">
+                    <img src="https://via.placeholder.com/80" alt="Product">
+                </div>
+                <div class="product-details">
+                    <div class="product-title" id="productTitle">Loading product...</div>
+                    <div class="product-meta">
+                        <span><i class="fas fa-boxes"></i> MOQ: <span id="productMoq">1</span></span>
+                        <span><i class="fas fa-store"></i> <span id="supplierName">Supplier</span></span>
+                    </div>
+                    <div class="product-price" id="productPrice">
+                        UGX 0 <small>per unit</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Participants -->
+            <div class="participants" id="participants"></div>
+
+            <!-- Messages -->
+            <div class="messages-container" id="messagesContainer"></div>
+
+            <!-- Input -->
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <input type="text" class="message-input" id="messageInput" placeholder="Type a message...">
+                    <button class="input-btn send" id="sendBtn" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Offer Panel -->
+        <div class="offer-panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fas fa-handshake"></i> Make an Offer
+                </div>
+                <div class="panel-subtitle">Propose your price and quantity</div>
+            </div>
+
+            <div class="offer-form">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-cubes"></i> Quantity
+                    </label>
+                    <input type="number" class="form-input" id="offerQuantity" value="500" min="1">
+                </div>
+
+                <div class="row-2">
+                    <div class="form-group">
+                        <label class="form-label">Price per Unit (UGX)</label>
+                        <input type="number" class="form-input" id="offerPrice" value="45000" min="0" step="100">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-calendar"></i> Delivery Timeline
+                    </label>
+                    <select class="form-input" id="offerTimeline">
+                        <option value="7">7 days</option>
+                        <option value="14">14 days</option>
+                        <option value="30">30 days</option>
+                        <option value="45">45 days</option>
+                    </select>
+                </div>
+
+                <!-- Price Calculator -->
+                <div class="price-calculator">
+                    <div class="calc-row">
+                        <span>Unit Price</span>
+                        <span id="calcUnitPrice">UGX 45,000</span>
+                    </div>
+                    <div class="calc-row">
+                        <span>Quantity</span>
+                        <span id="calcQuantity">500</span>
+                    </div>
+                    <div class="calc-row total">
+                        <span>Total</span>
+                        <span id="calcTotal">UGX 22,500,000</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-comment"></i> Message
+                    </label>
+                    <textarea class="form-input" id="offerMessage" rows="3" placeholder="Add a note..."></textarea>
+                </div>
+
+                <button class="offer-btn btn-accept" id="submitOfferBtn" style="width:100%; padding:14px;">
+                    <i class="fas fa-paper-plane"></i> Send Offer
+                </button>
+            </div>
+
+            <!-- Quick Suggestions -->
+            <div class="suggestions">
+                <div class="suggestions-title">QUICK SUGGESTIONS</div>
+                <div>
+                    <span class="suggestion-chip" onclick="applySuggestion(1000, 42000)">
+                        <i class="fas fa-bolt"></i> 1,000 @ UGX 42,000
+                    </span>
+                    <span class="suggestion-chip" onclick="applySuggestion(2500, 40000)">
+                        <i class="fas fa-bolt"></i> 2,500 @ UGX 40,000
+                    </span>
+                    <span class="suggestion-chip" onclick="applySuggestion(5000, 38000)">
+                        <i class="fas fa-bolt"></i> 5,000 @ UGX 38,000
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase config
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // State
+        let currentUser = null;
+        let negotiation = null;
+        let messages = [];
+        let isSupplier = false;
+
+        const negotiationId = new URLSearchParams(window.location.search).get('id');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            await loadNegotiation();
+            setupEventListeners();
+        });
+
+        async function checkAuth() {
+            const { data: { user } } = await sb.auth.getUser();
+            if (!user) {
+                window.location.href = `login.html?redirect=negotiation-room.html?id=${negotiationId}`;
+                return;
+            }
+            currentUser = user;
+        }
+
+        async function loadNegotiation() {
+            const { data } = await sb
+                .from('negotiations')
+                .select(`
+                    *,
+                    buyer:profiles!negotiations_buyer_id_fkey (*),
+                    supplier:suppliers!negotiations_supplier_id_fkey (
+                        *,
+                        profiles!suppliers_profile_id_fkey (*)
+                    ),
+                    ad:ads!negotiations_ad_id_fkey (*)
+                `)
+                .eq('id', negotiationId)
+                .single();
+
+            negotiation = data;
+            isSupplier = currentUser.id === negotiation.supplier?.profile_id;
+            
+            updateUI();
+        }
+
+        function updateUI() {
+            // Basic info
+            document.getElementById('negotiationTitle').textContent = 
+                `Negotiation with ${isSupplier ? 
+                    negotiation.buyer?.business_name || negotiation.buyer?.full_name : 
+                    negotiation.supplier?.business_name}`;
+            
+            // Product info
+            if (negotiation.ad) {
+                document.getElementById('productTitle').textContent = negotiation.ad.title;
+                document.getElementById('productPrice').innerHTML = 
+                    `UGX ${parseInt(negotiation.ad.wholesale_price || negotiation.ad.price).toLocaleString()} <small>per unit</small>`;
+            }
+        }
+
+        // Simple functions for sending messages and offers
+        async function sendMessage(content) {
+            await sb.from('messages').insert({
+                sender_id: currentUser.id,
+                receiver_id: isSupplier ? negotiation.buyer_id : negotiation.supplier_id,
+                negotiation_id: negotiationId,
+                content: content,
+                created_at: new Date().toISOString()
+            });
+        }
+
+        // Event listeners
+        document.getElementById('sendBtn').addEventListener('click', () => {
+            const input = document.getElementById('messageInput');
+            if (input.value.trim()) {
+                sendMessage(input.value);
+                input.value = '';
+            }
+        });
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>

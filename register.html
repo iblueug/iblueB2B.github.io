@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover" />
+  <title>iBlue Uganda B2B • Register as Buyer or Supplier</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(145deg, #0a2e3a 0%, #1a4b5c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0;
+      padding: 16px;
+      background-attachment: fixed;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 2rem 1.8rem;
+      border-radius: 32px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #0B4F6C;
+      margin-bottom: 0.2rem;
+    }
+
+    .b2b-badge {
+      background: #0B4F6C;
+      color: white;
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .brand-tag {
+      font-size: 0.95rem;
+      color: #3a6e7f;
+      margin-bottom: 2rem;
+      border-bottom: 1.5px solid rgba(11, 79, 108, 0.12);
+      padding-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .account-type-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .account-type-card {
+      border: 2px solid #e2e9f0;
+      border-radius: 20px;
+      padding: 1rem 0.8rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: white;
+    }
+
+    .account-type-card.selected {
+      border-color: #0B4F6C;
+      background: rgba(11, 79, 108, 0.04);
+      box-shadow: 0 8px 16px -8px rgba(11, 79, 108, 0.2);
+    }
+
+    .account-type-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .account-type-title {
+      font-weight: 700;
+      color: #0B4F6C;
+      margin-bottom: 0.25rem;
+    }
+
+    .account-type-desc {
+      font-size: 0.75rem;
+      color: #5f7d8c;
+    }
+
+    .section-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #0B4F6C;
+      margin: 1.2rem 0 0.8rem 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title span {
+      background: rgba(11, 79, 108, 0.1);
+      padding: 4px 8px;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #0B4F6C;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px 18px;
+      margin-bottom: 1rem;
+      border-radius: 18px;
+      border: 1.5px solid #e2e9f0;
+      background: #ffffff;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: #0a2e3a;
+      transition: border 0.15s, box-shadow 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus, select:focus {
+      border-color: #0B4F6C;
+      outline: 0;
+      box-shadow: 0 0 0 4px rgba(11, 79, 108, 0.12);
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .password-hint {
+      font-size: 0.8rem;
+      color: #5f7d8c;
+      margin: -0.5rem 0 1rem 0.5rem;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 1rem 0;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: auto;
+      margin-bottom: 0;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px 18px;
+      border: none;
+      border-radius: 40px;
+      font-size: 1.06rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.3px;
+      background: #0B4F6C;
+      color: white;
+      box-shadow: 0 10px 18px -8px rgba(11, 79, 108, 0.4);
+      margin-bottom: 0.8rem;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 5px 12px -6px rgba(11, 79, 108, 0.5);
+    }
+
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #0B4F6C;
+      border: 2px solid #0B4F6C;
+      box-shadow: none;
+    }
+
+    .auth-links {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .auth-links a {
+      color: #0B4F6C;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .msg {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 40px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: none;
+    }
+
+    .msg.show {
+      display: block;
+    }
+
+    .msg.success {
+      background: #e1f7ed;
+      color: #0a5c46;
+      border-left: 6px solid #1e9b7a;
+    }
+
+    .msg.error {
+      background: #ffe9e9;
+      color: #b13e3e;
+      border-left: 6px solid #c74a4a;
+    }
+
+    .msg.info {
+      background: #e1f0fa;
+      color: #0b4f6c;
+      border-left: 6px solid #0B4F6C;
+    }
+
+    .badge {
+      background: #ffd966;
+      color: #0a2e3a;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 40px;
+      font-weight: 600;
+    }
+
+    .supplier-note {
+      background: #e1f0fa;
+      border-radius: 16px;
+      padding: 12px;
+      margin: 16px 0;
+      font-size: 0.85rem;
+      color: #0B4F6C;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 4px solid #0B4F6C;
+    }
+
+    .supplier-note i {
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 1.5rem; }
+      .account-type-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>iBlue B2B</h1>
+    <div class="b2b-badge">BUSINESS MARKETPLACE</div>
+    
+    <div class="brand-tag">
+      <span>🇺🇬 Uganda's B2B Trade Hub</span>
+      <span class="badge">Bulk Trade • Verified Suppliers</span>
+    </div>
+    
+    <!-- Account Type Selection -->
+    <div class="account-type-grid">
+      <div class="account-type-card selected" id="buyerCard" onclick="selectAccountType('buyer')">
+        <div class="account-type-icon">🛒</div>
+        <div class="account-type-title">I'm a Buyer</div>
+        <div class="account-type-desc">Source products in bulk, request quotes</div>
+      </div>
+      <div class="account-type-card" id="supplierCard" onclick="selectAccountType('supplier')">
+        <div class="account-type-icon">🏭</div>
+        <div class="account-type-title">I'm a Supplier</div>
+        <div class="account-type-desc">List bulk products, manage B2B orders</div>
+      </div>
+    </div>
+
+    <!-- Supplier Note (shown when supplier is selected) -->
+    <div id="supplierNote" class="supplier-note" style="display: none;">
+      <i class="fas fa-info-circle"></i>
+      <div>
+        <strong>Supplier Registration:</strong> You'll be redirected to our multi-step supplier registration form to provide business details and verification documents.
+      </div>
+    </div>
+
+    <!-- Registration Form (for Buyers only) -->
+    <div id="registrationForm">
+      <!-- Basic Account Fields -->
+      <input id="email" type="email" placeholder="Email address" inputmode="email" autocomplete="email" />
+      <input id="fullName" type="text" placeholder="Full name / Contact person" />
+      
+      <div class="row-2">
+        <input id="phone" type="tel" placeholder="Phone (e.g., 0772123456)" />
+        <input id="businessName" type="text" placeholder="Business name (optional)" />
+      </div>
+
+      <div class="row-2">
+        <select id="businessType">
+          <option value="">Business type (optional)</option>
+          <option value="individual">Individual</option>
+          <option value="retailer">Retailer</option>
+          <option value="wholesaler">Wholesaler</option>
+          <option value="distributor">Distributor</option>
+          <option value="manufacturer">Manufacturer</option>
+          <option value="exporter">Exporter</option>
+          <option value="importer">Importer</option>
+          <option value="service_provider">Service Provider</option>
+        </select>
+        <select id="district">
+          <option value="">District</option>
+          <option value="Kampala">Kampala</option>
+          <option value="Wakiso">Wakiso</option>
+          <option value="Mukono">Mukono</option>
+          <option value="Jinja">Jinja</option>
+          <option value="Gulu">Gulu</option>
+          <option value="Mbarara">Mbarara</option>
+        </select>
+      </div>
+
+      <!-- Password fields -->
+      <div class="section-title" style="margin-top: 1.5rem;">
+        🔐 Account Security
+      </div>
+      
+      <input id="password" type="password" placeholder="Password (min. 8 characters)" autocomplete="new-password" />
+      <div class="password-hint">Use at least 8 characters with letters and numbers</div>
+      <input id="confirmPassword" type="password" placeholder="Confirm password" autocomplete="new-password" />
+
+      <!-- Terms & Conditions -->
+      <div class="checkbox-group">
+        <input type="checkbox" id="acceptTerms" />
+        <label for="acceptTerms">I agree to the <a href="#" style="color: #0B4F6C;">Terms of Service</a> and <a href="#" style="color: #0B4F6C;">Privacy Policy</a></label>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="b2bUpdates" checked />
+        <label for="b2bUpdates">Receive B2B trade opportunities and market updates</label>
+      </div>
+
+      <button class="btn" id="registerBtn" disabled>Create Buyer Account →</button>
+      
+      <button class="btn btn-outline" onclick="window.location.href='login.html'">Already have an account? Sign in</button>
+    </div>
+    
+    <div id="msg" class="msg" role="status"></div>
+  </div>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (function() {
+      "use strict";
+
+      const supabaseUrl = "https://uufhvmmgwzkxvvdbqemz.supabase.co";
+      const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc";
+      const sb = supabase.createClient(supabaseUrl, supabaseKey);
+
+      // DOM Elements
+      const msgEl = document.getElementById('msg');
+      const registerBtn = document.getElementById('registerBtn');
+      const acceptTerms = document.getElementById('acceptTerms');
+      const supplierNote = document.getElementById('supplierNote');
+      
+      // Account type
+      let accountType = 'buyer'; // 'buyer' or 'supplier'
+      
+      // Form fields
+      const emailInput = document.getElementById('email');
+      const fullNameInput = document.getElementById('fullName');
+      const phoneInput = document.getElementById('phone');
+      const businessNameInput = document.getElementById('businessName');
+      const businessTypeSelect = document.getElementById('businessType');
+      const districtSelect = document.getElementById('district');
+      const passwordInput = document.getElementById('password');
+      const confirmInput = document.getElementById('confirmPassword');
+
+      // Enable register button only if terms accepted
+      acceptTerms.addEventListener('change', function() {
+        registerBtn.disabled = !this.checked;
+      });
+
+      function showMessage(text, type = 'error') {
+        if (!msgEl) return;
+        msgEl.textContent = text;
+        msgEl.className = 'msg show ' + type;
+        
+        setTimeout(() => {
+          msgEl.classList.remove('show');
+        }, 5000);
+      }
+
+      // Validate Ugandan phone number
+      function validateUgPhone(phone) {
+        const cleaned = phone.replace(/\D/g, '');
+        return /^(0|256)?[0-9]{9}$/.test(cleaned) && cleaned.length >= 9;
+      }
+
+      async function registerHandler(e) {
+        e.preventDefault();
+        
+        // If supplier is selected, redirect to supplier registration
+        if (accountType === 'supplier') {
+          // Save basic info to session storage for pre-filling supplier form
+          const basicInfo = {
+            email: emailInput.value.trim(),
+            fullName: fullNameInput.value.trim(),
+            phone: phoneInput.value.trim(),
+            businessName: businessNameInput.value.trim(),
+            businessType: businessTypeSelect.value,
+            district: districtSelect.value
+          };
+          
+          // Validate basic fields first
+          if (!basicInfo.email || !basicInfo.fullName || !basicInfo.phone || !basicInfo.district) {
+            showMessage('Please fill in all required fields', 'error');
+            return;
+          }
+
+          if (!/^\S+@\S+\.\S+$/.test(basicInfo.email)) {
+            showMessage('Enter a valid business email address', 'error');
+            return;
+          }
+
+          if (!validateUgPhone(basicInfo.phone)) {
+            showMessage('Enter a valid Ugandan phone number', 'error');
+            return;
+          }
+
+          // Save to session storage
+          sessionStorage.setItem('supplierBasicInfo', JSON.stringify(basicInfo));
+          
+          // Redirect to supplier registration
+          window.location.href = 'supplier-register.html';
+          return;
+        }
+
+        // BUYER REGISTRATION
+        const email = emailInput.value.trim();
+        const fullName = fullNameInput.value.trim();
+        const phone = phoneInput.value.trim();
+        const businessName = businessNameInput.value.trim() || fullName; // Use personal name if no business name
+        const businessType = businessTypeSelect.value || 'individual';
+        const district = districtSelect.value;
+        const password = passwordInput.value.trim();
+        const confirm = confirmInput.value.trim();
+
+        // Validation
+        if (!email || !fullName || !phone || !district) {
+          showMessage('Please fill in all required fields', 'error');
+          return;
+        }
+
+        if (!/^\S+@\S+\.\S+$/.test(email)) {
+          showMessage('Enter a valid email address', 'error');
+          return;
+        }
+
+        if (!validateUgPhone(phone)) {
+          showMessage('Enter a valid Ugandan phone number', 'error');
+          return;
+        }
+
+        if (password.length < 8) {
+          showMessage('Password must be at least 8 characters', 'error');
+          return;
+        }
+
+        if (password !== confirm) {
+          showMessage('Passwords do not match', 'error');
+          return;
+        }
+
+        registerBtn.disabled = true;
+        registerBtn.textContent = 'Creating account...';
+
+        try {
+          // Create auth user
+          const { data: authData, error: authError } = await sb.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+              data: {
+                full_name: fullName,
+                phone: phone,
+                business_name: businessName,
+                business_type: businessType,
+                district: district,
+                is_supplier: false,
+                is_buyer: true
+              },
+              emailRedirectTo: window.location.origin + '/login.html?verified=true'
+            }
+          });
+
+          if (authError) {
+            showMessage(authError.message, 'error');
+            registerBtn.disabled = false;
+            registerBtn.textContent = 'Create Buyer Account →';
+            return;
+          }
+
+          if (authData.user) {
+            // Create profile for buyer
+            const { error: profileError } = await sb
+              .from('profiles')
+              .upsert({
+                id: authData.user.id,
+                email: email,
+                full_name: fullName,
+                phone: phone,
+                business_name: businessName,
+                business_type: businessType,
+                district: district,
+                is_supplier: false,
+                is_buyer: true,
+                onboarding_step: 'complete',
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              });
+
+            if (profileError) {
+              console.error('Profile creation error:', profileError);
+            }
+          }
+
+          showMessage('✓ Account created! Check your email to verify.', 'success');
+          
+          // Clear form
+          passwordInput.value = '';
+          confirmInput.value = '';
+          
+          setTimeout(() => {
+            window.location.href = 'login.html?registered=buyer';
+          }, 3000);
+          
+        } catch (err) {
+          console.error('Registration error:', err);
+          showMessage('Network error. Please try again.', 'error');
+          registerBtn.disabled = false;
+          registerBtn.textContent = 'Create Buyer Account →';
+        }
+      }
+
+      // Account type selection
+      window.selectAccountType = function(type) {
+        accountType = type;
+        
+        // Update UI
+        document.getElementById('buyerCard').classList.toggle('selected', type === 'buyer');
+        document.getElementById('supplierCard').classList.toggle('selected', type === 'supplier');
+        
+        // Show/hide supplier note
+        if (type === 'supplier') {
+          supplierNote.style.display = 'flex';
+          registerBtn.textContent = 'Continue to Supplier Registration →';
+          
+          // Make business name required for suppliers
+          businessNameInput.placeholder = 'Business/Company name *';
+          businessNameInput.style.borderColor = '';
+        } else {
+          supplierNote.style.display = 'none';
+          registerBtn.textContent = 'Create Buyer Account →';
+          businessNameInput.placeholder = 'Business name (optional)';
+        }
+      };
+
+      // Event listeners
+      registerBtn.addEventListener('click', registerHandler);
+
+      // Enter key navigation
+      emailInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') fullNameInput.focus();
+      });
+      fullNameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') phoneInput.focus();
+      });
+      phoneInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') businessNameInput.focus();
+      });
+      confirmInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !registerBtn.disabled) registerHandler(e);
+      });
+
+      // Pre-fill if coming from login
+      const urlParams = new URLSearchParams(window.location.search);
+      const prefilledEmail = urlParams.get('email');
+      if (prefilledEmail) {
+        emailInput.value = prefilledEmail;
+      }
+    })();
+  </script>
+</body>
+</html>

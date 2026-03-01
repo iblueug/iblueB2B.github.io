@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover" />
+  <title>iBlue B2B • Business Sign In</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(145deg, #0a2e3a 0%, #1a4b5c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0;
+      padding: 16px;
+      background-attachment: fixed;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 2rem 1.8rem;
+      border-radius: 32px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #0B4F6C;
+      margin-bottom: 0.2rem;
+    }
+
+    .b2b-badge {
+      background: #0B4F6C;
+      color: white;
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .brand-tag {
+      font-size: 0.95rem;
+      color: #3a6e7f;
+      margin-bottom: 2rem;
+      border-bottom: 1.5px solid rgba(11, 79, 108, 0.12);
+      padding-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .redirect-message {
+      background: #e1f0fa;
+      color: #0b4f6c;
+      padding: 12px 16px;
+      border-radius: 40px;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      text-align: center;
+      border-left: 4px solid #0B4F6C;
+      display: none;
+    }
+
+    .redirect-message.show {
+      display: block;
+    }
+
+    .redirect-message i {
+      margin-right: 8px;
+    }
+
+    .success-message {
+      background: #e1f7ed;
+      color: #0a5c46;
+      padding: 12px 16px;
+      border-radius: 40px;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      text-align: center;
+      border-left: 4px solid #1e9b7a;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px 18px;
+      margin-bottom: 1rem;
+      border-radius: 18px;
+      border: 1.5px solid #e2e9f0;
+      background: #ffffff;
+      font-size: 1rem;
+      line-height: 1.4;
+      color: #0a2e3a;
+      transition: border 0.15s, box-shadow 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus {
+      border-color: #0B4F6C;
+      outline: 0;
+      box-shadow: 0 0 0 4px rgba(11, 79, 108, 0.12);
+    }
+
+    input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 50px white inset;
+      -webkit-text-fill-color: #0a2e3a;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 0 5px;
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      margin-bottom: 0;
+      accent-color: #0B4F6C;
+      cursor: pointer;
+    }
+
+    .remember-me label {
+      font-size: 0.95rem;
+      color: #2c3e50;
+      cursor: pointer;
+      font-weight: 500;
+      user-select: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px 18px;
+      border: none;
+      border-radius: 40px;
+      font-size: 1.06rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.3px;
+      background: #0B4F6C;
+      color: white;
+      box-shadow: 0 10px 18px -8px rgba(11, 79, 108, 0.4);
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    button:active {
+      transform: scale(0.98);
+      box-shadow: 0 5px 12px -6px rgba(11, 79, 108, 0.5);
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .auth-links {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1.2rem 0 0;
+      font-size: 0.95rem;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .auth-links a {
+      color: #0B4F6C;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 0;
+      transition: color 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+
+    .auth-links a:hover {
+      color: #052a38;
+      border-bottom-color: #0B4F6C;
+    }
+
+    .auth-links .register-link {
+      background: rgba(11, 79, 108, 0.08);
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-weight: 600;
+    }
+
+    .auth-links .register-link:hover {
+      background: rgba(11, 79, 108, 0.15);
+      border-bottom: none;
+    }
+
+    .business-tip {
+      background: #f0f7fa;
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin: 1.5rem 0 0.5rem;
+      font-size: 0.85rem;
+      color: #0a2e3a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(11, 79, 108, 0.15);
+    }
+
+    .business-tip i {
+      color: #0B4F6C;
+      font-size: 1.2rem;
+    }
+
+    .msg {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 40px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: none;
+      transition: opacity 0.2s;
+      line-height: 1.4;
+    }
+
+    .msg.show {
+      display: block;
+    }
+
+    .msg.error {
+      background: #ffe9e9;
+      color: #b13e3e;
+      border-left: 6px solid #c74a4a;
+    }
+
+    .msg.info {
+      background: #e1f0fa;
+      color: #0b4f6c;
+      border-left: 6px solid #0B4F6C;
+    }
+
+    .msg.success {
+      background: #e1f7ed;
+      color: #0a5c46;
+      border-left: 6px solid #1e9b7a;
+    }
+
+    .demo-credentials {
+      background: #fff3cd;
+      border: 1px solid #ffeeba;
+      border-radius: 16px;
+      padding: 12px;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: #856404;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    @media (max-width: 400px) {
+      .card { padding: 1.5rem; }
+      h1 { font-size: 1.9rem; }
+    }
+
+    button, input {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible, input:focus-visible, a:focus-visible {
+      outline: 3px solid #0B4F6C;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>iBlue B2B</h1>
+    <div class="b2b-badge">BUSINESS MARKETPLACE</div>
+    
+    <div class="brand-tag">
+      <span>🇺🇬 Uganda's B2B Trade Hub</span>
+    </div>
+    
+    <!-- Redirect Message (shown when user came from a protected page) -->
+    <div id="redirectMessage" class="redirect-message">
+      <i class="fas fa-info-circle"></i>
+      <span id="redirectMessageText">Please sign in to continue</span>
+    </div>
+
+    <!-- Success Message (shown after registration) -->
+    <div id="successMessage" class="success-message">
+      <i class="fas fa-check-circle"></i>
+      <span id="successMessageText">Account created! Please check your email to verify.</span>
+    </div>
+    
+    <input id="email" type="email" placeholder="Business email address" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" />
+    <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+    
+    <div class="remember-me">
+      <input type="checkbox" id="rememberMe" checked>
+      <label for="rememberMe">Keep me signed in on this device</label>
+    </div>
+    
+    <button id="loginBtn">
+      <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+      Sign in to B2B Dashboard
+    </button>
+    
+    <!-- Auth Links -->
+    <div class="auth-links">
+      <a href="forgot-password.html" class="forgot-link">
+        <i class="fas fa-lock" style="margin-right: 4px;"></i>
+        Forgot password?
+      </a>
+      <a href="register.html" class="register-link">
+        Create B2B account <i class="fas fa-arrow-right" style="margin-left: 4px;"></i>
+      </a>
+    </div>
+
+    <!-- Business Tip -->
+    <div class="business-tip">
+      <i class="fas fa-briefcase"></i>
+      <div>
+        <strong>B2B Access:</strong> Source products in bulk, manage orders, connect with verified suppliers
+      </div>
+    </div>
+
+    <!-- Demo Credentials (remove in production) -->
+    <div class="demo-credentials">
+      <i class="fas fa-flask"></i>
+      <div>
+        <strong>Demo:</strong> buyer@demo.com / any password | supplier@demo.com / any password
+      </div>
+    </div>
+    
+    <div id="msg" class="msg" role="status"></div>
+  </div>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (function() {
+      "use strict";
+
+      // ============================================
+      // SUPABASE CONFIGURATION
+      // ============================================
+      const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+      
+      // ============================================
+      // CONSTANTS & CONFIG
+      // ============================================
+      const STORAGE_KEYS = {
+        SAVED_EMAIL: 'iblue_saved_email',
+        REMEMBER_ME: 'iblue_remember_me',
+        SESSION_EXPIRY: 'iblue_session_expiry',
+        INTENDED_PAGE: 'iblue_intended_page'
+      };
+
+      // Dashboard URLs based on user role
+      const DASHBOARD_URLS = {
+        BUYER: 'buyer-dashboard.html',
+        SUPPLIER: 'supplier-dashboard.html',
+        ADMIN: 'admin-dashboard.html',
+        DEFAULT: 'index.html'
+      };
+
+      // Demo credentials (for testing only - remove in production)
+      const DEMO_USERS = [
+        { email: 'buyer@demo.com', role: 'buyer' },
+        { email: 'supplier@demo.com', role: 'supplier' }
+      ];
+
+      // ============================================
+      // DOM ELEMENTS
+      // ============================================
+      const msgEl = document.getElementById('msg');
+      const redirectMessageEl = document.getElementById('redirectMessage');
+      const redirectMessageText = document.getElementById('redirectMessageText');
+      const successMessageEl = document.getElementById('successMessage');
+      const successMessageText = document.getElementById('successMessageText');
+      const loginBtn = document.getElementById('loginBtn');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const rememberMeCheckbox = document.getElementById('rememberMe');
+
+      // ============================================
+      // INITIALIZE SUPABASE CLIENT
+      // ============================================
+      let sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true
+        }
+      });
+
+      // ============================================
+      // HELPER FUNCTIONS
+      // ============================================
+      function showMessage(text, type = 'error') {
+        if (!msgEl) return;
+        msgEl.textContent = text;
+        msgEl.className = 'msg show ' + type;
+        
+        setTimeout(() => {
+          msgEl.classList.remove('show');
+        }, 5000);
+      }
+
+      function showSuccessMessage(text) {
+        if (!successMessageEl || !successMessageText) return;
+        successMessageText.textContent = text;
+        successMessageEl.classList.add('show');
+        
+        setTimeout(() => {
+          successMessageEl.classList.remove('show');
+        }, 5000);
+      }
+
+      function validateEmail(email) {
+        return /^\S+@\S+\.\S+$/.test(email);
+      }
+
+      function getPageNameFromUrl(url) {
+        if (!url) return 'dashboard';
+        const fileName = url.split('/').pop().replace('.html', '');
+        return fileName
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      }
+
+      // ============================================
+      // REDIRECT HANDLING
+      // ============================================
+      function getIntendedRedirect() {
+        // Check URL parameters first
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectParam = urlParams.get('redirect');
+        
+        if (redirectParam) {
+          // Store it for later use
+          sessionStorage.setItem(STORAGE_KEYS.INTENDED_PAGE, redirectParam);
+          return redirectParam;
+        }
+        
+        // Check session storage
+        return sessionStorage.getItem(STORAGE_KEYS.INTENDED_PAGE);
+      }
+
+      function showRedirectMessage(redirectUrl) {
+        if (!redirectUrl || !redirectMessageEl || !redirectMessageText) return;
+        
+        const pageName = getPageNameFromUrl(redirectUrl);
+        redirectMessageText.innerHTML = `🔒 Please sign in to access <strong>${pageName}</strong>`;
+        redirectMessageEl.classList.add('show');
+      }
+
+      function clearIntendedRedirect() {
+        sessionStorage.removeItem(STORAGE_KEYS.INTENDED_PAGE);
+      }
+
+      // ============================================
+      // GET USER ROLE AND DASHBOARD URL
+      // ============================================
+      async function getUserDashboardUrl(userId) {
+        try {
+          // Get user profile to check role
+          const { data: profile, error } = await sb
+            .from('profiles')
+            .select('is_supplier, is_admin, admin_role')
+            .eq('id', userId)
+            .single();
+
+          if (error) {
+            console.error('Error fetching profile:', error);
+            return DASHBOARD_URLS.DEFAULT;
+          }
+
+          // Check admin first
+          if (profile?.is_admin) {
+            return DASHBOARD_URLS.ADMIN;
+          }
+
+          // Then supplier
+          if (profile?.is_supplier) {
+            return DASHBOARD_URLS.SUPPLIER;
+          }
+
+          // Default to buyer dashboard
+          return DASHBOARD_URLS.BUYER;
+
+        } catch (error) {
+          console.error('Error determining user role:', error);
+          return DASHBOARD_URLS.DEFAULT;
+        }
+      }
+
+      // ============================================
+      // HANDLE SUCCESSFUL LOGIN
+      // ============================================
+      async function handleSuccessfulLogin(user) {
+        try {
+          // Get the intended redirect URL
+          let redirectUrl = getIntendedRedirect();
+          
+          // If no specific redirect, go to role-based dashboard
+          if (!redirectUrl) {
+            redirectUrl = await getUserDashboardUrl(user.id);
+          }
+
+          // Clear the stored redirect
+          clearIntendedRedirect();
+
+          // Save session expiry if remember me is checked
+          if (rememberMeCheckbox.checked) {
+            const expiresAt = new Date();
+            expiresAt.setDate(expiresAt.getDate() + 30); // 30 days
+            localStorage.setItem(STORAGE_KEYS.SESSION_EXPIRY, expiresAt.toISOString());
+            localStorage.setItem(STORAGE_KEYS.SAVED_EMAIL, emailInput.value.trim());
+            localStorage.setItem(STORAGE_KEYS.REMEMBER_ME, 'true');
+          } else {
+            localStorage.setItem(STORAGE_KEYS.REMEMBER_ME, 'false');
+          }
+
+          // Show success message
+          const pageName = getPageNameFromUrl(redirectUrl);
+          showMessage(`✓ Login successful! Redirecting to ${pageName}...`, 'success');
+
+          // Redirect after brief delay
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 1500);
+
+        } catch (error) {
+          console.error('Error in post-login handling:', error);
+          window.location.href = DASHBOARD_URLS.DEFAULT;
+        }
+      }
+
+      // ============================================
+      // LOGIN HANDLER
+      // ============================================
+      async function loginHandler(e) {
+        e.preventDefault();
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+        const rememberMe = rememberMeCheckbox.checked;
+
+        // Validation
+        if (!email) {
+          showMessage('📧 Email is required', 'error');
+          emailInput.focus();
+          return;
+        }
+
+        if (!password) {
+          showMessage('🔒 Password is required', 'error');
+          passwordInput.focus();
+          return;
+        }
+
+        if (!validateEmail(email)) {
+          showMessage('Please enter a valid email address', 'error');
+          emailInput.focus();
+          return;
+        }
+
+        // Disable button
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i> Signing in...';
+
+        try {
+          // Attempt login
+          const { data, error } = await sb.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+          if (error) {
+            // Check for demo credentials (optional - remove in production)
+            if (email === 'buyer@demo.com' || email === 'supplier@demo.com') {
+              // For demo, redirect based on email
+              const redirectUrl = email === 'supplier@demo.com' 
+                ? DASHBOARD_URLS.SUPPLIER 
+                : DASHBOARD_URLS.BUYER;
+              
+              showMessage(`✓ Demo login successful! Redirecting...`, 'success');
+              setTimeout(() => window.location.href = redirectUrl, 1500);
+              return;
+            }
+
+            // Handle specific error messages
+            if (error.message.includes('Invalid login credentials')) {
+              showMessage('Invalid email or password', 'error');
+            } else if (error.message.includes('Email not confirmed')) {
+              showMessage('Please verify your email first. Check your inbox.', 'info');
+            } else {
+              showMessage(error.message, 'error');
+            }
+
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign in to B2B Dashboard';
+            return;
+          }
+
+          // Login successful
+          if (data?.user) {
+            await handleSuccessfulLogin(data.user);
+          }
+
+        } catch (err) {
+          console.error('Login error:', err);
+          showMessage('Network error. Please try again.', 'error');
+          loginBtn.disabled = false;
+          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign in to B2B Dashboard';
+        }
+      }
+
+      // ============================================
+      // CHECK EXISTING SESSION
+      // ============================================
+      async function checkExistingSession() {
+        try {
+          const { data: { session }, error } = await sb.auth.getSession();
+
+          if (error) {
+            console.error('Session check error:', error);
+            return;
+          }
+
+          if (session?.user) {
+            // Check if session is expired based on remember me setting
+            const rememberMe = localStorage.getItem(STORAGE_KEYS.REMEMBER_ME) === 'true';
+            
+            if (rememberMe) {
+              const expiryStr = localStorage.getItem(STORAGE_KEYS.SESSION_EXPIRY);
+              if (expiryStr) {
+                const expiryDate = new Date(expiryStr);
+                if (new Date() > expiryDate) {
+                  // Session expired
+                  await sb.auth.signOut();
+                  localStorage.removeItem(STORAGE_KEYS.SAVED_EMAIL);
+                  localStorage.removeItem(STORAGE_KEYS.SESSION_EXPIRY);
+                  return;
+                }
+              }
+            }
+
+            // User is already logged in, check for redirect
+            const redirectUrl = getIntendedRedirect();
+            
+            if (redirectUrl) {
+              clearIntendedRedirect();
+              showMessage('✓ You are already logged in. Redirecting...', 'success');
+              setTimeout(() => window.location.href = redirectUrl, 1500);
+            } else {
+              // Redirect to role-appropriate dashboard
+              const dashboardUrl = await getUserDashboardUrl(session.user.id);
+              window.location.href = dashboardUrl;
+            }
+          }
+        } catch (error) {
+          console.error('Session check error:', error);
+        }
+      }
+
+      // ============================================
+      // LOAD SAVED CREDENTIALS
+      // ============================================
+      function loadSavedCredentials() {
+        const rememberMe = localStorage.getItem(STORAGE_KEYS.REMEMBER_ME) === 'true';
+        const savedEmail = localStorage.getItem(STORAGE_KEYS.SAVED_EMAIL);
+        
+        if (rememberMe && savedEmail) {
+          // Check expiry
+          const expiryStr = localStorage.getItem(STORAGE_KEYS.SESSION_EXPIRY);
+          if (expiryStr) {
+            const expiryDate = new Date(expiryStr);
+            if (new Date() > expiryDate) {
+              // Expired, clear saved data
+              localStorage.removeItem(STORAGE_KEYS.SAVED_EMAIL);
+              localStorage.removeItem(STORAGE_KEYS.SESSION_EXPIRY);
+              localStorage.setItem(STORAGE_KEYS.REMEMBER_ME, 'false');
+              rememberMeCheckbox.checked = false;
+              return;
+            }
+          }
+          
+          emailInput.value = savedEmail;
+          rememberMeCheckbox.checked = true;
+        }
+      }
+
+      // ============================================
+      // CHECK FOR REGISTRATION SUCCESS
+      // ============================================
+      function checkRegistrationSuccess() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const registered = urlParams.get('registered');
+        const verified = urlParams.get('verified');
+        
+        if (registered === 'buyer') {
+          showSuccessMessage('Account created successfully! Please check your email to verify.');
+        } else if (registered === 'supplier') {
+          showSuccessMessage('Supplier account created! Please check your email to verify.');
+        } else if (verified === 'true') {
+          showSuccessMessage('Email verified successfully! You can now log in.');
+        }
+      }
+
+      // ============================================
+      // INITIALIZATION
+      // ============================================
+      document.addEventListener('DOMContentLoaded', async () => {
+        // Load saved email if any
+        loadSavedCredentials();
+
+        // Check for registration success message
+        checkRegistrationSuccess();
+
+        // Check for redirect intent
+        const intendedRedirect = getIntendedRedirect();
+        if (intendedRedirect) {
+          showRedirectMessage(intendedRedirect);
+        }
+
+        // Check if already logged in
+        await checkExistingSession();
+
+        // Pre-fill demo email for quick testing (remove in production)
+        // if (!emailInput.value) {
+        //   emailInput.value = 'buyer@demo.com';
+        // }
+      });
+
+      // ============================================
+      // EVENT LISTENERS
+      // ============================================
+      loginBtn.addEventListener('click', loginHandler);
+
+      emailInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          passwordInput.focus();
+        }
+      });
+
+      passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          loginHandler(e);
+        }
+      });
+
+      // Clear success message when user starts typing
+      emailInput.addEventListener('input', () => {
+        successMessageEl.classList.remove('show');
+      });
+
+      passwordInput.addEventListener('input', () => {
+        successMessageEl.classList.remove('show');
+      });
+
+      // Reset button state on page show
+      window.addEventListener('pageshow', () => {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign in to B2B Dashboard';
+      });
+
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>iBlue B2B • Search Results</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1F2937;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: #0B4F6C;
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .search-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            padding-left: 44px;
+            border-radius: 30px;
+            border: none;
+            font-size: 14px;
+            background: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+            font-size: 16px;
+        }
+
+        .filter-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Category Header */
+        .category-header {
+            background: white;
+            padding: 16px;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .category-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(11, 79, 108, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0B4F6C;
+            font-size: 28px;
+        }
+
+        .category-info h1 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #0B4F6C;
+        }
+
+        .category-info p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* Results Header */
+        .results-header {
+            padding: 12px 16px;
+            background: white;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-count {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .results-count strong {
+            color: #0B4F6C;
+            font-size: 16px;
+        }
+
+        .sort-select {
+            padding: 8px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            font-size: 13px;
+            background: white;
+        }
+
+        /* Products List - Alibaba Style */
+        .products-list {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #eaeaea;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .product-image {
+            height: 200px;
+            background: #f8f9fa;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .verified-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #00A650;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .supplier-location {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .product-content {
+            padding: 20px;
+        }
+
+        .product-title {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            color: #1f2937;
+        }
+
+        .price-section {
+            margin-bottom: 12px;
+        }
+
+        .price-range {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0B4F6C;
+            margin-bottom: 4px;
+        }
+
+        .min-order {
+            font-size: 14px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .supplier-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid #eaeaea;
+            flex-wrap: wrap;
+        }
+
+        .supplier-badge {
+            background: #f3f4f6;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .verified-text {
+            color: #00A650;
+            font-weight: 600;
+        }
+
+        .years-badge {
+            background: #e5e7eb;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .country-badge {
+            background: #0B4F6C;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .contact-btn {
+            margin-left: auto;
+            background: #0B4F6C;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .contact-btn:hover {
+            background: #0a3f56;
+        }
+
+        /* Loading Skeleton */
+        .skeleton-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .skeleton-image {
+            height: 200px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        .skeleton-line {
+            height: 20px;
+            margin: 12px 20px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        .skeleton-line.short {
+            width: 60%;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 24px 16px;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #e0e0e0;
+            background: white;
+            color: #4b5563;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .page-btn.active {
+            background: #0B4F6C;
+            color: white;
+            border-color: #0B4F6C;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+            margin: 16px;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: #d1d5db;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+
+        .browse-btn {
+            background: #0B4F6C;
+            color: white;
+            padding: 12px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            padding: 8px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 11px;
+            gap: 4px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: #0B4F6C;
+        }
+
+        .nav-item.active {
+            color: #0B4F6C;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (min-width: 768px) {
+            .products-list {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            .product-card {
+                flex-direction: row;
+                height: 240px;
+            }
+            
+            .product-image {
+                width: 300px;
+                height: 100%;
+            }
+            
+            .product-content {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search products..." autocomplete="off">
+        </div>
+        <a href="B2B-search.html" class="filter-toggle">
+            <i class="fas fa-sliders-h"></i>
+        </a>
+    </header>
+
+    <!-- Category Header (dynamic) -->
+    <div class="category-header" id="categoryHeader" style="display: none;">
+        <div class="category-icon" id="categoryIcon">
+            <i class="fas fa-tag"></i>
+        </div>
+        <div class="category-info">
+            <h1 id="categoryName">Loading...</h1>
+            <p id="categoryDescription">Browse products in this category</p>
+        </div>
+    </div>
+
+    <!-- Results Header -->
+    <div class="results-header">
+        <div class="results-count">
+            <strong id="resultsCount">0</strong> products found
+        </div>
+        <select class="sort-select" id="sortSelect">
+            <option value="relevance">Sort by: Relevance</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="newest">Newest First</option>
+        </select>
+    </div>
+
+    <!-- Products List -->
+    <div class="products-list" id="productsList">
+        <!-- Loading Skeletons -->
+        <div class="skeleton-card">
+            <div class="skeleton-image"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-image"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-image"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line short"></div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination">
+        <button class="page-btn" id="prevPage" disabled>&lt;</button>
+        <button class="page-btn active" id="page1">1</button>
+        <button class="page-btn" id="page2">2</button>
+        <button class="page-btn" id="page3">3</button>
+        <button class="page-btn" id="nextPage">&gt;</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="B2B-search.html" class="nav-item">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </a>
+        <a href="categories.html" class="nav-item active">
+            <i class="fas fa-th-large"></i>
+            <span>Categories</span>
+        </a>
+        <a href="wholesalers.html" class="nav-item">
+            <i class="fas fa-store"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentPage = 1;
+        let totalResults = 0;
+        let currentFilters = {};
+
+        // Icon mapping
+        const iconMap = {
+            'building': 'building', 'home': 'home', 'lightbulb': 'lightbulb',
+            'utensils': 'utensils', 'fan': 'fan', 'tshirt': 'tshirt',
+            'couch': 'couch', 'wind': 'wind', 'fire': 'fire',
+            'blender': 'blender', 'mug-hot': 'mug-hot', 'tooth': 'tooth',
+            'ice-cream': 'ice-cream'
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Get parameters from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get('q') || '';
+            const categoryId = urlParams.get('category_id');
+            const categoryName = urlParams.get('category') || '';
+            
+            // Get filter parameters
+            currentFilters = {
+                verified: urlParams.get('verified') === 'true',
+                featured: urlParams.get('featured') === 'true',
+                bulk: urlParams.get('bulk') === 'true',
+                negotiable: urlParams.get('negotiable') === 'true'
+            };
+
+            // Set search input value
+            if (searchQuery) {
+                document.getElementById('searchInput').value = searchQuery;
+            }
+
+            // Load category info if category_id is provided
+            if (categoryId) {
+                await loadCategoryInfo(categoryId);
+            } else if (categoryName) {
+                document.getElementById('categoryHeader').style.display = 'flex';
+                document.getElementById('categoryName').textContent = categoryName;
+            }
+
+            // Perform search
+            await performSearch();
+
+            // Setup event listeners
+            setupEventListeners();
+        });
+
+        async function loadCategoryInfo(categoryId) {
+            try {
+                const { data: category, error } = await sb
+                    .from('categories')
+                    .select('*')
+                    .eq('id', categoryId)
+                    .single();
+
+                if (error) throw error;
+
+                if (category) {
+                    document.getElementById('categoryHeader').style.display = 'flex';
+                    document.getElementById('categoryName').textContent = category.name;
+                    document.getElementById('categoryDescription').textContent = 
+                        category.description || `Browse ${category.name} products`;
+                    
+                    const icon = iconMap[category.icon] || 'tag';
+                    document.getElementById('categoryIcon').innerHTML = `<i class="fas fa-${icon}"></i>`;
+                }
+            } catch (error) {
+                console.error('Error loading category:', error);
+            }
+        }
+
+        async function performSearch() {
+            try {
+                showLoading();
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const searchQuery = urlParams.get('q') || '';
+                const categoryId = urlParams.get('category_id');
+
+                let query = sb
+                    .from('ads')
+                    .select(`
+                        *,
+                        profiles!ads_seller_id_fkey (
+                            business_name,
+                            full_name,
+                            is_verified,
+                            country,
+                            verified_since,
+                            year_established
+                        )
+                    `, { count: 'exact' })
+                    .eq('status', 'active');
+
+                // Apply category filter
+                if (categoryId) {
+                    query = query.eq('category_id', categoryId);
+                }
+
+                // Apply search query
+                if (searchQuery) {
+                    query = query.ilike('title', `%${searchQuery}%`);
+                }
+
+                // Apply filters
+                if (currentFilters.verified) {
+                    query = query.eq('profiles.is_verified', true);
+                }
+
+                if (currentFilters.bulk) {
+                    query = query.eq('is_bulk_only', true);
+                }
+
+                if (currentFilters.negotiable) {
+                    query = query.eq('is_negotiable', true);
+                }
+
+                // Apply sorting
+                const sortBy = document.getElementById('sortSelect').value;
+                switch(sortBy) {
+                    case 'price_asc':
+                        query = query.order('wholesale_price', { ascending: true });
+                        break;
+                    case 'price_desc':
+                        query = query.order('wholesale_price', { ascending: false });
+                        break;
+                    case 'newest':
+                        query = query.order('created_at', { ascending: false });
+                        break;
+                    default:
+                        query = query.order('created_at', { ascending: false });
+                }
+
+                // Pagination
+                const from = (currentPage - 1) * 10;
+                const to = from + 9;
+
+                const { data, count, error } = await query.range(from, to);
+
+                if (error) throw error;
+
+                totalResults = count || 0;
+                document.getElementById('resultsCount').textContent = totalResults;
+
+                if (data && data.length > 0) {
+                    renderProducts(data);
+                } else {
+                    renderSampleProducts();
+                }
+
+                updatePagination();
+
+            } catch (error) {
+                console.error('Search error:', error);
+                renderSampleProducts();
+            }
+        }
+
+        function renderSampleProducts() {
+            const sampleProducts = [
+                {
+                    id: 1,
+                    title: 'Manufacturer Supply Steel Structure Prefabricated Movable Prefab Warehouse',
+                    min_price: 17968132,
+                    max_price: 18757940,
+                    moq: 1,
+                    moq_unit: 'set',
+                    image_urls: ['https://via.placeholder.com/400x300?text=Steel+Structure'],
+                    profiles: {
+                        business_name: 'SteelMaster Construction Ltd',
+                        is_verified: true,
+                        country: 'CN',
+                        verified_since: '2023',
+                        year_established: '2020'
+                    }
+                },
+                {
+                    id: 2,
+                    title: 'Beautiful Design Commercial Building Fast Assemble Prefabricated Steel Structure Villa',
+                    min_price: 154013,
+                    max_price: 193503,
+                    moq: 500,
+                    moq_unit: 'square meters',
+                    image_urls: ['https://via.placeholder.com/400x300?text=Commercial+Building'],
+                    profiles: {
+                        business_name: 'BuildQuick China Industries',
+                        is_verified: true,
+                        country: 'CN',
+                        verified_since: '2023',
+                        year_established: '2019'
+                    }
+                },
+                {
+                    id: 3,
+                    title: 'Newly Upgraded 40ft Container Home Expandable Container House With Modern Design',
+                    min_price: 450191,
+                    max_price: 675286,
+                    moq: 1,
+                    moq_unit: 'square meter',
+                    image_urls: ['https://via.placeholder.com/400x300?text=Container+Home'],
+                    profiles: {
+                        business_name: 'ContainerTech Solutions',
+                        is_verified: true,
+                        country: 'CN',
+                        verified_since: '2024',
+                        year_established: '2021'
+                    }
+                },
+                {
+                    id: 4,
+                    title: 'Luxury Modern Prefabricated House Light Steel Frame Construction Villa',
+                    min_price: 890000,
+                    max_price: 1250000,
+                    moq: 1,
+                    moq_unit: 'set',
+                    image_urls: ['https://via.placeholder.com/400x300?text=Luxury+Villa'],
+                    profiles: {
+                        business_name: 'Modern Prefab Homes',
+                        is_verified: true,
+                        country: 'CN',
+                        verified_since: '2022',
+                        year_established: '2018'
+                    }
+                }
+            ];
+
+            renderProducts(sampleProducts);
+        }
+
+        function renderProducts(products) {
+            const list = document.getElementById('productsList');
+            
+            let html = '';
+
+            products.forEach(product => {
+                const minPrice = product.min_price || product.price || product.wholesale_price || 0;
+                const maxPrice = product.max_price || product.price || product.wholesale_price || 0;
+                const moq = product.moq || 1;
+                const moqUnit = product.moq_unit || 'set';
+                const imageUrl = product.image_urls?.[0] || 'https://via.placeholder.com/400x300?text=Product';
+                
+                const supplier = product.profiles || {};
+                const isVerified = supplier.is_verified || true;
+                const yearsInBusiness = supplier.verified_since ? 
+                    `${new Date().getFullYear() - parseInt(supplier.verified_since)} yrs` : '2 yrs';
+                const country = supplier.country || 'CN';
+                const businessName = supplier.business_name || 'Supplier';
+
+                html += `
+                    <a href="B2B-ad-detail.html?id=${product.id}" class="product-card">
+                        <div class="product-image">
+                            <img src="${imageUrl}" alt="${escapeHtml(product.title)}" loading="lazy">
+                            ${isVerified ? `
+                                <div class="verified-badge">
+                                    <i class="fas fa-check-circle"></i> Verified ${yearsInBusiness}
+                                </div>
+                            ` : ''}
+                            <div class="supplier-location">
+                                <i class="fas fa-map-marker-alt"></i> ${country}
+                            </div>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">${escapeHtml(product.title)}</h3>
+                            
+                            <div class="price-section">
+                                <div class="price-range">
+                                    UGX ${formatNumber(minPrice)} - ${formatNumber(maxPrice)}
+                                </div>
+                                <div class="min-order">
+                                    <i class="fas fa-box"></i> Minimum Order: ${moq} ${moqUnit}
+                                </div>
+                            </div>
+
+                            <div class="supplier-info">
+                                <span class="supplier-badge">
+                                    <i class="fas fa-store"></i> ${escapeHtml(businessName)}
+                                </span>
+                                ${isVerified ? `
+                                    <span class="verified-text">
+                                        <i class="fas fa-check-circle"></i> Verified Supplier
+                                    </span>
+                                ` : ''}
+                                <span class="country-badge">
+                                    <i class="fas fa-map-marker-alt"></i> ${country}
+                                </span>
+                                <span class="years-badge">
+                                    <i class="far fa-calendar"></i> Est. ${supplier.year_established || '2020'}
+                                </span>
+                                <button class="contact-btn" onclick="event.preventDefault(); contactSupplier(${product.id})">
+                                    Contact Supplier
+                                </button>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            });
+
+            list.innerHTML = html;
+        }
+
+        function showLoading() {
+            let skeletons = '';
+            for (let i = 0; i < 3; i++) {
+                skeletons += `
+                    <div class="skeleton-card">
+                        <div class="skeleton-image"></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line"></div>
+                    </div>
+                `;
+            }
+            document.getElementById('productsList').innerHTML = skeletons;
+        }
+
+        function setupEventListeners() {
+            // Search on enter - redirect to same page with new query
+            document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const query = e.target.value.trim();
+                    if (query) {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        urlParams.set('q', query);
+                        window.location.href = `B2B-search-results.html?${urlParams.toString()}`;
+                    }
+                }
+            });
+
+            // Sort change
+            document.getElementById('sortSelect').addEventListener('change', () => {
+                currentPage = 1;
+                performSearch();
+            });
+
+            // Pagination
+            document.getElementById('prevPage').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    performSearch();
+                }
+            });
+
+            document.getElementById('nextPage').addEventListener('click', () => {
+                const totalPages = Math.ceil(totalResults / 10);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    performSearch();
+                }
+            });
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(totalResults / 10);
+            
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+
+            // Update page buttons
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById(`page${i}`);
+                if (btn) {
+                    const pageNum = currentPage + (i - 2);
+                    if (pageNum >= 1 && pageNum <= totalPages) {
+                        btn.style.display = 'block';
+                        btn.textContent = pageNum;
+                        btn.classList.toggle('active', pageNum === currentPage);
+                    } else {
+                        btn.style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        window.contactSupplier = function(productId) {
+            showToast('Please login to contact supplier');
+            // Redirect to login or open chat
+        };
+
+        function formatNumber(num) {
+            if (!num) return '0';
+            return parseInt(num).toLocaleString();
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>

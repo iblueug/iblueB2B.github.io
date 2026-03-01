@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quote Details - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/buyer-quote.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            <div class="header-actions">
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+                <div class="header-icon" id="menuToggle">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quote Status Bar -->
+        <div class="status-bar" id="statusBar">
+            <!-- Populated by JS -->
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading quote details...</p>
+        </div>
+
+        <!-- Quote Content (Hidden until loaded) -->
+        <div class="quote-content" id="quoteContent" style="display: none;">
+            <!-- Quote Header -->
+            <div class="quote-header">
+                <div>
+                    <h1 id="quoteTitle">Loading...</h1>
+                    <div class="quote-meta">
+                        <span class="quote-number" id="quoteNumber">QTE-12345</span>
+                        <span class="quote-date" id="quoteDate">Issued on Jan 15, 2026</span>
+                    </div>
+                </div>
+                <div class="quote-actions-top">
+                    <button class="btn-icon" id="printQuoteBtn" onclick="printQuote()">
+                        <i class="fas fa-print"></i>
+                    </button>
+                    <button class="btn-icon" id="shareQuoteBtn" onclick="shareQuote()">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Supplier Card -->
+            <div class="supplier-card" id="supplierCard">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Amount Summary -->
+            <div class="amount-summary" id="amountSummary">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Items Table -->
+            <div class="items-section">
+                <h3><i class="fas fa-boxes"></i> Quoted Items</h3>
+                <div class="items-table-container">
+                    <table class="items-table" id="itemsTable">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Total</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Terms & Conditions -->
+            <div class="terms-section">
+                <h3><i class="fas fa-file-contract"></i> Terms & Conditions</h3>
+                <div class="terms-grid" id="termsGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Additional Notes -->
+            <div class="notes-section" id="notesSection" style="display: none;">
+                <h3><i class="fas fa-sticky-note"></i> Additional Notes</h3>
+                <div class="notes-content" id="quoteNotes"></div>
+            </div>
+
+            <!-- Attachments -->
+            <div class="attachments-section" id="attachmentsSection" style="display: none;">
+                <h3><i class="fas fa-paperclip"></i> Attachments</h3>
+                <div class="attachments-list" id="attachmentsList">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Comparison Section (if multiple quotes) -->
+            <div class="comparison-section" id="comparisonSection" style="display: none;">
+                <h3><i class="fas fa-balance-scale"></i> Compare with Other Quotes</h3>
+                <div class="comparison-preview" id="comparisonPreview">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons" id="actionButtons">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>Quote Not Found</h3>
+            <p>The quote you're looking for doesn't exist or has been removed</p>
+            <a href="my-inquiries.html" class="btn-primary">Back to Inquiries</a>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="my-inquiries.html" class="nav-item active">
+            <i class="fas fa-file-invoice"></i>
+            <span>Inquiries</span>
+        </a>
+        <a href="orders.html" class="nav-item">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Orders</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Accept Quote Modal -->
+    <div class="modal" id="acceptModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Accept Quotation</h3>
+                <button class="modal-close" onclick="closeAcceptModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="acceptModalBody">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Quote Modal -->
+    <div class="modal" id="rejectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reject Quotation</h3>
+                <button class="modal-close" onclick="closeRejectModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="rejectModalBody">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Negotiate Modal -->
+    <div class="modal" id="negotiateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Negotiate Price</h3>
+                <button class="modal-close" onclick="closeNegotiateModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="negotiateModalBody">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Quote accepted successfully</p>
+            <div class="modal-actions">
+                <a href="orders.html" class="btn-primary">View Orders</a>
+                <button class="btn-secondary" onclick="closeSuccessModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="js/buyer-quote.js"></script>
+</body>
+</html>

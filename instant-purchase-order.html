@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Create Purchase Order - iBlue B2B</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/instant-purchase-order.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="mainHeader">
+        <div class="header-top">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <a href="index.html" class="logo">
+                <div class="logo-circle">i</div>
+                <span class="logo-text">iBlue<span>B2B</span></span>
+            </a>
+            <div class="header-actions">
+                <a href="notifications.html" class="header-icon">
+                    <i class="far fa-bell"></i>
+                    <span class="badge" id="notificationBadge">3</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-steps">
+                <div class="step active" id="step1Indicator">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Select Supplier</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step2Indicator">
+                    <span class="step-number">2</span>
+                    <span class="step-label">Add Products</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step3Indicator">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Terms & Payment</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step4Indicator">
+                    <span class="step-number">4</span>
+                    <span class="step-label">Review</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Step 1: Select Supplier -->
+        <div class="step-content active" id="step1">
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-warehouse"></i>
+                    Select Supplier
+                </h2>
+                <p class="section-subtitle">Choose the supplier you want to purchase from</p>
+
+                <!-- Search Suppliers -->
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="supplierSearch" placeholder="Search by supplier name or business...">
+                </div>
+
+                <!-- Suppliers List -->
+                <div class="suppliers-list" id="suppliersList">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Or Enter Manually -->
+                <div class="manual-supplier-toggle">
+                    <button class="btn-link" id="showManualSupplier">
+                        <i class="fas fa-plus-circle"></i> Enter supplier details manually
+                    </button>
+                </div>
+
+                <!-- Manual Supplier Form (Hidden) -->
+                <div class="manual-supplier-form" id="manualSupplierForm" style="display: none;">
+                    <h3>Supplier Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Business Name <span class="required">*</span></label>
+                            <input type="text" id="manualBusinessName" placeholder="e.g., ABC Enterprises Ltd">
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Person</label>
+                            <input type="text" id="manualContactPerson" placeholder="Full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone <span class="required">*</span></label>
+                            <input type="tel" id="manualPhone" placeholder="+256 700 000000">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="manualEmail" placeholder="supplier@example.com">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Business Address</label>
+                            <textarea id="manualAddress" rows="2" placeholder="Street, city, district..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>TIN Number (Optional)</label>
+                            <input type="text" id="manualTin" placeholder="Tax Identification Number">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected Supplier Summary -->
+                <div class="selected-supplier" id="selectedSupplier" style="display: none;">
+                    <h3>Selected Supplier</h3>
+                    <div class="supplier-card" id="selectedSupplierCard">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Continue Button -->
+                <div class="step-action">
+                    <button class="continue-btn" id="continueToStep2" disabled>
+                        Continue to Add Products <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Add Products -->
+        <div class="step-content" id="step2">
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-boxes"></i>
+                    Add Products
+                </h2>
+                <p class="section-subtitle">Select products and specify quantities</p>
+
+                <!-- Product Search -->
+                <div class="product-search">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="productSearch" placeholder="Search products...">
+                    </div>
+                    <button class="btn-outline" id="scanBarcodeBtn">
+                        <i class="fas fa-camera"></i> Scan
+                    </button>
+                </div>
+
+                <!-- Quick Add by SKU -->
+                <div class="quick-add">
+                    <input type="text" id="skuInput" placeholder="Enter SKU or Product ID">
+                    <button class="btn-primary" id="addBySkuBtn">Add</button>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="products-grid" id="productsGrid">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Cart/Selected Products -->
+                <div class="cart-section" id="cartSection" style="display: none;">
+                    <div class="cart-header">
+                        <h3><i class="fas fa-shopping-cart"></i> Order Items (<span id="cartCount">0</span>)</h3>
+                        <button class="btn-link" id="clearCartBtn">Clear All</button>
+                    </div>
+                    <div class="cart-items" id="cartItems">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="cartSubtotal">UGX 0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Items:</span>
+                            <span id="cartTotalItems">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="step-actions">
+                    <button class="back-btn-step" id="backToStep1">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="continue-btn" id="continueToStep3" disabled>
+                        Continue to Terms <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Terms & Payment -->
+        <div class="step-content" id="step3">
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-file-contract"></i>
+                    Terms & Payment
+                </h2>
+                <p class="section-subtitle">Specify payment and delivery terms</p>
+
+                <div class="form-section">
+                    <h3>Payment Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Payment Method <span class="required">*</span></label>
+                            <select id="paymentMethod">
+                                <option value="">Select payment method</option>
+                                <option value="bank_transfer">Bank Transfer</option>
+                                <option value="mobile_money">Mobile Money</option>
+                                <option value="credit_card">Credit Card</option>
+                                <option value="cash_on_delivery">Cash on Delivery</option>
+                                <option value="cheque">Cheque</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Terms</label>
+                            <select id="paymentTerms">
+                                <option value="advance_full">100% Advance</option>
+                                <option value="advance_partial">50% Advance, 50% on Delivery</option>
+                                <option value="credit_7">7 Days Credit</option>
+                                <option value="credit_15">15 Days Credit</option>
+                                <option value="credit_30">30 Days Credit</option>
+                                <option value="negotiable">Negotiable</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Money Fields (conditional) -->
+                    <div class="mobile-money-fields" id="mobileMoneyFields" style="display: none;">
+                        <div class="form-group">
+                            <label>Mobile Money Number</label>
+                            <input type="tel" id="mobileMoneyNumber" placeholder="e.g., 0772 123456">
+                        </div>
+                        <div class="form-group">
+                            <label>Network Provider</label>
+                            <select id="mobileMoneyNetwork">
+                                <option value="mtn">MTN Uganda</option>
+                                <option value="airtel">Airtel Uganda</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Bank Transfer Fields (conditional) -->
+                    <div class="bank-fields" id="bankFields" style="display: none;">
+                        <div class="form-group">
+                            <label>Bank Name</label>
+                            <input type="text" id="bankName" placeholder="e.g., Stanbic Bank">
+                        </div>
+                        <div class="form-group">
+                            <label>Account Number</label>
+                            <input type="text" id="accountNumber" placeholder="Account number">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Delivery Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Delivery Terms</label>
+                            <select id="deliveryTerms">
+                                <option value="ex_warehouse">Ex-Warehouse</option>
+                                <option value="fob">FOB (Free on Board)</option>
+                                <option value="cif">CIF (Cost, Insurance, Freight)</option>
+                                <option value="door_delivery">Door Delivery</option>
+                                <option value="pickup">Buyer Pickup</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Expected Delivery Date</label>
+                            <input type="date" id="expectedDelivery" min="">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Delivery Address <span class="required">*</span></label>
+                            <textarea id="deliveryAddress" rows="2" placeholder="Street, building, landmark..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>District</label>
+                            <select id="deliveryDistrict">
+                                <option value="">Select district</option>
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Phone</label>
+                            <input type="tel" id="deliveryPhone" placeholder="For delivery coordination">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Additional Information</h3>
+                    <div class="form-group">
+                        <label>Purchase Order Reference (Your internal PO #)</label>
+                        <input type="text" id="internalReference" placeholder="e.g., PO-2024-001">
+                    </div>
+                    <div class="form-group">
+                        <label>Notes to Supplier</label>
+                        <textarea id="supplierNotes" rows="3" placeholder="Any special instructions, quality requirements, etc."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Attachments (Optional)</label>
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop files or <span>browse</span></p>
+                            <small>PDF, Images (Max 10MB)</small>
+                            <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png" style="display: none;">
+                        </div>
+                        <div class="file-list" id="fileList"></div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="step-actions">
+                    <button class="back-btn-step" id="backToStep2">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="continue-btn" id="continueToStep4" disabled>
+                        Review Order <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Review & Submit -->
+        <div class="step-content" id="step4">
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-check-circle"></i>
+                    Review Purchase Order
+                </h2>
+                <p class="section-subtitle">Verify all details before submitting</p>
+
+                <!-- PO Summary Card -->
+                <div class="po-summary-card" id="poSummary">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Terms Acceptance -->
+                <div class="terms-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="acceptTerms">
+                        <span>I confirm that all information provided is accurate and this purchase order is legally binding</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="acceptTerms2">
+                        <span>I agree to the platform's terms of service and supplier's stated terms</span>
+                    </label>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="step-actions">
+                    <button class="back-btn-step" id="backToStep3">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="submit-btn" id="submitPO" disabled>
+                        <i class="fas fa-paper-plane"></i> Submit Purchase Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="suppliers.html" class="nav-item">
+            <i class="fas fa-warehouse"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="my-inquiries.html" class="nav-item">
+            <i class="fas fa-file-invoice"></i>
+            <span>Inquiries</span>
+        </a>
+        <a href="orders.html" class="nav-item active">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Orders</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Purchase Order Created!</h3>
+            <p id="successMessage">Your PO has been sent to the supplier</p>
+            <div class="po-number-display" id="poNumberDisplay">PO-2024-00123</div>
+            <div class="modal-actions">
+                <a href="purchase-order.html?id=" class="btn-primary" id="viewPOBtn">View PO</a>
+                <a href="orders.html" class="btn-secondary">View All Orders</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barcode Scanner Modal -->
+    <div class="modal" id="scannerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Scan Product Barcode</h3>
+                <button class="modal-close" onclick="closeScannerModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="scanner-container"></div>
+                <p class="scanner-hint">Position barcode in front of camera</p>
+                <button class="btn-secondary" onclick="closeScannerModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <script src="js/instant-purchase-order.js"></script>
+</body>
+</html>

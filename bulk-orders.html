@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>iBlue B2B • Bulk Orders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1F2937;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: #0B4F6C;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .order-badge {
+            background: #10B981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: white;
+            padding: 16px;
+            border-bottom: 1px solid #E5E7EB;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 16px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6B7280;
+            cursor: pointer;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: #0B4F6C;
+            border-bottom-color: #0B4F6C;
+        }
+
+        .tab i {
+            margin-right: 8px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            padding: 16px;
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 16px;
+            padding-left: 44px;
+            border-radius: 30px;
+            border: 1.5px solid #E5E7EB;
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #0B4F6C;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+            font-size: 16px;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            padding: 12px 16px;
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .filter-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-chip {
+            background: #F3F4F6;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4B5563;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .filter-chip.active {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        /* Orders Grid */
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 16px;
+            padding: 16px;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #E5E7EB;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .order-header {
+            background: linear-gradient(135deg, #0B4F6C, #1a6b8a);
+            padding: 16px;
+            color: white;
+        }
+
+        .order-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .order-number {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .order-date {
+            font-size: 12px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .supplier-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .supplier-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0B4F6C;
+            font-weight: 600;
+            font-size: 16px;
+            overflow: hidden;
+        }
+
+        .supplier-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .supplier-details {
+            flex: 1;
+        }
+
+        .supplier-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .verified-badge {
+            color: #10B981;
+            font-size: 12px;
+        }
+
+        .supplier-location {
+            font-size: 11px;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .order-body {
+            padding: 16px;
+        }
+
+        /* Products List */
+        .products-list {
+            margin-bottom: 16px;
+        }
+
+        .product-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .product-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            background: #F3F4F6;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .product-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .product-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #6B7280;
+            margin-bottom: 4px;
+        }
+
+        .product-price {
+            font-weight: 600;
+            color: #0B4F6C;
+        }
+
+        .product-quantity {
+            color: #6B7280;
+        }
+
+        .product-subtotal {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+
+        .summary-row.total {
+            border-top: 1px solid #E5E7EB;
+            margin-top: 8px;
+            padding-top: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            color: #0B4F6C;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-processing {
+            background: #E0F2FE;
+            color: #0369A1;
+        }
+
+        .status-shipped {
+            background: #E0F2FE;
+            color: #0369A1;
+        }
+
+        .status-delivered {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-cancelled {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px 0 10px;
+            position: relative;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .progress-step::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: -50%;
+            width: 100%;
+            height: 2px;
+            background: #E5E7EB;
+            z-index: 1;
+        }
+
+        .progress-step:first-child::before {
+            display: none;
+        }
+
+        .progress-step.completed::before {
+            background: #10B981;
+        }
+
+        .progress-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #F3F4F6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            position: relative;
+            z-index: 2;
+            border: 2px solid white;
+        }
+
+        .progress-step.completed .progress-icon {
+            background: #10B981;
+            color: white;
+        }
+
+        .progress-step.active .progress-icon {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        .progress-step.completed .progress-label {
+            color: #10B981;
+        }
+
+        .progress-step.active .progress-label {
+            color: #0B4F6C;
+            font-weight: 600;
+        }
+
+        /* Timeline */
+        .timeline {
+            margin: 16px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .timeline-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #F3F4F6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .timeline-icon.success {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .timeline-icon.warning {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .timeline-time {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #F3F4F6;
+            color: #4B5563;
+        }
+
+        .btn-success {
+            background: #10B981;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #EF4444;
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1.5px solid #0B4F6C;
+            color: #0B4F6C;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+            margin: 16px;
+            grid-column: 1/-1;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            background: #F3F4F6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: #9CA3AF;
+            font-size: 32px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            color: #6B7280;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .empty-btn {
+            background: #0B4F6C;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        /* Loading Skeleton */
+        .skeleton-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .skeleton-header {
+            height: 100px;
+            background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        .skeleton-line {
+            height: 16px;
+            background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+            margin: 8px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            font-size: 24px;
+            cursor: pointer;
+            color: #9CA3AF;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 13px;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: #0B4F6C;
+            outline: none;
+        }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            padding: 8px 0 12px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #9CA3AF;
+            font-size: 11px;
+            gap: 4px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: #0B4F6C;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .orders-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .orders-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="header-title">Bulk Orders</div>
+        <div class="order-badge">
+            <i class="fas fa-box"></i> 12 Active
+        </div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-value" id="statPending">0</div>
+            <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="statProcessing">0</div>
+            <div class="stat-label">Processing</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="statShipped">0</div>
+            <div class="stat-label">Shipped</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="statDelivered">0</div>
+            <div class="stat-label">Delivered</div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="tab active" data-status="all">
+            <i class="fas fa-box"></i>
+            All Orders
+        </div>
+        <div class="tab" data-status="pending">
+            <i class="fas fa-clock"></i>
+            Pending
+        </div>
+        <div class="tab" data-status="processing">
+            <i class="fas fa-cog"></i>
+            Processing
+        </div>
+        <div class="tab" data-status="shipped">
+            <i class="fas fa-truck"></i>
+            Shipped
+        </div>
+        <div class="tab" data-status="delivered">
+            <i class="fas fa-check-circle"></i>
+            Delivered
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search by order # or supplier...">
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="filter-chip active" data-filter="all">All Time</div>
+        <div class="filter-chip" data-filter="today">Today</div>
+        <div class="filter-chip" data-filter="week">This Week</div>
+        <div class="filter-chip" data-filter="month">This Month</div>
+        <div class="filter-chip" data-filter="custom">Custom</div>
+    </div>
+
+    <!-- Orders Grid -->
+    <div class="orders-grid" id="ordersGrid">
+        <!-- Loading Skeletons -->
+        <div class="skeleton-card">
+            <div class="skeleton-header"></div>
+            <div class="skeleton-line" style="width: 80%;"></div>
+            <div class="skeleton-line" style="width: 60%;"></div>
+            <div class="skeleton-line" style="width: 40%;"></div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-header"></div>
+            <div class="skeleton-line" style="width: 80%;"></div>
+            <div class="skeleton-line" style="width: 60%;"></div>
+            <div class="skeleton-line" style="width: 40%;"></div>
+        </div>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalOrderNumber">Order Details</h3>
+                <div class="modal-close" id="closeModal">&times;</div>
+            </div>
+            <div id="orderDetails">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="B2B-search.html" class="nav-item">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </a>
+        <a href="bulk-orders.html" class="nav-item active">
+            <i class="fas fa-box"></i>
+            <span>Orders</span>
+        </a>
+        <a href="wholesalers.html" class="nav-item">
+            <i class="fas fa-store"></i>
+            <span>Suppliers</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="far fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase config
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // State
+        let currentUser = null;
+        let orders = [];
+        let filteredOrders = [];
+        let currentStatus = 'all';
+        let currentFilter = 'all';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            await loadOrders();
+            setupEventListeners();
+        });
+
+        // Check authentication
+        async function checkAuth() {
+            try {
+                const { data: { user }, error } = await sb.auth.getUser();
+                
+                if (error || !user) {
+                    showToast('Please login to view orders');
+                    setTimeout(() => {
+                        window.location.href = 'login.html?redirect=bulk-orders.html';
+                    }, 2000);
+                    return;
+                }
+                
+                currentUser = user;
+                
+            } catch (error) {
+                console.error('Auth check error:', error);
+            }
+        }
+
+        // Load orders
+        async function loadOrders() {
+            try {
+                // For demo purposes, we'll create sample orders
+                // In production, fetch from database
+                orders = [
+                    {
+                        id: 'ORD-2024-001',
+                        order_number: 'ORD-2024-001',
+                        supplier: {
+                            id: 'sup1',
+                            name: 'Kampala Wholesalers Ltd',
+                            location: 'Kampala',
+                            verified: true,
+                            avatar: null
+                        },
+                        date: '2024-02-25T10:30:00',
+                        status: 'processing',
+                        items: [
+                            {
+                                id: 1,
+                                title: 'Industrial Rice Cooker - 50L',
+                                image: 'https://via.placeholder.com/60',
+                                quantity: 10,
+                                price: 450000,
+                                total: 4500000
+                            },
+                            {
+                                id: 2,
+                                title: 'Commercial Ceiling Fan - 56"',
+                                image: 'https://via.placeholder.com/60',
+                                quantity: 25,
+                                price: 185000,
+                                total: 4625000
+                            }
+                        ],
+                        subtotal: 9125000,
+                        delivery: 0,
+                        discount: 456250,
+                        total: 8668750,
+                        timeline: [
+                            { status: 'Order Placed', time: '2024-02-25T10:30:00', completed: true },
+                            { status: 'Payment Confirmed', time: '2024-02-25T14:20:00', completed: true },
+                            { status: 'Processing', time: '2024-02-26T09:15:00', completed: true },
+                            { status: 'Shipped', time: null, completed: false },
+                            { status: 'Delivered', time: null, completed: false }
+                        ]
+                    },
+                    {
+                        id: 'ORD-2024-002',
+                        order_number: 'ORD-2024-002',
+                        supplier: {
+                            id: 'sup2',
+                            name: 'Jinja Industrial Supplies',
+                            location: 'Jinja',
+                            verified: true,
+                            avatar: null
+                        },
+                        date: '2024-02-24T15:45:00',
+                        status: 'shipped',
+                        items: [
+                            {
+                                id: 3,
+                                title: 'Industrial Blender - 20L',
+                                image: 'https://via.placeholder.com/60',
+                                quantity: 5,
+                                price: 850000,
+                                total: 4250000
+                            }
+                        ],
+                        subtotal: 4250000,
+                        delivery: 150000,
+                        discount: 0,
+                        total: 4400000,
+                        timeline: [
+                            { status: 'Order Placed', time: '2024-02-24T15:45:00', completed: true },
+                            { status: 'Payment Confirmed', time: '2024-02-24T16:30:00', completed: true },
+                            { status: 'Processing', time: '2024-02-25T08:20:00', completed: true },
+                            { status: 'Shipped', time: '2024-02-26T11:00:00', completed: true },
+                            { status: 'Delivered', time: null, completed: false }
+                        ]
+                    },
+                    {
+                        id: 'ORD-2024-003',
+                        order_number: 'ORD-2024-003',
+                        supplier: {
+                            id: 'sup3',
+                            name: 'Mbarara Hardware Ltd',
+                            location: 'Mbarara',
+                            verified: false,
+                            avatar: null
+                        },
+                        date: '2024-02-23T09:15:00',
+                        status: 'delivered',
+                        items: [
+                            {
+                                id: 4,
+                                title: 'Electric Forklift - 2 Ton',
+                                image: 'https://via.placeholder.com/60',
+                                quantity: 2,
+                                price: 45000000,
+                                total: 90000000
+                            },
+                            {
+                                id: 5,
+                                title: 'Pallet Jack - 2.5 Ton',
+                                image: 'https://via.placeholder.com/60',
+                                quantity: 5,
+                                price: 1250000,
+                                total: 6250000
+                            }
+                        ],
+                        subtotal: 96250000,
+                        delivery: 500000,
+                        discount: 4812500,
+                        total: 91937500,
+                        timeline: [
+                            { status: 'Order Placed', time: '2024-02-23T09:15:00', completed: true },
+                            { status: 'Payment Confirmed', time: '2024-02-23T11:30:00', completed: true },
+                            { status: 'Processing', time: '2024-02-24T10:00:00', completed: true },
+                            { status: 'Shipped', time: '2024-02-25T14:20:00', completed: true },
+                            { status: 'Delivered', time: '2024-02-26T16:45:00', completed: true }
+                        ]
+                    }
+                ];
+
+                updateStats();
+                renderOrders();
+
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                showToast('Error loading orders');
+            }
+        }
+
+        // Update stats
+        function updateStats() {
+            const stats = {
+                pending: orders.filter(o => o.status === 'pending').length,
+                processing: orders.filter(o => o.status === 'processing').length,
+                shipped: orders.filter(o => o.status === 'shipped').length,
+                delivered: orders.filter(o => o.status === 'delivered').length
+            };
+
+            document.getElementById('statPending').textContent = stats.pending;
+            document.getElementById('statProcessing').textContent = stats.processing;
+            document.getElementById('statShipped').textContent = stats.shipped;
+            document.getElementById('statDelivered').textContent = stats.delivered;
+        }
+
+        // Render orders
+        function renderOrders() {
+            const grid = document.getElementById('ordersGrid');
+
+            if (orders.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <h3 class="empty-title">No Orders Found</h3>
+                        <p class="empty-text">You haven't placed any bulk orders yet</p>
+                        <a href="B2B-search.html" class="empty-btn">
+                            <i class="fas fa-search"></i> Browse Products
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = orders.map(order => {
+                const statusClass = `status-${order.status}`;
+                const supplierInitials = order.supplier.name
+                    .split(' ')
+                    .map(n => n[0])
+                    .join('')
+                    .toUpperCase()
+                    .substring(0, 2);
+
+                return `
+                    <div class="order-card" onclick="openOrderModal('${order.id}')">
+                        <div class="order-header">
+                            <div class="order-header-top">
+                                <span class="order-number">${order.order_number}</span>
+                                <span class="order-date">
+                                    <i class="far fa-calendar"></i>
+                                    ${formatDate(order.date)}
+                                </span>
+                            </div>
+                            
+                            <div class="supplier-info">
+                                <div class="supplier-avatar">
+                                    ${supplierInitials}
+                                </div>
+                                <div class="supplier-details">
+                                    <div class="supplier-name">
+                                        ${order.supplier.name}
+                                        ${order.supplier.verified ? 
+                                            '<i class="fas fa-check-circle verified-badge"></i>' : ''}
+                                    </div>
+                                    <div class="supplier-location">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        ${order.supplier.location}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-body">
+                            <div class="products-list">
+                                ${order.items.slice(0, 2).map(item => `
+                                    <div class="product-item">
+                                        <div class="product-image">
+                                            <img src="${item.image}" alt="${item.title}">
+                                        </div>
+                                        <div class="product-details">
+                                            <div class="product-title">${item.title}</div>
+                                            <div class="product-meta">
+                                                <span class="product-price">UGX ${item.price.toLocaleString()}</span>
+                                                <span class="product-quantity">x${item.quantity}</span>
+                                            </div>
+                                        </div>
+                                        <div class="product-subtotal">
+                                            UGX ${item.total.toLocaleString()}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                                ${order.items.length > 2 ? 
+                                    `<div style="text-align: center; padding: 8px; color: #6B7280; font-size: 12px;">
+                                        +${order.items.length - 2} more items
+                                    </div>` : ''}
+                            </div>
+
+                            <div class="order-summary">
+                                <div class="summary-row">
+                                    <span>Subtotal</span>
+                                    <span>UGX ${order.subtotal.toLocaleString()}</span>
+                                </div>
+                                ${order.discount > 0 ? `
+                                    <div class="summary-row" style="color: #10B981;">
+                                        <span>Bulk Discount</span>
+                                        <span>-UGX ${order.discount.toLocaleString()}</span>
+                                    </div>
+                                ` : ''}
+                                ${order.delivery > 0 ? `
+                                    <div class="summary-row">
+                                        <span>Delivery</span>
+                                        <span>UGX ${order.delivery.toLocaleString()}</span>
+                                    </div>
+                                ` : ''}
+                                <div class="summary-row total">
+                                    <span>Total</span>
+                                    <span>UGX ${order.total.toLocaleString()}</span>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span class="status-badge ${statusClass}">
+                                    ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                </span>
+                                
+                                <button class="action-btn btn-secondary" style="width: auto; padding: 8px 16px;" 
+                                        onclick="event.stopPropagation(); trackOrder('${order.id}')">
+                                    <i class="fas fa-truck"></i> Track
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Open order modal
+        window.openOrderModal = function(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+
+            const modal = document.getElementById('orderModal');
+            document.getElementById('modalOrderNumber').textContent = `Order ${order.order_number}`;
+
+            const completedSteps = order.timeline.filter(t => t.completed).length;
+            const progressWidth = (completedSteps / order.timeline.length) * 100;
+
+            const detailsHtml = `
+                <div style="margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+                        <div>
+                            <div style="font-size: 14px; color: #6B7280;">Supplier</div>
+                            <div style="font-weight: 600;">${order.supplier.name}</div>
+                            <div style="font-size: 12px; color: #6B7280;">${order.supplier.location}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 14px; color: #6B7280;">Order Date</div>
+                            <div style="font-weight: 600;">${new Date(order.date).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Tracker -->
+                    <div style="margin: 24px 0;">
+                        <div class="progress-tracker">
+                            ${order.timeline.map((step, index) => `
+                                <div class="progress-step ${step.completed ? 'completed' : ''} ${index === completedSteps - 1 ? 'active' : ''}">
+                                    <div class="progress-icon">
+                                        <i class="fas ${getStepIcon(step.status)}"></i>
+                                    </div>
+                                    <div class="progress-label">${step.status}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="timeline">
+                        ${order.timeline.map(step => `
+                            <div class="timeline-item">
+                                <div class="timeline-icon ${step.completed ? 'success' : ''}">
+                                    <i class="fas ${getStepIcon(step.status)}"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">${step.status}</div>
+                                    <div class="timeline-time">
+                                        ${step.time ? new Date(step.time).toLocaleString() : 'Pending'}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Order Items -->
+                    <div style="margin: 20px 0;">
+                        <h4 style="margin-bottom: 12px;">Order Items</h4>
+                        ${order.items.map(item => `
+                            <div style="display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #F3F4F6;">
+                                <img src="${item.image}" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;">
+                                <div style="flex:1">
+                                    <div style="font-weight: 600; font-size: 14px;">${item.title}</div>
+                                    <div style="font-size: 12px; color: #6B7280;">
+                                        UGX ${item.price.toLocaleString()} x ${item.quantity}
+                                    </div>
+                                </div>
+                                <div style="font-weight: 600; color: #0B4F6C;">
+                                    UGX ${item.total.toLocaleString()}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="order-summary">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>UGX ${order.subtotal.toLocaleString()}</span>
+                        </div>
+                        ${order.discount > 0 ? `
+                            <div class="summary-row" style="color: #10B981;">
+                                <span>Bulk Discount</span>
+                                <span>-UGX ${order.discount.toLocaleString()}</span>
+                            </div>
+                        ` : ''}
+                        ${order.delivery > 0 ? `
+                            <div class="summary-row">
+                                <span>Delivery</span>
+                                <span>UGX ${order.delivery.toLocaleString()}</span>
+                            </div>
+                        ` : ''}
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span>UGX ${order.total.toLocaleString()}</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        ${order.status === 'shipped' ? `
+                            <button class="action-btn btn-success" onclick="confirmDelivery('${order.id}')">
+                                <i class="fas fa-check"></i> Confirm Delivery
+                            </button>
+                        ` : ''}
+                        ${order.status === 'pending' ? `
+                            <button class="action-btn btn-danger" onclick="cancelOrder('${order.id}')">
+                                <i class="fas fa-times"></i> Cancel Order
+                            </button>
+                        ` : ''}
+                        <button class="action-btn btn-primary" onclick="contactSupplier('${order.supplier.id}')">
+                            <i class="fas fa-comment"></i> Contact Supplier
+                        </button>
+                        <button class="action-btn btn-secondary" onclick="downloadInvoice('${order.id}')">
+                            <i class="fas fa-download"></i> Invoice
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('orderDetails').innerHTML = detailsHtml;
+            modal.classList.add('show');
+        };
+
+        // Helper function for step icons
+        function getStepIcon(step) {
+            const icons = {
+                'Order Placed': 'fa-shopping-cart',
+                'Payment Confirmed': 'fa-credit-card',
+                'Processing': 'fa-cog',
+                'Shipped': 'fa-truck',
+                'Delivered': 'fa-check-circle'
+            };
+            return icons[step] || 'fa-circle';
+        }
+
+        // Track order
+        window.trackOrder = function(orderId) {
+            openOrderModal(orderId);
+        };
+
+        // Confirm delivery
+        window.confirmDelivery = function(orderId) {
+            if (confirm('Confirm that you have received this order?')) {
+                showToast('Delivery confirmed. Thank you for your business!');
+                // Update order status in database
+                document.getElementById('orderModal').classList.remove('show');
+            }
+        };
+
+        // Cancel order
+        window.cancelOrder = function(orderId) {
+            if (confirm('Are you sure you want to cancel this order?')) {
+                showToast('Order cancellation requested');
+                document.getElementById('orderModal').classList.remove('show');
+            }
+        };
+
+        // Contact supplier
+        window.contactSupplier = function(supplierId) {
+            window.location.href = `supplier-chat.html?user=${supplierId}`;
+        };
+
+        // Download invoice
+        window.downloadInvoice = function(orderId) {
+            showToast('Downloading invoice...');
+            // Implement invoice download
+        };
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab switching
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    currentStatus = tab.dataset.status;
+                    filterOrders();
+                });
+            });
+
+            // Filter chips
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    
+                    currentFilter = chip.dataset.filter;
+                    filterOrders();
+                });
+            });
+
+            // Search
+            let searchTimeout;
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const term = e.target.value.toLowerCase();
+                    filteredOrders = orders.filter(order => 
+                        order.order_number.toLowerCase().includes(term) ||
+                        order.supplier.name.toLowerCase().includes(term)
+                    );
+                    renderOrders();
+                }, 500);
+            });
+
+            // Close modal
+            document.getElementById('closeModal').addEventListener('click', () => {
+                document.getElementById('orderModal').classList.remove('show');
+            });
+        }
+
+        // Filter orders
+        function filterOrders() {
+            filteredOrders = orders.filter(order => {
+                if (currentStatus !== 'all' && order.status !== currentStatus) {
+                    return false;
+                }
+
+                // Date filtering
+                if (currentFilter !== 'all') {
+                    const orderDate = new Date(order.date);
+                    const today = new Date();
+                    
+                    if (currentFilter === 'today') {
+                        if (orderDate.toDateString() !== today.toDateString()) return false;
+                    } else if (currentFilter === 'week') {
+                        const weekAgo = new Date(today.setDate(today.getDate() - 7));
+                        if (orderDate < weekAgo) return false;
+                    } else if (currentFilter === 'month') {
+                        const monthAgo = new Date(today.setMonth(today.getMonth() - 1));
+                        if (orderDate < monthAgo) return false;
+                    }
+                }
+
+                return true;
+            });
+
+            renderOrders();
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = now - date;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            if (days === 0) return 'Today';
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return `${days} days ago`;
+            
+            return date.toLocaleDateString('en-UG');
+        }
+
+        // Toast function
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('orderModal');
+            if (event.target === modal) {
+                modal.classList.remove('show');
+            }
+        };
+    </script>
+</body>
+</html>

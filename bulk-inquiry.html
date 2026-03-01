@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>iBlue B2B • Bulk Purchase Inquiry</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1F2937;
+            padding-bottom: 100px;
+        }
+
+        /* Header */
+        .header {
+            background: #0B4F6C;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .progress-steps {
+            display: flex;
+            gap: 8px;
+        }
+
+        .step {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .step.active {
+            background: white;
+            width: 24px;
+            border-radius: 12px;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* Product Summary Card */
+        .product-summary {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #E5E7EB;
+            display: flex;
+            gap: 12px;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: #F3F4F6;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .product-supplier {
+            font-size: 13px;
+            color: #6B7280;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .verified-badge {
+            color: #10B981;
+            font-size: 12px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        .product-price small {
+            font-size: 12px;
+            font-weight: 400;
+            color: #6B7280;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #E5E7EB;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            color: #0B4F6C;
+        }
+
+        .card-title span {
+            background: #F3F4F6;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 400;
+            margin-left: auto;
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-label i {
+            color: #0B4F6C;
+            margin-right: 6px;
+            width: 16px;
+        }
+
+        .required::after {
+            content: '*';
+            color: #EF4444;
+            margin-left: 4px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: #0B4F6C;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(11, 79, 108, 0.1);
+        }
+
+        .form-input.error, .form-select.error, .form-textarea.error {
+            border-color: #EF4444;
+        }
+
+        .error-message {
+            color: #EF4444;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #6B7280;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Row Layout */
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .row-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        /* Quantity Selector */
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .quantity-btn {
+            width: 48px;
+            height: 48px;
+            background: #F9FAFB;
+            border: none;
+            font-size: 20px;
+            font-weight: 600;
+            color: #4B5563;
+            cursor: pointer;
+        }
+
+        .quantity-btn:active {
+            background: #F3F4F6;
+        }
+
+        .quantity-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quantity-input {
+            flex: 1;
+            height: 48px;
+            border: none;
+            border-left: 1.5px solid #E5E7EB;
+            border-right: 1.5px solid #E5E7EB;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .quantity-input:focus {
+            outline: none;
+        }
+
+        /* Bulk Tiers */
+        .bulk-tiers {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .tier-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 12px;
+        }
+
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .tier-card {
+            background: white;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .tier-card.selected {
+            border-color: #0B4F6C;
+            background: rgba(11, 79, 108, 0.05);
+        }
+
+        .tier-range {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .tier-price {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0B4F6C;
+        }
+
+        .tier-save {
+            font-size: 11px;
+            color: #10B981;
+            margin-top: 4px;
+        }
+
+        /* Price Calculation */
+        .price-calculation {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        .calc-row.total {
+            border-top: 1px solid #E5E7EB;
+            margin-top: 8px;
+            padding-top: 16px;
+            font-weight: 700;
+            font-size: 18px;
+            color: #0B4F6C;
+        }
+
+        .calc-row.discount {
+            color: #10B981;
+        }
+
+        /* Requirements Checklist */
+        .requirements-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #F9FAFB;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .requirement-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #0B4F6C;
+        }
+
+        .requirement-text {
+            flex: 1;
+        }
+
+        .requirement-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .requirement-desc {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        /* Timeline Options */
+        .timeline-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .timeline-option {
+            padding: 12px 8px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .timeline-option.selected {
+            border-color: #0B4F6C;
+            background: rgba(11, 79, 108, 0.05);
+        }
+
+        .timeline-value {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1F2937;
+        }
+
+        .timeline-label {
+            font-size: 11px;
+            color: #6B7280;
+        }
+
+        /* File Upload */
+        .upload-area {
+            border: 2px dashed #E5E7EB;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #F9FAFB;
+        }
+
+        .upload-area:hover {
+            border-color: #0B4F6C;
+            background: rgba(11, 79, 108, 0.05);
+        }
+
+        .upload-area i {
+            font-size: 32px;
+            color: #0B4F6C;
+            margin-bottom: 8px;
+        }
+
+        .upload-area p {
+            font-size: 14px;
+            color: #4B5563;
+            margin-bottom: 4px;
+        }
+
+        .upload-area small {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .file-list {
+            margin-top: 12px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #F3F4F6;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-info i {
+            color: #0B4F6C;
+        }
+
+        .file-name {
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .file-size {
+            font-size: 11px;
+            color: #6B7280;
+            margin-left: 8px;
+        }
+
+        .file-remove {
+            color: #EF4444;
+            cursor: pointer;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E5E7EB;
+            padding: 12px 16px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 1.5px solid #0B4F6C;
+            color: #0B4F6C;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Success Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #10B981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 40px;
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 8px;
+        }
+
+        .modal-text {
+            color: #6B7280;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .inquiry-number {
+            background: #F3F4F6;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #0B4F6C;
+            margin-bottom: 24px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+
+        .modal-btn-primary {
+            background: #0B4F6C;
+            color: white;
+        }
+
+        .modal-btn-secondary {
+            background: white;
+            border: 1.5px solid #E5E7EB;
+            color: #4B5563;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #E5E7EB 25%, #F3F4F6 50%, #E5E7EB 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 2000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .action-buttons {
+                max-width: 600px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 30px 30px 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="header-title">Bulk Purchase Inquiry</div>
+        <div class="progress-steps">
+            <span class="step active"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Product Summary -->
+        <div class="product-summary" id="productSummary">
+            <div class="product-image" id="productImage">
+                <img src="https://via.placeholder.com/80" alt="Product">
+            </div>
+            <div class="product-info">
+                <div class="product-title" id="productTitle">Loading product details...</div>
+                <div class="product-supplier" id="productSupplier">
+                    <i class="fas fa-store"></i>
+                    <span id="supplierName">Supplier Name</span>
+                    <i class="fas fa-check-circle verified-badge" id="verifiedIcon"></i>
+                </div>
+                <div class="product-price" id="productPrice">UGX 0</div>
+            </div>
+        </div>
+
+        <!-- Inquiry Form -->
+        <form id="inquiryForm">
+            <!-- Step 1: Quantity & Pricing -->
+            <div class="form-card">
+                <div class="card-title">
+                    <i class="fas fa-boxes"></i>
+                    Quantity & Pricing
+                    <span>Step 1 of 3</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">
+                        <i class="fas fa-cubes"></i>
+                        Quantity Needed
+                    </label>
+                    <div class="quantity-selector">
+                        <button type="button" class="quantity-btn" id="decreaseQty">−</button>
+                        <input type="number" class="quantity-input" id="quantity" value="100" min="1" step="1">
+                        <button type="button" class="quantity-btn" id="increaseQty">+</button>
+                    </div>
+                    <div class="hint">
+                        <i class="fas fa-info-circle"></i>
+                        Minimum order quantity: <span id="moq">1</span> units
+                    </div>
+                </div>
+
+                <!-- Bulk Pricing Tiers -->
+                <div class="bulk-tiers" id="bulkTiers">
+                    <div class="tier-title">Bulk Pricing Tiers</div>
+                    <div class="tier-grid" id="tierGrid">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-tag"></i>
+                        Your Target Price (per unit)
+                    </label>
+                    <div class="row-2">
+                        <input type="number" class="form-input" id="targetPrice" placeholder="UGX" min="0" step="100">
+                        <select class="form-select" id="currency">
+                            <option value="UGX">UGX</option>
+                            <option value="USD">USD</option>
+                        </select>
+                    </div>
+                    <div class="hint">
+                        <i class="fas fa-lightbulb"></i>
+                        Optional - suggest your desired price
+                    </div>
+                </div>
+
+                <!-- Price Calculation -->
+                <div class="price-calculation" id="priceCalculation">
+                    <div class="calc-row">
+                        <span>Price per unit</span>
+                        <span id="calcUnitPrice">UGX 0</span>
+                    </div>
+                    <div class="calc-row">
+                        <span>Quantity</span>
+                        <span id="calcQuantity">100</span>
+                    </div>
+                    <div class="calc-row discount" id="discountRow" style="display: none;">
+                        <span>Bulk discount</span>
+                        <span id="calcDiscount">-UGX 0</span>
+                    </div>
+                    <div class="calc-row total">
+                        <span>Estimated Total</span>
+                        <span id="calcTotal">UGX 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Specifications & Requirements -->
+            <div class="form-card">
+                <div class="card-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    Specifications & Requirements
+                    <span>Step 2 of 3</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-ruler"></i>
+                        Product Specifications
+                    </label>
+                    <textarea class="form-textarea" id="specifications" rows="3" placeholder="Size, color, material, quality grade, packaging requirements..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-check-circle"></i>
+                        Additional Requirements
+                    </label>
+                    <div class="requirements-list">
+                        <label class="requirement-item">
+                            <input type="checkbox" id="reqSampling">
+                            <div class="requirement-text">
+                                <div class="requirement-title">Product Sampling</div>
+                                <div class="requirement-desc">Request samples before bulk order</div>
+                            </div>
+                        </label>
+                        <label class="requirement-item">
+                            <input type="checkbox" id="reqCustomPackaging">
+                            <div class="requirement-text">
+                                <div class="requirement-title">Custom Packaging</div>
+                                <div class="requirement-desc">Branded packaging required</div>
+                            </div>
+                        </label>
+                        <label class="requirement-item">
+                            <input type="checkbox" id="reqQualityCert">
+                            <div class="requirement-text">
+                                <div class="requirement-title">Quality Certificate</div>
+                                <div class="requirement-desc">ISO or other certification needed</div>
+                            </div>
+                        </label>
+                        <label class="requirement-item">
+                            <input type="checkbox" id="reqInspection">
+                            <div class="requirement-text">
+                                <div class="requirement-title">Pre-shipment Inspection</div>
+                                <div class="requirement-desc">Third-party inspection required</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-file-alt"></i>
+                        Attachments (Optional)
+                    </label>
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload or drag and drop</p>
+                        <small>PDF, Images, DOC (Max 10MB)</small>
+                        <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="display: none;">
+                    </div>
+                    <div id="fileList" class="file-list"></div>
+                    <div class="hint">
+                        <i class="fas fa-paperclip"></i>
+                        Upload spec sheets, drawings, or requirement documents
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Delivery & Timeline -->
+            <div class="form-card">
+                <div class="card-title">
+                    <i class="fas fa-truck"></i>
+                    Delivery & Timeline
+                    <span>Step 3 of 3</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Delivery Location
+                    </label>
+                    <select class="form-select" id="deliveryDistrict">
+                        <option value="">Select district</option>
+                        <option value="Kampala">Kampala</option>
+                        <option value="Wakiso">Wakiso</option>
+                        <option value="Mukono">Mukono</option>
+                        <option value="Jinja">Jinja</option>
+                        <option value="Mbarara">Mbarara</option>
+                        <option value="Gulu">Gulu</option>
+                        <option value="Lira">Lira</option>
+                        <option value="Arua">Arua</option>
+                        <option value="Mbale">Mbale</option>
+                        <option value="Fort Portal">Fort Portal</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-map-pin"></i>
+                        Specific Address
+                    </label>
+                    <input type="text" class="form-input" id="deliveryAddress" placeholder="Street, building, landmark">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">
+                        <i class="fas fa-clock"></i>
+                        Expected Delivery Timeline
+                    </label>
+                    <div class="timeline-options" id="timelineOptions">
+                        <div class="timeline-option selected" data-days="7">
+                            <div class="timeline-value">7</div>
+                            <div class="timeline-label">Days</div>
+                        </div>
+                        <div class="timeline-option" data-days="14">
+                            <div class="timeline-value">14</div>
+                            <div class="timeline-label">Days</div>
+                        </div>
+                        <div class="timeline-option" data-days="30">
+                            <div class="timeline-value">30</div>
+                            <div class="timeline-label">Days</div>
+                        </div>
+                        <div class="timeline-option" data-days="60">
+                            <div class="timeline-value">60</div>
+                            <div class="timeline-label">Days</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-handshake"></i>
+                        Preferred Payment Terms
+                    </label>
+                    <select class="form-select" id="paymentTerms">
+                        <option value="">Select payment terms</option>
+                        <option value="100% advance">100% Advance</option>
+                        <option value="50% advance, 50% delivery">50% Advance, 50% on Delivery</option>
+                        <option value="30% advance, 70% delivery">30% Advance, 70% on Delivery</option>
+                        <option value="LC">Letter of Credit (LC)</option>
+                        <option value="negotiable">Negotiable</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-comment"></i>
+                        Additional Notes
+                    </label>
+                    <textarea class="form-textarea" id="additionalNotes" rows="3" placeholder="Any other requirements or questions for the supplier..."></textarea>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="btn btn-secondary" id="saveDraftBtn">
+            <i class="fas fa-save"></i>
+            Save Draft
+        </button>
+        <button class="btn btn-primary" id="submitBtn">
+            <i class="fas fa-paper-plane"></i>
+            Submit Inquiry
+        </button>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 class="modal-title">Inquiry Sent!</h2>
+            <p class="modal-text">Your bulk purchase inquiry has been submitted successfully.</p>
+            <div class="inquiry-number" id="inquiryNumber">INQ-2024-00123</div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" onclick="window.location.href='suppliers.html'">
+                    Browse More
+                </button>
+                <button class="modal-btn modal-btn-primary" onclick="window.location.href='negotiations.html'">
+                    Track Status
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ============================================
+        // SUPABASE CONFIGURATION
+        // ============================================
+        const SUPABASE_URL = 'https://uufhvmmgwzkxvvdbqemz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1Zmh2bW1nd3preHZ2ZGJxZW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMDIzNTYsImV4cCI6MjA4NTg3ODM1Nn0.WABHx4ilFRkhPHP-y4ZC4E8Kb7PRqY-cyxI8cVS8Tyc';
+        
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================
+        // STATE
+        // ============================================
+        let currentUser = null;
+        let productData = null;
+        let supplierData = null;
+        let bulkPricing = [];
+        let selectedFiles = [];
+        let currentStep = 1;
+
+        // Get parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('product');
+        const supplierId = urlParams.get('supplier');
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            
+            if (productId) {
+                await loadProductData();
+            }
+            
+            if (supplierId) {
+                await loadSupplierData();
+            }
+            
+            setupEventListeners();
+            loadDraft();
+            updatePriceCalculation();
+        });
+
+        // ============================================
+        // CHECK AUTH
+        // ============================================
+        async function checkAuth() {
+            try {
+                const { data: { user }, error } = await sb.auth.getUser();
+                
+                if (error || !user) {
+                    showToast('Please login to submit a bulk inquiry');
+                    setTimeout(() => {
+                        window.location.href = `login.html?redirect=bulk-inquiry.html${window.location.search}`;
+                    }, 2000);
+                    return;
+                }
+                
+                currentUser = user;
+                
+                // Load user profile for pre-filling
+                await loadUserProfile();
+                
+            } catch (error) {
+                console.error('Auth check error:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD USER PROFILE
+        // ============================================
+        async function loadUserProfile() {
+            try {
+                const { data: profile, error } = await sb
+                    .from('profiles')
+                    .select('full_name, phone, district')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (!error && profile) {
+                    if (profile.district) {
+                        document.getElementById('deliveryDistrict').value = profile.district;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD PRODUCT DATA
+        // ============================================
+        async function loadProductData() {
+            try {
+                const { data: product, error } = await sb
+                    .from('ads')
+                    .select(`
+                        *,
+                        profiles!ads_seller_id_fkey (
+                            id,
+                            full_name,
+                            business_name,
+                            is_verified
+                        )
+                    `)
+                    .eq('id', productId)
+                    .single();
+
+                if (error) throw error;
+
+                productData = product;
+                supplierData = product.profiles;
+
+                // Update UI
+                document.getElementById('productTitle').textContent = product.title;
+                
+                const supplierName = product.profiles?.business_name || product.profiles?.full_name || 'Supplier';
+                document.getElementById('supplierName').textContent = supplierName;
+                
+                if (product.profiles?.is_verified) {
+                    document.getElementById('verifiedIcon').style.display = 'inline';
+                }
+
+                const price = product.wholesale_price || product.price || 0;
+                document.getElementById('productPrice').textContent = `UGX ${parseInt(price).toLocaleString()}`;
+                
+                if (product.image_urls?.[0]) {
+                    document.querySelector('#productImage img').src = product.image_urls[0];
+                }
+
+                // Set MOQ
+                document.getElementById('moq').textContent = product.moq || 1;
+                document.getElementById('quantity').min = product.moq || 1;
+                document.getElementById('quantity').value = product.moq || 100;
+
+                // Load bulk pricing
+                await loadBulkPricing();
+
+            } catch (error) {
+                console.error('Error loading product:', error);
+                showToast('Error loading product details');
+            }
+        }
+
+        // ============================================
+        // LOAD BULK PRICING
+        // ============================================
+        async function loadBulkPricing() {
+            try {
+                const { data, error } = await sb
+                    .from('bulk_pricing')
+                    .select('*')
+                    .eq('ad_id', productId)
+                    .eq('is_active', true)
+                    .order('min_quantity', { ascending: true });
+
+                if (error) throw error;
+
+                bulkPricing = data || [];
+
+                if (bulkPricing.length > 0) {
+                    renderBulkTiers();
+                } else {
+                    document.getElementById('bulkTiers').style.display = 'none';
+                }
+
+            } catch (error) {
+                console.error('Error loading bulk pricing:', error);
+                document.getElementById('bulkTiers').style.display = 'none';
+            }
+        }
+
+        // ============================================
+        // RENDER BULK TIERS
+        // ============================================
+        function renderBulkTiers() {
+            const container = document.getElementById('tierGrid');
+            const basePrice = productData?.wholesale_price || productData?.price || 0;
+
+            container.innerHTML = bulkPricing.map(tier => {
+                const savings = basePrice - tier.price_per_unit;
+                const savingPercent = ((savings / basePrice) * 100).toFixed(0);
+
+                return `
+                    <div class="tier-card" onclick="selectTier(${tier.min_quantity}, ${tier.price_per_unit})">
+                        <div class="tier-range">${tier.min_quantity}${tier.max_quantity ? `-${tier.max_quantity}` : '+'}</div>
+                        <div class="tier-price">UGX ${parseInt(tier.price_per_unit).toLocaleString()}</div>
+                        ${savings > 0 ? `<div class="tier-save">Save ${savingPercent}%</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================
+        // SELECT BULK TIER
+        // ============================================
+        window.selectTier = function(quantity, price) {
+            document.getElementById('quantity').value = quantity;
+            document.getElementById('targetPrice').value = price;
+            
+            document.querySelectorAll('.tier-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            
+            updatePriceCalculation();
+        };
+
+        // ============================================
+        // LOAD SUPPLIER DATA
+        // ============================================
+        async function loadSupplierData() {
+            try {
+                const { data: supplier, error } = await sb
+                    .from('suppliers')
+                    .select(`
+                        *,
+                        profiles!suppliers_profile_id_fkey (
+                            business_name,
+                            is_verified
+                        )
+                    `)
+                    .eq('id', supplierId)
+                    .single();
+
+                if (error) throw error;
+
+                supplierData = supplier.profiles;
+
+                // Update supplier name if no product context
+                if (!productData) {
+                    document.getElementById('supplierName').textContent = 
+                        supplier.profiles?.business_name || 'Supplier';
+                }
+
+            } catch (error) {
+                console.error('Error loading supplier:', error);
+            }
+        }
+
+        // ============================================
+        // SETUP EVENT LISTENERS
+        // ============================================
+        function setupEventListeners() {
+            // Quantity buttons
+            document.getElementById('decreaseQty').addEventListener('click', () => {
+                const input = document.getElementById('quantity');
+                const moq = parseInt(document.getElementById('moq').textContent);
+                let value = parseInt(input.value) - 1;
+                if (value >= moq) {
+                    input.value = value;
+                    updatePriceCalculation();
+                }
+            });
+
+            document.getElementById('increaseQty').addEventListener('click', () => {
+                const input = document.getElementById('quantity');
+                input.value = parseInt(input.value) + 1;
+                updatePriceCalculation();
+            });
+
+            document.getElementById('quantity').addEventListener('input', updatePriceCalculation);
+            document.getElementById('targetPrice').addEventListener('input', updatePriceCalculation);
+
+            // Timeline options
+            document.querySelectorAll('.timeline-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.timeline-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+
+            // File upload
+            setupFileUpload();
+
+            // Submit button
+            document.getElementById('submitBtn').addEventListener('click', submitInquiry);
+
+            // Save draft
+            document.getElementById('saveDraftBtn').addEventListener('click', saveDraft);
+        }
+
+        // ============================================
+        // SETUP FILE UPLOAD
+        // ============================================
+        function setupFileUpload() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+
+            uploadArea.addEventListener('click', () => fileInput.click());
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#0B4F6C';
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.borderColor = '#E5E7EB';
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#E5E7EB';
+                handleFiles(e.dataTransfer.files);
+            });
+
+            fileInput.addEventListener('change', () => {
+                handleFiles(fileInput.files);
+            });
+        }
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.size > 10 * 1024 * 1024) {
+                    showToast(`${file.name} is too large (max 10MB)`);
+                    return;
+                }
+
+                selectedFiles.push(file);
+                displayFile(file);
+            });
+        }
+
+        function displayFile(file) {
+            const fileList = document.getElementById('fileList');
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <div class="file-info">
+                    <i class="fas ${getFileIcon(file.type)}"></i>
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-size">(${(file.size / 1024).toFixed(0)} KB)</span>
+                </div>
+                <div class="file-remove" onclick="removeFile('${file.name}')">
+                    <i class="fas fa-times"></i>
+                </div>
+            `;
+            fileList.appendChild(fileItem);
+        }
+
+        function getFileIcon(mimeType) {
+            if (mimeType.startsWith('image/')) return 'fa-file-image';
+            if (mimeType === 'application/pdf') return 'fa-file-pdf';
+            if (mimeType.includes('word')) return 'fa-file-word';
+            if (mimeType.includes('sheet')) return 'fa-file-excel';
+            return 'fa-file';
+        }
+
+        window.removeFile = function(fileName) {
+            selectedFiles = selectedFiles.filter(f => f.name !== fileName);
+            document.querySelectorAll('.file-item').forEach(item => {
+                if (item.querySelector('.file-name').textContent === fileName) {
+                    item.remove();
+                }
+            });
+        };
+
+        // ============================================
+        // UPDATE PRICE CALCULATION
+        // ============================================
+        function updatePriceCalculation() {
+            const quantity = parseInt(document.getElementById('quantity').value) || 0;
+            const targetPrice = parseInt(document.getElementById('targetPrice').value) || 0;
+            const basePrice = productData ? (productData.wholesale_price || productData.price || 0) : 0;
+            
+            // Use target price if provided, otherwise use base price
+            const unitPrice = targetPrice || basePrice;
+            const total = unitPrice * quantity;
+
+            document.getElementById('calcUnitPrice').textContent = `UGX ${unitPrice.toLocaleString()}`;
+            document.getElementById('calcQuantity').textContent = quantity;
+            document.getElementById('calcTotal').textContent = `UGX ${total.toLocaleString()}`;
+
+            // Check if bulk pricing applies
+            if (bulkPricing.length > 0) {
+                const applicableTier = bulkPricing.find(tier => 
+                    quantity >= tier.min_quantity && 
+                    (!tier.max_quantity || quantity <= tier.max_quantity)
+                );
+
+                if (applicableTier) {
+                    const discount = (basePrice - applicableTier.price_per_unit) * quantity;
+                    document.getElementById('discountRow').style.display = 'flex';
+                    document.getElementById('calcDiscount').textContent = `-UGX ${discount.toLocaleString()}`;
+                } else {
+                    document.getElementById('discountRow').style.display = 'none';
+                }
+            }
+        }
+
+        // ============================================
+        // SAVE DRAFT
+        // ============================================
+        function saveDraft() {
+            const draft = {
+                productId: productId,
+                supplierId: supplierId,
+                quantity: document.getElementById('quantity').value,
+                targetPrice: document.getElementById('targetPrice').value,
+                currency: document.getElementById('currency').value,
+                specifications: document.getElementById('specifications').value,
+                requirements: {
+                    sampling: document.getElementById('reqSampling').checked,
+                    customPackaging: document.getElementById('reqCustomPackaging').checked,
+                    qualityCert: document.getElementById('reqQualityCert').checked,
+                    inspection: document.getElementById('reqInspection').checked
+                },
+                deliveryDistrict: document.getElementById('deliveryDistrict').value,
+                deliveryAddress: document.getElementById('deliveryAddress').value,
+                timeline: document.querySelector('.timeline-option.selected')?.dataset.days || '7',
+                paymentTerms: document.getElementById('paymentTerms').value,
+                additionalNotes: document.getElementById('additionalNotes').value,
+                savedAt: new Date().toISOString()
+            };
+
+            localStorage.setItem('bulkInquiryDraft', JSON.stringify(draft));
+            showToast('Draft saved successfully');
+        }
+
+        // ============================================
+        // LOAD DRAFT
+        // ============================================
+        function loadDraft() {
+            const saved = localStorage.getItem('bulkInquiryDraft');
+            if (!saved) return;
+
+            try {
+                const draft = JSON.parse(saved);
+                
+                // Only load if it's for the same product/supplier
+                if (draft.productId === productId && draft.supplierId === supplierId) {
+                    document.getElementById('quantity').value = draft.quantity || 100;
+                    document.getElementById('targetPrice').value = draft.targetPrice || '';
+                    document.getElementById('currency').value = draft.currency || 'UGX';
+                    document.getElementById('specifications').value = draft.specifications || '';
+                    
+                    document.getElementById('reqSampling').checked = draft.requirements?.sampling || false;
+                    document.getElementById('reqCustomPackaging').checked = draft.requirements?.customPackaging || false;
+                    document.getElementById('reqQualityCert').checked = draft.requirements?.qualityCert || false;
+                    document.getElementById('reqInspection').checked = draft.requirements?.inspection || false;
+                    
+                    document.getElementById('deliveryDistrict').value = draft.deliveryDistrict || '';
+                    document.getElementById('deliveryAddress').value = draft.deliveryAddress || '';
+                    document.getElementById('paymentTerms').value = draft.paymentTerms || '';
+                    document.getElementById('additionalNotes').value = draft.additionalNotes || '';
+
+                    // Timeline
+                    if (draft.timeline) {
+                        document.querySelectorAll('.timeline-option').forEach(opt => {
+                            if (opt.dataset.days === draft.timeline) {
+                                opt.classList.add('selected');
+                            } else {
+                                opt.classList.remove('selected');
+                            }
+                        });
+                    }
+
+                    updatePriceCalculation();
+                    showToast('Draft loaded');
+                }
+            } catch (error) {
+                console.error('Error loading draft:', error);
+            }
+        }
+
+        // ============================================
+        // SUBMIT INQUIRY
+        // ============================================
+        async function submitInquiry() {
+            // Validate required fields
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const moq = parseInt(document.getElementById('moq').textContent);
+            const deliveryDistrict = document.getElementById('deliveryDistrict').value;
+
+            if (quantity < moq) {
+                showToast(`Quantity must be at least ${moq} units`);
+                return;
+            }
+
+            if (!deliveryDistrict) {
+                showToast('Please select delivery district');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+            try {
+                // Generate inquiry number
+                const inquiryNumber = `INQ-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`;
+
+                // Prepare negotiation/inquiry data
+                const inquiryData = {
+                    buyer_id: currentUser.id,
+                    supplier_id: supplierData?.id || supplierId,
+                    ad_id: productId || null,
+                    requested_quantity: quantity,
+                    requested_price: document.getElementById('targetPrice').value ? parseFloat(document.getElementById('targetPrice').value) : null,
+                    buyer_message: `
+                        BULK PURCHASE INQUIRY
+                        
+                        Quantity: ${quantity} units
+                        Target Price: ${document.getElementById('targetPrice').value ? `UGX ${parseInt(document.getElementById('targetPrice').value).toLocaleString()}` : 'Not specified'}
+                        
+                        Specifications:
+                        ${document.getElementById('specifications').value || 'Not specified'}
+                        
+                        Requirements:
+                        ${getRequirements()}
+                        
+                        Delivery Location: ${deliveryDistrict}
+                        ${document.getElementById('deliveryAddress').value ? `Address: ${document.getElementById('deliveryAddress').value}` : ''}
+                        Timeline: ${document.querySelector('.timeline-option.selected')?.dataset.days || '7'} days
+                        Payment Terms: ${document.getElementById('paymentTerms').value || 'Not specified'}
+                        
+                        Additional Notes:
+                        ${document.getElementById('additionalNotes').value || 'None'}
+                    `,
+                    status: 'pending',
+                    expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
+                };
+
+                // Insert into negotiations table
+                const { data: negotiation, error } = await sb
+                    .from('negotiations')
+                    .insert(inquiryData)
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                // Create notification for supplier
+                await sb
+                    .from('notifications')
+                    .insert({
+                        user_id: supplierData?.id || supplierId,
+                        type: 'new_message',
+                        title: 'New Bulk Inquiry',
+                        message: `You have received a bulk purchase inquiry for ${quantity} units`,
+                        link: `/supplier-negotiations.html?id=${negotiation.id}`,
+                        created_at: new Date().toISOString()
+                    });
+
+                // Handle file uploads (simplified - you'd upload to storage)
+                if (selectedFiles.length > 0) {
+                    console.log('Files to upload:', selectedFiles);
+                }
+
+                // Clear draft
+                localStorage.removeItem('bulkInquiryDraft');
+
+                // Show success modal
+                document.getElementById('inquiryNumber').textContent = inquiryNumber;
+                document.getElementById('successModal').classList.add('show');
+
+            } catch (error) {
+                console.error('Error submitting inquiry:', error);
+                showToast('Error submitting inquiry. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Inquiry';
+            }
+        }
+
+        function getRequirements() {
+            const reqs = [];
+            if (document.getElementById('reqSampling').checked) reqs.push('• Product sampling required');
+            if (document.getElementById('reqCustomPackaging').checked) reqs.push('• Custom packaging required');
+            if (document.getElementById('reqQualityCert').checked) reqs.push('• Quality certificate required');
+            if (document.getElementById('reqInspection').checked) reqs.push('• Pre-shipment inspection required');
+            return reqs.length > 0 ? reqs.join('\n') : 'None';
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('successModal');
+            if (event.target === modal) {
+                modal.classList.remove('show');
+            }
+        };
+    </script>
+</body>
+</html>
